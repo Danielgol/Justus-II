@@ -3,6 +3,8 @@
 #include "allegro5/allegro_image.h"
 #include "allegro5/allegro_native_dialog.h"
 
+//TESTE GIT 10:39
+
 //ISSUES:
 //*ROTAÇÃO
 //*COLISÃO
