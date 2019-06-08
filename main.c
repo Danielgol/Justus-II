@@ -66,7 +66,12 @@ int main(int argc, char **argv){
     shipHeight = al_get_bitmap_height(ship);
     int controle = 0;
     float forceX = 0, forceY = 0;
-    //int rotation = 0;
+
+
+    ALLEGRO_BITMAP *propulsor;
+    propulsor = al_load_bitmap("images/ship/Propulsor.png");
+    int propWidth = al_get_bitmap_width(propulsor), propHeight = al_get_bitmap_height(propulsor);
+    int rotation = 0;
 
     //MEGAMEN
     ALLEGRO_BITMAP  *mega[14];
@@ -170,7 +175,6 @@ int main(int argc, char **argv){
                     if(forceY < -2){
                         forceY = -2;
                     }
-                    //rotation+=1;
                 }
                 if(key[KEY_DOWN]){
                     forceY += 0.01;
@@ -183,12 +187,14 @@ int main(int argc, char **argv){
                     if(forceX < -2){
                         forceX = -2;
                     }
+                    rotation+=1;
                 }
                 if(key[KEY_RIGHT]){
                     forceX += 0.01;
                     if(forceX > 2){
                         forceX = 2;
                     }
+                    rotation-=1;
                 }
             }else{
                 if(key[KEY_UP] && yMega > 0){
@@ -382,8 +388,8 @@ int main(int argc, char **argv){
             //###TESTAR MUDAR REALMENTE A VARIAVEL DE POSIÇÃO DOS OBJETOS, AO INVES DE SÓ COLOCAR ONDE ELES DEVEM SER DESENHADOS.
             //###EX: xSonic -= cameraX; al_draw_scaled_bitmap(...,xSonic, ySonic,...);
             al_draw_scaled_bitmap(background,0,0,BGWidth,BGHeight,xBG-(cameraX/2),yBG-(cameraY/2),BGWidth*BGScale, BGHeight*BGScale, 0);
+            al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,(rotation*3.14159/180),0);
             al_draw_scaled_bitmap(ship,0,0,shipWidth,shipHeight,xShip-cameraX,yShip-cameraY,shipWidth, shipHeight, 0);
-            //al_draw_rotated_bitmap(ship,shipWidth/2, shipHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,(rotation*3.14159/180),0);
             al_draw_scaled_bitmap(comp,0,0,compWidth,compHeight,xShip-cameraX+shipWidth/2-10,yShip-cameraY+shipHeight/2-15,compWidth*compScale, compHeight*compScale, 0);
             al_draw_scaled_bitmap(compShot,0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-50,yShip-cameraY+shipHeight/2-15,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(sonic[curSonic/DELAY],0,0,sonicWidth,sonicHeight,xSonic+xShip-cameraX,ySonic+yShip-cameraY,sonicWidth, sonicHeight, 0);
