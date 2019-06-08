@@ -5,9 +5,11 @@
 #include <math.h>
 
 //ISSUES:
-//*ROTAÇÃO
-//*COLISÃO
-//*PLANO DE FUNDO
+//*PENSAR MAIS SOBRE O JOGO
+//*VIDA
+//*FAZER OS BONECOS ANDAREM NO CAMINHO
+//*ATIRAR (TIRO COLIDIR)
+//*GERAR ASTEROIDES ALEATORIAMENTE NO MAPA
 //*MOVIMENTAÇÃO DA NAVE (FÓRMULAS)
 
 //AO APAGAR QUALQUER OBJETO LEMBRAR:
@@ -17,8 +19,6 @@
 //*APAGAR OS DESTROYERS
 
 const float FPS = 60;
-//const int SCREEN_W = 0;
-//const int SCREEN_H = 0;
 const int WORLD_W = 3000;
 const int WORLD_H = 1500;
 const int VELOCITY = 2;
@@ -62,13 +62,10 @@ int main(int argc, char **argv){
     ALLEGRO_BITMAP *ship;
     ship = al_load_bitmap("images/ship/shipBig.png");
     float xShip = WORLD_W/2, yShip = WORLD_H/2;
-    int shipWidth = 0, shipHeight = 0;
-    shipWidth = al_get_bitmap_width(ship);
-    shipHeight = al_get_bitmap_height(ship);
+    int shipWidth = al_get_bitmap_width(ship), shipHeight = al_get_bitmap_height(ship);
     int controle = 0;
     float forceX = 0, forceY = 0;
-
-
+    //PROPULSOR
     ALLEGRO_BITMAP *propulsor;
     propulsor = al_load_bitmap("images/ship/Propulsor.png");
     int propWidth = al_get_bitmap_width(propulsor), propHeight = al_get_bitmap_height(propulsor);
@@ -90,10 +87,8 @@ int main(int argc, char **argv){
     mega[11] = al_load_bitmap("images/mega/ml5.png");
     mega[12] = al_load_bitmap("images/mega/ml6.png");
     mega[13] = al_load_bitmap("images/mega/ml7.png");
-    int megaWidth = 0, megaHeight = 0;
     int xMega = shipWidth/2, yMega = shipHeight/2, curMega = 0;
-    megaWidth = al_get_bitmap_width(mega[0]);
-    megaHeight = al_get_bitmap_height(mega[0]);
+    int megaWidth = al_get_bitmap_width(mega[0]), megaHeight = al_get_bitmap_height(mega[0]);
 
     //SONIC
     ALLEGRO_BITMAP  *sonic[10];
@@ -107,43 +102,35 @@ int main(int argc, char **argv){
     sonic[7] = al_load_bitmap("images/sonic/l3.png");
     sonic[8] = al_load_bitmap("images/sonic/l4.png");
     sonic[9] = al_load_bitmap("images/sonic/l5.png");
-    int sonicWidth = 0, sonicHeight = 0;
     int xSonic = shipWidth/2, ySonic = shipHeight/2, curSonic = 0;
-    sonicWidth = al_get_bitmap_width(sonic[0]);
-    sonicHeight = al_get_bitmap_height(sonic[0]);
-
-
+    int sonicWidth = al_get_bitmap_width(sonic[0]), sonicHeight = al_get_bitmap_height(sonic[0]);
 
     //COMPUTADOR
     ALLEGRO_BITMAP *comp;
     comp = al_load_bitmap("images/ship/comp.png");
-    int compWidth = 0, compHeight = 0;
     float compScale = 0.3;
-    compWidth = al_get_bitmap_width(comp);
-    compHeight = al_get_bitmap_height(comp);
+    int compWidth = al_get_bitmap_width(comp), compHeight = al_get_bitmap_height(comp);
 
     //COMPUTADOR
     ALLEGRO_BITMAP *compShot;
     compShot = al_load_bitmap("images/ship/compShot.png");
-    int compShotWidth = 0, compShotHeight = 0;
-    compShotWidth = al_get_bitmap_width(compShot);
-    compShotHeight = al_get_bitmap_height(compShot);
+    int compShotWidth = al_get_bitmap_width(compShot);
+    int compShotHeight = al_get_bitmap_height(compShot);
 
     ALLEGRO_BITMAP *asteroid;
     asteroid = al_load_bitmap("images/asteroids/Asteroid.png");
-    int astWidth = 0, astHeight = 0;
     int xAst = (WORLD_W/2)-200, yAst = (WORLD_H/2)-200;
-    astWidth = al_get_bitmap_width(asteroid);
-    astHeight = al_get_bitmap_height(asteroid);
+    int astWidth = al_get_bitmap_width(asteroid);
+    int astHeight = al_get_bitmap_height(asteroid);
+    float dist;
 
     //PLANO DE FUNDO
     ALLEGRO_BITMAP *background;
     background = al_load_bitmap("images/background.jpg");
-    int BGWidth = 0, BGHeight = 0;
     int xBG = 0, yBG = 0;
     float BGScale = 1.7;
-    BGWidth = al_get_bitmap_width(background);
-    BGHeight = al_get_bitmap_height(background);
+    int BGWidth = al_get_bitmap_width(background);
+    int BGHeight = al_get_bitmap_height(background);
 
 
 
@@ -158,7 +145,6 @@ int main(int argc, char **argv){
     al_start_timer(timer);
 
 
-    float dist;
 
 
     while(1){
@@ -169,8 +155,7 @@ int main(int argc, char **argv){
         //EVENTOS REAIS (TEMPO)
         if(ev.type == ALLEGRO_EVENT_TIMER) {
 
-
-            //MOVIMENTOS MEGAMEN
+            //MOVIMENTOS NAVE
             if(controle == 1){
                 if(key[KEY_UP]){
                     forceY -= 0.01;
@@ -199,6 +184,7 @@ int main(int argc, char **argv){
                     rotation-=1;
                 }
             }else{
+                //MOVIMENTOS MEGAMEN
                 if(key[KEY_UP] && yMega > 0){
                     yMega -= VELOCITY;
                 }
@@ -215,13 +201,14 @@ int main(int argc, char **argv){
                 }
 
             }
-            //ATUALIZA OS FRAMES
+            //ATUALIZA OS FRAMES MEGAMEN
             if(curMega == 0){
                 curMega = 6*DELAY;
             }else if(curMega == 14*DELAY){
                 curMega = 8*DELAY;
             }
 
+            //FAZ COM QUE A NAVE FREIE AOS POUCOS
             if(forceY < 0){
                     forceY += 0.002;
                     if(forceY>0){
@@ -245,9 +232,11 @@ int main(int argc, char **argv){
                     }
             }
 
+            //APLICA AS FORÇAS NA NAVE
             yShip += forceY;
             xShip += forceX;
 
+            //IMPEDE QUE A NAVE SAIA DOS LIMITES DO MUNDO
             if(yShip < 0){
                 yShip = 0;
                 forceY=0;
@@ -280,7 +269,7 @@ int main(int argc, char **argv){
                 xSonic += VELOCITY;
                 curSonic--;
             }
-            //ATUALIZA OS FRAMES
+            //ATUALIZA OS FRAMES SONIC
             if(curSonic == 0){
                 curSonic = 4*DELAY;
             }else if(curSonic == 10*DELAY){
@@ -292,8 +281,8 @@ int main(int argc, char **argv){
             cameraY = yShip - SCREEN_H/2 +shipHeight/2;
 
             dist = sqrt((pow((xShip+shipWidth/2)-(xAst+astWidth/2), 2))+(pow((yShip+shipWidth/2)-(yAst+astHeight/2), 2)));
-            //dist = 1000;
 
+            //LIMITA A CAMERA NAS BORDAS DO MAPA
             if(cameraX < 0){
                 cameraX = 0;
             }
@@ -414,6 +403,7 @@ int main(int argc, char **argv){
     al_destroy_timer(timer);
     al_destroy_display(display);
     al_destroy_bitmap(ship);
+    al_destroy_bitmap(propulsor);
     al_destroy_bitmap(comp);
     al_destroy_bitmap(background);
     al_destroy_bitmap(asteroid);
