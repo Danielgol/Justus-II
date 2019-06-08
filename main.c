@@ -3,6 +3,8 @@
 #include "allegro5/allegro_image.h"
 #include "allegro5/allegro_native_dialog.h"
 
+//Daniel cara de pastel
+
 //ISSUES:
 //*ROTAÇÃO
 //*COLISÃO
