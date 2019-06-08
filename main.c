@@ -2,6 +2,7 @@
 #include <allegro5/allegro.h>
 #include "allegro5/allegro_image.h"
 #include "allegro5/allegro_native_dialog.h"
+#include <math.h>
 
 //ISSUES:
 //*ROTAÇÃO
@@ -157,6 +158,7 @@ int main(int argc, char **argv){
     al_start_timer(timer);
 
 
+    float dist;
 
 
     while(1){
@@ -289,6 +291,9 @@ int main(int argc, char **argv){
             cameraX = xShip - SCREEN_W/2 +shipWidth/2;
             cameraY = yShip - SCREEN_H/2 +shipHeight/2;
 
+            dist = sqrt((pow((xShip+shipWidth/2)-(xAst+astWidth/2), 2))+(pow((yShip+shipWidth/2)-(yAst+astHeight/2), 2)));
+            //dist = 1000;
+
             if(cameraX < 0){
                 cameraX = 0;
             }
@@ -394,7 +399,11 @@ int main(int argc, char **argv){
             al_draw_scaled_bitmap(compShot,0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-50,yShip-cameraY+shipHeight/2-15,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(sonic[curSonic/DELAY],0,0,sonicWidth,sonicHeight,xSonic+xShip-cameraX,ySonic+yShip-cameraY,sonicWidth, sonicHeight, 0);
             al_draw_scaled_bitmap(mega[curMega/DELAY],0,0,megaWidth,megaHeight,xMega+xShip-cameraX,yMega+yShip-cameraY,megaWidth, megaHeight, 0);
-            al_draw_scaled_bitmap(asteroid,0,0,astWidth,astHeight,xAst-cameraX,yAst-cameraY,astWidth, astHeight, 0);
+
+            if(dist > (shipWidth/2)+(astWidth/2)){
+                al_draw_scaled_bitmap(asteroid,0,0,astWidth,astHeight,xAst-cameraX,yAst-cameraY,astWidth, astHeight, 0);
+            }
+
             //AO DESENHAR QUALQUER COISA (FORA O OBJETO FOCO DA CAMERA) COLOCAR AS POSIÇÕES DE DESENHO "X_OBJETO - CAMERAX" E "Y_OBJETO - CAMERAY"
             al_flip_display();
         }
