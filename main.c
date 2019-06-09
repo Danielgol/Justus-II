@@ -69,7 +69,7 @@ int main(int argc, char **argv){
     ALLEGRO_BITMAP *propulsor;
     propulsor = al_load_bitmap("images/ship/Propulsor.png");
     int propWidth = al_get_bitmap_width(propulsor), propHeight = al_get_bitmap_height(propulsor);
-    int rotation = 0;
+    int rotation = 90;
 
     //MEGAMEN
     ALLEGRO_BITMAP  *mega[14];
@@ -158,29 +158,42 @@ int main(int argc, char **argv){
             //MOVIMENTOS NAVE
             if(controle == 1){
                 if(key[KEY_UP]){
-                    forceY -= 0.01;
+
+                    //IDEIA:
+                    //https://www.efunda.com/math/fourier_series/display.cfm?name=triangle
+                    //float angle = rotation*3.14159/180;
+                    //float senof = 0;
+                    //float cosef = 0;
+                    //if(-3.14159/2 <= angle && angle <= 3.14159/2){
+                    //    senof = 2*angle/3.14159;
+                    //    cosef = 1-senof;
+                    //}else{
+                    //    senof = (2*(3.14159-angle))/3.14159;
+                    //    cosef = 1-senof;
+                    //}
+                    //forceX -= senof*0.01;
+                    //forceY += cosef*0.01;
+
+                    forceX -= sin(rotation*3.14159/180)*0.01;
+                    forceY += cos(rotation*3.14159/180)*0.01;
+
                     if(forceY < -2){
                         forceY = -2;
                     }
-                }
-                if(key[KEY_DOWN]){
-                    forceY += 0.01;
                     if(forceY > 2){
                         forceY = 2;
                     }
-                }
-                if(key[KEY_LEFT]){
-                    forceX -= 0.01;
                     if(forceX < -2){
                         forceX = -2;
                     }
-                    rotation+=1;
-                }
-                if(key[KEY_RIGHT]){
-                    forceX += 0.01;
                     if(forceX > 2){
                         forceX = 2;
                     }
+                }
+                if(key[KEY_LEFT]){
+                    rotation+=1;
+                }
+                if(key[KEY_RIGHT]){
                     rotation-=1;
                 }
             }else{
@@ -230,6 +243,12 @@ int main(int argc, char **argv){
                     if(forceX < 0){
                         forceX = 0;
                     }
+            }
+
+            if(rotation >= 360){
+                rotation = 0;
+            }else if(rotation < 0){
+                rotation = 359;
             }
 
             //APLICA AS FORÇAS NA NAVE
@@ -382,7 +401,7 @@ int main(int argc, char **argv){
             //###TESTAR MUDAR REALMENTE A VARIAVEL DE POSIÇÃO DOS OBJETOS, AO INVES DE SÓ COLOCAR ONDE ELES DEVEM SER DESENHADOS.
             //###EX: xSonic -= cameraX; al_draw_scaled_bitmap(...,xSonic, ySonic,...);
             al_draw_scaled_bitmap(background,0,0,BGWidth,BGHeight,xBG-(cameraX/2),yBG-(cameraY/2),BGWidth*BGScale, BGHeight*BGScale, 0);
-            al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,(rotation*3.14159/180),0);
+            al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation-90)*3.14159/180),0);
             al_draw_scaled_bitmap(ship,0,0,shipWidth,shipHeight,xShip-cameraX,yShip-cameraY,shipWidth, shipHeight, 0);
             al_draw_scaled_bitmap(comp,0,0,compWidth,compHeight,xShip-cameraX+shipWidth/2-10,yShip-cameraY+shipHeight/2-15,compWidth*compScale, compHeight*compScale, 0);
             al_draw_scaled_bitmap(compShot,0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-50,yShip-cameraY+shipHeight/2-15,compShotWidth*compScale, compShotHeight*compScale, 0);
