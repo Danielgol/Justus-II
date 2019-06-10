@@ -4,6 +4,8 @@
 #include "allegro5/allegro_native_dialog.h"
 #include <math.h>
 
+//João  testeeeee ahhhhhhhhhhhhhhhh
+
 //ISSUES:
 //*PENSAR MAIS SOBRE O JOGO
 //*VIDA
