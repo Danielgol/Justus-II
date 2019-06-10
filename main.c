@@ -4,8 +4,6 @@
 #include "allegro5/allegro_native_dialog.h"
 #include <math.h>
 
-//MODIFICAÇÃO
-
 //ISSUES:
 //*PENSAR MAIS SOBRE O JOGO
 //*VIDA
@@ -135,7 +133,7 @@ int main(int argc, char **argv){
     int BGHeight = al_get_bitmap_height(background);
 
 
-    //TEST
+
 
     //CONFIGURA/INICIALIZA EVENTOS E LOCAL DE DESENHO
     al_set_target_bitmap(al_get_backbuffer(display));
@@ -423,10 +421,11 @@ int main(int argc, char **argv){
     //DESTROI TUDO DA MEMORIA
     al_destroy_timer(timer);
     al_destroy_display(display);
-    al_destroy_bitmap(ship);
-    al_destroy_bitmap(propulsor);
-    al_destroy_bitmap(comp);
     al_destroy_bitmap(background);
+    al_destroy_bitmap(propulsor);
+    al_destroy_bitmap(ship);
+    al_destroy_bitmap(comp);
+    al_destroy_bitmap(compShot);
     al_destroy_bitmap(asteroid);
     for(int i=0; i<14; i++){
         al_destroy_bitmap(mega[i]);
