@@ -10,7 +10,7 @@
 //*FAZER OS BONECOS ANDAREM NO CAMINHO
 //*ATIRAR (TIRO COLIDIR)
 //*GERAR ASTEROIDES ALEATORIAMENTE NO MAPA
-//*MOVIMENTAÇÃO DA NAVE (FÓRMULAS)
+//*MOVIMENTAÇÃO DA NAVE (ADAPTAR)
 
 //AO APAGAR QUALQUER OBJETO LEMBRAR:
 //*APAGAR OS DADOS QUE CRIAM O OBJETO
@@ -133,7 +133,7 @@ int main(int argc, char **argv){
     int BGHeight = al_get_bitmap_height(background);
 
 
-
+    //TEST
 
     //CONFIGURA/INICIALIZA EVENTOS E LOCAL DE DESENHO
     al_set_target_bitmap(al_get_backbuffer(display));
