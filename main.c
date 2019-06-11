@@ -4,7 +4,7 @@
 #include "allegro5/allegro_native_dialog.h"
 #include <math.h>
 
-//João  testeeeee ahhhhhhhhhhhhhhhh
+
 
 //ISSUES:
 //*PENSAR MAIS SOBRE O JOGO
@@ -13,6 +13,8 @@
 //*ATIRAR (TIRO COLIDIR)
 //*GERAR ASTEROIDES ALEATORIAMENTE NO MAPA
 //*MOVIMENTAÇÃO DA NAVE (ADAPTAR)
+//*COMETA AINDA SOME E VOLTA (IMPLANTAR PRECISAMENTE A COLISÃO NAVE-COMETA) (JOÃO)
+
 
 //AO APAGAR QUALQUER OBJETO LEMBRAR:
 //*APAGAR OS DADOS QUE CRIAM O OBJETO
@@ -114,10 +116,13 @@ int main(int argc, char **argv){
     int compWidth = al_get_bitmap_width(comp), compHeight = al_get_bitmap_height(comp);
 
     //COMPUTADOR
-    ALLEGRO_BITMAP *compShot;
-    compShot = al_load_bitmap("images/ship/compShot.png");
-    int compShotWidth = al_get_bitmap_width(compShot);
-    int compShotHeight = al_get_bitmap_height(compShot);
+    ALLEGRO_BITMAP *compShot[4];
+    compShot[0] = al_load_bitmap("images/ship/compShot.png");
+    compShot[1] = al_load_bitmap("images/ship/compShot.png");
+    compShot[2] = al_load_bitmap("images/ship/compShot.png");
+    compShot[3] = al_load_bitmap("images/ship/compShot.png");
+    int compShotWidth = al_get_bitmap_width(compShot[0]);
+    int compShotHeight = al_get_bitmap_height(compShot[0]);
 
     ALLEGRO_BITMAP *asteroid;
     asteroid = al_load_bitmap("images/asteroids/Asteroid.png");
@@ -406,7 +411,10 @@ int main(int argc, char **argv){
             al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation-90)*3.14159/180),0);
             al_draw_scaled_bitmap(ship,0,0,shipWidth,shipHeight,xShip-cameraX,yShip-cameraY,shipWidth, shipHeight, 0);
             al_draw_scaled_bitmap(comp,0,0,compWidth,compHeight,xShip-cameraX+shipWidth/2-10,yShip-cameraY+shipHeight/2-15,compWidth*compScale, compHeight*compScale, 0);
-            al_draw_scaled_bitmap(compShot,0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-50,yShip-cameraY+shipHeight/2-15,compShotWidth*compScale, compShotHeight*compScale, 0);
+            al_draw_scaled_bitmap(compShot[0],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-140,yShip-cameraY+shipHeight/2-15,compShotWidth*compScale, compShotHeight*compScale, 0);
+            al_draw_scaled_bitmap(compShot[1],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+110,yShip-cameraY+shipHeight/2-20,compShotWidth*compScale, compShotHeight*compScale, 0);
+            al_draw_scaled_bitmap(compShot[2],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+15,yShip-cameraY+shipHeight/2-150,compShotWidth*compScale, compShotHeight*compScale, 0);
+            al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(sonic[curSonic/DELAY],0,0,sonicWidth,sonicHeight,xSonic+xShip-cameraX,ySonic+yShip-cameraY,sonicWidth, sonicHeight, 0);
             al_draw_scaled_bitmap(mega[curMega/DELAY],0,0,megaWidth,megaHeight,xMega+xShip-cameraX,yMega+yShip-cameraY,megaWidth, megaHeight, 0);
 
