@@ -4,7 +4,7 @@
 #include "allegro5/allegro_native_dialog.h"
 #include <math.h>
 
-//MUDANÇA
+//MUDANÇA JOAO ABFHASVFVASYIISDFA
 
 //ISSUES:
 //*PENSAR MAIS SOBRE O JOGO
