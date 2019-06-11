@@ -4,8 +4,6 @@
 #include "allegro5/allegro_native_dialog.h"
 #include <math.h>
 
-//MUDANÇA JOAO ABFHASVFVASYIISDFA
-
 //ISSUES:
 //*PENSAR MAIS SOBRE O JOGO
 //*VIDA
@@ -14,7 +12,6 @@
 //*GERAR ASTEROIDES ALEATORIAMENTE NO MAPA
 //*MOVIMENTAÇÃO DA NAVE (ADAPTAR)
 //*COMETA AINDA SOME E VOLTA (IMPLANTAR PRECISAMENTE A COLISÃO NAVE-COMETA) (JOÃO)
-
 
 //AO APAGAR QUALQUER OBJETO LEMBRAR:
 //*APAGAR OS DADOS QUE CRIAM O OBJETO
@@ -435,8 +432,10 @@ int main(int argc, char **argv){
     al_destroy_bitmap(propulsor);
     al_destroy_bitmap(ship);
     al_destroy_bitmap(comp);
-    al_destroy_bitmap(compShot);
     al_destroy_bitmap(asteroid);
+    for(int i=0; i<4; i++){
+        al_destroy_bitmap(compShot[i]);
+    }
     for(int i=0; i<14; i++){
         al_destroy_bitmap(mega[i]);
     }
