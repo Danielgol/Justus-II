@@ -72,6 +72,24 @@ int main(int argc, char **argv){
     int propWidth = al_get_bitmap_width(propulsor), propHeight = al_get_bitmap_height(propulsor);
     int rotation = 90;
 
+    //COMPUTADOR
+    ALLEGRO_BITMAP *fire[12];
+    fire[0] = al_load_bitmap("images/ship/fire/f1.png");
+    fire[1] = al_load_bitmap("images/ship/fire/f2.png");
+    fire[2] = al_load_bitmap("images/ship/fire/f3.png");
+    fire[3] = al_load_bitmap("images/ship/fire/f4.png");
+    fire[4] = al_load_bitmap("images/ship/fire/f5.png");
+    fire[5] = al_load_bitmap("images/ship/fire/f6.png");
+    fire[6] = al_load_bitmap("images/ship/fire/f7.png");
+    fire[7] = al_load_bitmap("images/ship/fire/f8.png");
+    fire[8] = al_load_bitmap("images/ship/fire/f9.png");
+    fire[9] = al_load_bitmap("images/ship/fire/f10.png");
+    fire[10] = al_load_bitmap("images/ship/fire/f11.png");
+    fire[11] = al_load_bitmap("images/ship/fire/f12.png");
+    int curFire = 0;
+    int fireWidth = al_get_bitmap_width(fire[0]);
+    int fireHeight = al_get_bitmap_height(fire[0]);
+
     //MEGAMEN
     ALLEGRO_BITMAP  *mega[14];
     mega[0] = al_load_bitmap("images/mega/mr1.png");
@@ -158,6 +176,11 @@ int main(int argc, char **argv){
 
         //EVENTOS REAIS (TEMPO)
         if(ev.type == ALLEGRO_EVENT_TIMER) {
+
+            curFire+=1;
+            if(curFire == 12){
+                curFire = 0;
+            }
 
             //MOVIMENTOS NAVE
             if(controle == 1){
@@ -405,6 +428,9 @@ int main(int argc, char **argv){
             //###TESTAR MUDAR REALMENTE A VARIAVEL DE POSIÇÃO DOS OBJETOS, AO INVES DE SÓ COLOCAR ONDE ELES DEVEM SER DESENHADOS.
             //###EX: xSonic -= cameraX; al_draw_scaled_bitmap(...,xSonic, ySonic,...);
             al_draw_scaled_bitmap(background,0,0,BGWidth,BGHeight,xBG-(cameraX/2),yBG-(cameraY/2),BGWidth*BGScale, BGHeight*BGScale, 0);
+            if(key[KEY_UP] && controle){
+                al_draw_rotated_bitmap(fire[curFire],25, -200,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation+180)*3.14159/180),0);
+            }
             al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation-90)*3.14159/180),0);
             al_draw_scaled_bitmap(ship,0,0,shipWidth,shipHeight,xShip-cameraX,yShip-cameraY,shipWidth, shipHeight, 0);
             al_draw_scaled_bitmap(comp,0,0,compWidth,compHeight,xShip-cameraX+shipWidth/2-10,yShip-cameraY+shipHeight/2-15,compWidth*compScale, compHeight*compScale, 0);
@@ -433,6 +459,9 @@ int main(int argc, char **argv){
     al_destroy_bitmap(ship);
     al_destroy_bitmap(comp);
     al_destroy_bitmap(asteroid);
+    for(int i=0; i<12; i++){
+        al_destroy_bitmap(fire[i]);
+    }
     for(int i=0; i<4; i++){
         al_destroy_bitmap(compShot[i]);
     }
