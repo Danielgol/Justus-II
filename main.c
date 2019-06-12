@@ -350,18 +350,6 @@ int main(int argc, char **argv){
                     }
             }
 
-
-
-
-
-
-            //ADICIONANDO COMENTARIO INUTIL PARA TESTAR CONFLITOS
-
-
-
-
-
-
             //LIMITA O VALOR DA ROTAÇÃO NO INTERVALO [0,359]
             if(rotation >= 360){
                 rotation = 0;
