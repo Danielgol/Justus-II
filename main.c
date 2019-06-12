@@ -216,7 +216,7 @@ int main(int argc, char **argv){
     rotacao_h = al_load_sample("sounds/rotacaoh.ogg");
     inst_rotacao_h = al_create_sample_instance(rotacao_h);
     al_attach_sample_instance_to_mixer(inst_rotacao_h,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_rotacao_h,1.4);
+    al_set_sample_instance_gain(inst_rotacao_h,0.8);
 
     ALLEGRO_SAMPLE *alerta;
     ALLEGRO_SAMPLE_INSTANCE *inst_alerta;
@@ -297,6 +297,10 @@ int main(int argc, char **argv){
 
                 if(key[KEY_LEFT]){
                     rotation+=1;
+
+                    al_play_sample_instance(inst_rotacao_h);
+                }else{
+                    al_stop_sample_instance(inst_rotacao_h);
                 }
 
                 if(key[KEY_RIGHT]){
