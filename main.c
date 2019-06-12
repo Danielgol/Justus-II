@@ -2,6 +2,8 @@
 #include <allegro5/allegro.h>
 #include "allegro5/allegro_image.h"
 #include "allegro5/allegro_native_dialog.h"
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <math.h>
 
 //ISSUES:
@@ -46,9 +48,13 @@ int main(int argc, char **argv){
     //INSTALA AS FUNCIONALIDADES NECESSARIAS
     al_init();
     al_init_image_addon();
+    al_install_audio();
+    al_init_acodec_addon();
+    al_reserve_samples(20);
     //al_init_primitives_addon(); //FULLSCREEN
     al_install_keyboard();
     timer = al_create_timer(1.0 / FPS);
+
     //FULLSCREEN
     //al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
     //al_set_new_display_flags(ALLEGRO_FULLSCREEN);
@@ -66,7 +72,6 @@ int main(int argc, char **argv){
     int shipWidth = al_get_bitmap_width(ship), shipHeight = al_get_bitmap_height(ship);
     int controle = 0;
     float forceX = 0, forceY = 0;
-    //PROPULSOR
     ALLEGRO_BITMAP *propulsor;
     propulsor = al_load_bitmap("images/ship/Propulsor.png");
     int propWidth = al_get_bitmap_width(propulsor), propHeight = al_get_bitmap_height(propulsor);
@@ -124,13 +129,13 @@ int main(int argc, char **argv){
     int xSonic = shipWidth/2, ySonic = shipHeight/2, curSonic = 0;
     int sonicWidth = al_get_bitmap_width(sonic[0]), sonicHeight = al_get_bitmap_height(sonic[0]);
 
-    //COMPUTADOR
+    //COMPUTADOR NAVE
     ALLEGRO_BITMAP *comp;
     comp = al_load_bitmap("images/ship/comp.png");
     float compScale = 0.3;
     int compWidth = al_get_bitmap_width(comp), compHeight = al_get_bitmap_height(comp);
 
-    //COMPUTADOR
+    //COMPUTADORES DE TIRO
     ALLEGRO_BITMAP *compShot[4];
     compShot[0] = al_load_bitmap("images/ship/compShot.png");
     compShot[1] = al_load_bitmap("images/ship/compShot.png");
@@ -139,6 +144,7 @@ int main(int argc, char **argv){
     int compShotWidth = al_get_bitmap_width(compShot[0]);
     int compShotHeight = al_get_bitmap_height(compShot[0]);
 
+    //ASTEROIDE
     ALLEGRO_BITMAP *asteroid;
     asteroid = al_load_bitmap("images/asteroids/Asteroid.png");
     int xAst = (WORLD_W/2)-200, yAst = (WORLD_H/2)-200;
@@ -156,6 +162,72 @@ int main(int argc, char **argv){
 
 
 
+    //SONS
+    ALLEGRO_SAMPLE *theme;
+    ALLEGRO_SAMPLE_INSTANCE *inst_theme;
+    theme = al_load_sample("sounds/theme.ogg");
+    inst_theme = al_create_sample_instance(theme);
+    al_attach_sample_instance_to_mixer(inst_theme,al_get_default_mixer());
+    al_set_sample_instance_playmode(inst_theme, ALLEGRO_PLAYMODE_LOOP);
+    al_set_sample_instance_gain(inst_theme,0.8);
+
+    ALLEGRO_SAMPLE *tiro;
+    ALLEGRO_SAMPLE_INSTANCE *inst_tiro;
+    tiro = al_load_sample("sounds/tiro.wav");
+    inst_tiro = al_create_sample_instance(tiro);
+    al_attach_sample_instance_to_mixer(inst_tiro,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_tiro,0.9);
+
+    ALLEGRO_SAMPLE *explosao1;
+    ALLEGRO_SAMPLE_INSTANCE *inst_explosao1;
+    explosao1 = al_load_sample("sounds/explosao1.wav");
+    inst_explosao1 = al_create_sample_instance(explosao1);
+    al_attach_sample_instance_to_mixer(inst_explosao1,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_explosao1,1.0);
+
+    ALLEGRO_SAMPLE *explosao2;
+    ALLEGRO_SAMPLE_INSTANCE *inst_explosao2;
+    explosao2 = al_load_sample("sounds/explosao2.wav");
+    inst_explosao2 = al_create_sample_instance(explosao2);
+    al_attach_sample_instance_to_mixer(inst_explosao2,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_explosao2,1.0);
+
+    ALLEGRO_SAMPLE *explosao3;
+    ALLEGRO_SAMPLE_INSTANCE *inst_explosao3;
+    explosao3 = al_load_sample("sounds/explosao3.wav");
+    inst_explosao3 = al_create_sample_instance(explosao3);
+    al_attach_sample_instance_to_mixer(inst_explosao3,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_explosao3,1.0);
+
+    ALLEGRO_SAMPLE *som_propulsor;
+    ALLEGRO_SAMPLE_INSTANCE *inst_som_propulsor;
+    som_propulsor = al_load_sample("sounds/propulsor.ogg");
+    inst_som_propulsor = al_create_sample_instance(som_propulsor);
+    al_attach_sample_instance_to_mixer(inst_som_propulsor,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_som_propulsor,0.8);
+
+    ALLEGRO_SAMPLE *rotacao_a;
+    ALLEGRO_SAMPLE_INSTANCE *inst_rotacao_a;
+    rotacao_a = al_load_sample("sounds/rotacaoa.wav");
+    inst_rotacao_a = al_create_sample_instance(rotacao_a);
+    al_attach_sample_instance_to_mixer(inst_rotacao_a,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_rotacao_a,1.0);
+
+    ALLEGRO_SAMPLE *rotacao_h;
+    ALLEGRO_SAMPLE_INSTANCE *inst_rotacao_h;
+    rotacao_h = al_load_sample("sounds/rotacaoh.wav");
+    inst_rotacao_h = al_create_sample_instance(rotacao_h);
+    al_attach_sample_instance_to_mixer(inst_rotacao_h,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_rotacao_h,1.0);
+
+    ALLEGRO_SAMPLE *alerta;
+    ALLEGRO_SAMPLE_INSTANCE *inst_alerta;
+    alerta = al_load_sample("sounds/alerta.wav");
+    inst_alerta = al_create_sample_instance(alerta);
+    al_attach_sample_instance_to_mixer(inst_alerta,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_alerta,1.0);
+
+
 
     //CONFIGURA/INICIALIZA EVENTOS E LOCAL DE DESENHO
     al_set_target_bitmap(al_get_backbuffer(display));
@@ -167,6 +239,9 @@ int main(int argc, char **argv){
     al_start_timer(timer);
 
 
+
+    //INICIALIZAÇÃO DA TRILHA SONORA
+    al_play_sample_instance(inst_theme);
 
 
     while(1){
@@ -200,6 +275,8 @@ int main(int argc, char **argv){
                     //}
                     //forceX -= senof*0.01;
                     //forceY += cosef*0.01;
+
+                    al_play_sample_instance(inst_tiro);
 
                     forceX -= sin(rotation*3.14159/180)*0.01;
                     forceY += cos(rotation*3.14159/180)*0.01;
@@ -248,7 +325,7 @@ int main(int argc, char **argv){
                 curMega = 8*DELAY;
             }
 
-            //FAZ COM QUE A NAVE FREIE AOS POUCOS
+            //FAZ COM QUE A NAVE FREIE AOS POUCOS (PENSAR EM TIRAR)
             if(forceY < 0){
                     forceY += 0.002;
                     if(forceY>0){
@@ -326,9 +403,10 @@ int main(int argc, char **argv){
             cameraX = xShip - SCREEN_W/2 +shipWidth/2;
             cameraY = yShip - SCREEN_H/2 +shipHeight/2;
 
+            //CALCULA DISTÂNCIA ENTRE O ASTEROID E A NAVE
             dist = sqrt((pow((xShip+shipWidth/2)-(xAst+astWidth/2), 2))+(pow((yShip+shipWidth/2)-(yAst+astHeight/2), 2)));
 
-            //LIMITA A CAMERA NAS BORDAS DO MAPA
+            //LIMITA A CAMERA NAS BORDAS DO MAPA (PENSAR UM LIMITE DE ASTEROIDS E NÃO DA CÂMERA)
             if(cameraX < 0){
                 cameraX = 0;
             }
@@ -422,11 +500,9 @@ int main(int argc, char **argv){
 
         //DESENHOS
         if(redraw && al_is_event_queue_empty(event_queue)) {
+
             redraw = false;
-            //al_clear_to_color(al_map_rgb(50,50,50)); //LIMPA A TELA (NECESSÁRIO QUANDO NÃO TEM BACKGROUND)
-            //###TALVEZ NA HORA DAS COLISÕES DÊ ERRO POR CONTA DO LUGAR DOS OBJETOS SEREM DIFERENTES DE ONDE ELES ESTÃO
-            //###TESTAR MUDAR REALMENTE A VARIAVEL DE POSIÇÃO DOS OBJETOS, AO INVES DE SÓ COLOCAR ONDE ELES DEVEM SER DESENHADOS.
-            //###EX: xSonic -= cameraX; al_draw_scaled_bitmap(...,xSonic, ySonic,...);
+
             al_draw_scaled_bitmap(background,0,0,BGWidth,BGHeight,xBG-(cameraX/2),yBG-(cameraY/2),BGWidth*BGScale, BGHeight*BGScale, 0);
             if(key[KEY_UP] && controle){
                 al_draw_rotated_bitmap(fire[curFire],25, -200,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation+180)*3.14159/180),0);
@@ -440,11 +516,9 @@ int main(int argc, char **argv){
             al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(sonic[curSonic/DELAY],0,0,sonicWidth,sonicHeight,xSonic+xShip-cameraX,ySonic+yShip-cameraY,sonicWidth, sonicHeight, 0);
             al_draw_scaled_bitmap(mega[curMega/DELAY],0,0,megaWidth,megaHeight,xMega+xShip-cameraX,yMega+yShip-cameraY,megaWidth, megaHeight, 0);
-
             if(dist > (shipWidth/2)+(astWidth/2)){
                 al_draw_scaled_bitmap(asteroid,0,0,astWidth,astHeight,xAst-cameraX,yAst-cameraY,astWidth, astHeight, 0);
             }
-
             //AO DESENHAR QUALQUER COISA (FORA O OBJETO FOCO DA CAMERA) COLOCAR AS POSIÇÕES DE DESENHO "X_OBJETO - CAMERAX" E "Y_OBJETO - CAMERAY"
             al_flip_display();
         }
@@ -459,6 +533,26 @@ int main(int argc, char **argv){
     al_destroy_bitmap(ship);
     al_destroy_bitmap(comp);
     al_destroy_bitmap(asteroid);
+
+    al_destroy_sample(theme);
+    al_destroy_sample(tiro);
+    al_destroy_sample(explosao1);
+    al_destroy_sample(explosao2);
+    al_destroy_sample(explosao3);
+    al_destroy_sample(som_propulsor);
+    al_destroy_sample(rotacao_a);
+    al_destroy_sample(rotacao_h);
+    al_destroy_sample(alerta);
+    al_destroy_sample_instance(inst_theme);
+    al_destroy_sample_instance(inst_tiro);
+    al_destroy_sample_instance(inst_explosao1);
+    al_destroy_sample_instance(inst_explosao2);
+    al_destroy_sample_instance(inst_explosao3);
+    al_destroy_sample_instance(inst_som_propulsor);
+    al_destroy_sample_instance(inst_rotacao_a);
+    al_destroy_sample_instance(inst_rotacao_h);
+    al_destroy_sample_instance(inst_alerta);
+
     for(int i=0; i<12; i++){
         al_destroy_bitmap(fire[i]);
     }
