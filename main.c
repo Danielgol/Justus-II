@@ -250,14 +250,14 @@ int main(int argc, char **argv){
         //EVENTOS REAIS (TEMPO)
         if(ev.type == ALLEGRO_EVENT_TIMER) {
 
-            curFire+=1;
-            if(curFire == 12){
-                curFire = 0;
-            }
-
             //MOVIMENTOS NAVE
             if(controle == 1){
                 if(key[KEY_UP]){
+
+                    curFire+=1;
+                    if(curFire == 12){
+                        curFire = 0;
+                    }
 
                     //IDEIA:
                     //https://www.efunda.com/math/fourier_series/display.cfm?name=triangle
@@ -292,7 +292,7 @@ int main(int argc, char **argv){
                         forceX = 2;
                     }
                 }else{
-                al_stop_sample_instance(inst_som_propulsor);
+                    al_stop_sample_instance(inst_som_propulsor);
                 }
 
                 if(key[KEY_LEFT]){
