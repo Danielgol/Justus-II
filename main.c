@@ -160,8 +160,6 @@ int main(int argc, char **argv){
     int BGWidth = al_get_bitmap_width(background);
     int BGHeight = al_get_bitmap_height(background);
 
-
-
     //SONS
     ALLEGRO_SAMPLE *theme;
     ALLEGRO_SAMPLE_INSTANCE *inst_theme;
@@ -349,6 +347,7 @@ int main(int argc, char **argv){
                     }
             }
 
+            //LIMITA O VALOR DA ROTAÇÃO NO INTERVALO [0,359]
             if(rotation >= 360){
                 rotation = 0;
             }else if(rotation < 0){
