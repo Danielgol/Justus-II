@@ -274,7 +274,7 @@ int main(int argc, char **argv){
                     //forceX -= senof*0.01;
                     //forceY += cosef*0.01;
 
-                    al_play_sample_instance(inst_tiro);
+                    al_play_sample_instance(inst_som_propulsor);
 
                     forceX -= sin(rotation*3.14159/180)*0.01;
                     forceY += cos(rotation*3.14159/180)*0.01;
@@ -291,7 +291,10 @@ int main(int argc, char **argv){
                     if(forceX > 2){
                         forceX = 2;
                     }
+                }else{
+                al_stop_sample_instance(inst_som_propulsor);
                 }
+
                 if(key[KEY_LEFT]){
                     rotation+=1;
                 }
