@@ -202,21 +202,21 @@ int main(int argc, char **argv){
     som_propulsor = al_load_sample("sounds/propulsor.ogg");
     inst_som_propulsor = al_create_sample_instance(som_propulsor);
     al_attach_sample_instance_to_mixer(inst_som_propulsor,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_som_propulsor,0.8);
+    al_set_sample_instance_gain(inst_som_propulsor,1.0);
 
     ALLEGRO_SAMPLE *rotacao_a;
     ALLEGRO_SAMPLE_INSTANCE *inst_rotacao_a;
-    rotacao_a = al_load_sample("sounds/rotacaoa.wav");
+    rotacao_a = al_load_sample("sounds/rotacaoa.ogg");
     inst_rotacao_a = al_create_sample_instance(rotacao_a);
     al_attach_sample_instance_to_mixer(inst_rotacao_a,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_rotacao_a,1.0);
+    al_set_sample_instance_gain(inst_rotacao_a,1.4);
 
     ALLEGRO_SAMPLE *rotacao_h;
     ALLEGRO_SAMPLE_INSTANCE *inst_rotacao_h;
-    rotacao_h = al_load_sample("sounds/rotacaoh.wav");
+    rotacao_h = al_load_sample("sounds/rotacaoh.ogg");
     inst_rotacao_h = al_create_sample_instance(rotacao_h);
     al_attach_sample_instance_to_mixer(inst_rotacao_h,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_rotacao_h,1.0);
+    al_set_sample_instance_gain(inst_rotacao_h,1.4);
 
     ALLEGRO_SAMPLE *alerta;
     ALLEGRO_SAMPLE_INSTANCE *inst_alerta;
@@ -298,9 +298,15 @@ int main(int argc, char **argv){
                 if(key[KEY_LEFT]){
                     rotation+=1;
                 }
+
                 if(key[KEY_RIGHT]){
                     rotation-=1;
-                }
+
+                    al_play_sample_instance(inst_rotacao_a);
+                }else{
+                    al_stop_sample_instance(inst_rotacao_a);
+                     }
+
             }else{
                 //MOVIMENTOS MEGAMEN
                 if(key[KEY_UP] && yMega > 0){
