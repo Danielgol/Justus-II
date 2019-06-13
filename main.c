@@ -34,7 +34,7 @@ enum MYKEYS {
 int main(int argc, char **argv){
 
     ALLEGRO_DISPLAY *display = NULL;
-    //ALLEGRO_DISPLAY_MODE   disp_data; //FULLSCREEN
+    ALLEGRO_DISPLAY_MODE   disp_data; //FULLSCREEN
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_TIMER *timer = NULL;
 
@@ -51,19 +51,19 @@ int main(int argc, char **argv){
     al_install_audio();
     al_init_acodec_addon();
     al_reserve_samples(20);
-    //al_init_primitives_addon(); //FULLSCREEN
+    al_init_primitives_addon(); //FULLSCREEN
     al_install_keyboard();
     timer = al_create_timer(1.0 / FPS);
 
     //FULLSCREEN
-    //al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
-    //al_set_new_display_flags(ALLEGRO_FULLSCREEN);
-    //display = al_create_display(disp_data.width, disp_data.height);
-    //int SCREEN_W = al_get_display_width(display);
-    //int SCREEN_H = al_get_display_height(display);
-    int SCREEN_W = 1380; //APAGAR (FULLSCREEN)
-    int SCREEN_H = 780; //APAGAR (FULLSCREEN)
-    display = al_create_display(SCREEN_W, SCREEN_H); //APAGAR (FULLSCREEN)
+    al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
+    al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+    display = al_create_display(disp_data.width, disp_data.height);
+    int SCREEN_W = al_get_display_width(display);
+    int SCREEN_H = al_get_display_height(display);
+    //int SCREEN_W = 1380; //APAGAR (FULLSCREEN)
+    //int SCREEN_H = 780; //APAGAR (FULLSCREEN)
+    //display = al_create_display(SCREEN_W, SCREEN_H); //APAGAR (FULLSCREEN)
 
     //NAVE
     ALLEGRO_BITMAP *ship;
@@ -298,14 +298,12 @@ int main(int argc, char **argv){
                 if(key[KEY_LEFT]){
                     rotation+=1;
                 }
-
                 if(key[KEY_RIGHT]){
                     rotation-=1;
-
                     al_play_sample_instance(inst_rotacao_a);
                 }else{
                     al_stop_sample_instance(inst_rotacao_a);
-                     }
+                }
 
             }else{
                 //MOVIMENTOS MEGAMEN
