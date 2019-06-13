@@ -6,13 +6,47 @@
 #include <allegro5/allegro_acodec.h>
 #include <math.h>
 
+//-----------------------------------------------
+//TESTE CAIO COMETAS
+//const int NUM_COMETA = 10;
+//InitCometa(cometa, NUM_COMETA);
+
+
+//void InitCometa(Cometa cometas[],int size)
+//{
+//  for(int i = 0;i < size;i++)
+//    {
+//      cometa[i].ID = ENEMY;
+//      cometa[i].live = false;
+//      cometa[i].speed = 5; VELOCIDADE DO COMETA, AJUSTAR DE ACORDO COM O JOGO
+//      cometa[i].bondx = 18; LEMBRAR DE EXPLICAR ESSES COMANDOS DEPOIS
+//      cometa[i].bondy = 18;  ''
+//    };
+//};
+
+
+//DrawCometa(cometas,NUM_COMETA);
+//void DrawCometa(Cometa cometas[],int size)
+//{
+// for(int i = 0;i < size;i++)
+//   {
+//     if(cometa[i].live)
+//      {
+//        al_draw_filled_circle(cometas[i].x,cometas[i].y,20,al_map_rgb(255,0,0));
+//      }
+//   }
+//};
+//void StartCometa(Cometa cometas[],int size);
+//void UpdateCometa(Cometa cometas[],int size);
+//-----------------------------------------------
+
 //ISSUES:
 //*PENSAR MAIS SOBRE O JOGO
-//*VIDA
+//*VIDA(WEI)
 //*FAZER OS BONECOS ANDAREM NO CAMINHO
-//*ATIRAR (TIRO COLIDIR)
-//*GERAR ASTEROIDES ALEATORIAMENTE NO MAPA
-//*MOVIMENTAÇÃO DA NAVE (ADAPTAR)
+//*ATIRAR (TIRO COLIDIR)(GABRIEL)
+//*GERAR ASTEROIDES ALEATORIAMENTE NO MAPA(CAIO)
+//*MOVIMENTAÇÃO DA NAVE (DANIEL)
 //*COMETA AINDA SOME E VOLTA (IMPLANTAR PRECISAMENTE A COLISÃO NAVE-COMETA) (JOÃO)
 
 //AO APAGAR QUALQUER OBJETO LEMBRAR:
@@ -32,6 +66,21 @@ enum MYKEYS {
 };
 
 int main(int argc, char **argv){
+
+    //---------------------------------------------
+    //TESTE CAIO COMETAS
+    //Cometa cometas[NUM_COMETA]
+   // struct cometa
+    //{
+    //int ID;
+    //int x;
+    //int y;
+    //bool live;
+    //int speed;
+    //int boundx;
+    //int boundy;
+    //};
+    //---------------------------------------------
 
     ALLEGRO_DISPLAY *display = NULL;
     ALLEGRO_DISPLAY_MODE   disp_data; //FULLSCREEN
@@ -216,7 +265,7 @@ int main(int argc, char **argv){
     rotacao_h = al_load_sample("sounds/rotacaoh.ogg");
     inst_rotacao_h = al_create_sample_instance(rotacao_h);
     al_attach_sample_instance_to_mixer(inst_rotacao_h,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_rotacao_h,1.4);
+    al_set_sample_instance_gain(inst_rotacao_h,0.8);
 
     ALLEGRO_SAMPLE *alerta;
     ALLEGRO_SAMPLE_INSTANCE *inst_alerta;
@@ -297,6 +346,10 @@ int main(int argc, char **argv){
 
                 if(key[KEY_LEFT]){
                     rotation+=1;
+
+                    al_play_sample_instance(inst_rotacao_h);
+                }else{
+                    al_stop_sample_instance(inst_rotacao_h);
                 }
                 if(key[KEY_RIGHT]){
                     rotation-=1;
