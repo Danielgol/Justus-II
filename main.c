@@ -209,7 +209,7 @@ int main(int argc, char **argv){
     int BGWidth = al_get_bitmap_width(background);
     int BGHeight = al_get_bitmap_height(background);
 
-    //BARRA DAS COISAS
+    //BARRA
     ALLEGRO_BITMAP *barra;
     barra=al_load_bitmap("images/barra/barra.png");
     float xbarra = cameraX;
@@ -225,12 +225,29 @@ int main(int argc, char **argv){
     int vidaWidth = al_get_bitmap_width(vida);
     int vidaHeight = al_get_bitmap_height(vida);
 
+    //BARRA DE OXIGENIO
     ALLEGRO_BITMAP *oxigenio;
     oxigenio=al_load_bitmap("images/barra/oxigenio.png");
     float xoxigenio = cameraX;
     float yoxigenio = cameraY;
     int oxigenioWidth = al_get_bitmap_width(oxigenio);
     int oxigenioHeight = al_get_bitmap_height(oxigenio);
+
+    //GALAO
+    ALLEGRO_BITMAP *galao;
+    galao=al_load_bitmap("images/barra/galao.png");
+    float xgalao = cameraX;
+    float ygalao = cameraY;
+    int galaoWidth = al_get_bitmap_width(galao);
+    int galaoHeight = al_get_bitmap_height(galao);
+
+    //GASOLINA
+    ALLEGRO_BITMAP *gasolina;
+    gasolina=al_load_bitmap("images/barra/gasolina.png");
+    float xgasolina = cameraX;
+    float ygasolina = cameraY;
+    int gasolinaWidth = al_get_bitmap_width(gasolina);
+    int gasolinaHeight = al_get_bitmap_height(gasolina);
 
     //SONS
     ALLEGRO_SAMPLE *theme;
@@ -602,6 +619,8 @@ int main(int argc, char **argv){
             al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,xvida+400,yvida+650,vidaWidth,vidaHeight, 0);
             al_draw_scaled_bitmap(barra,0,0,barraWidth,barraHeight,xbarra+400,ybarra+650,barraWidth,barraHeight, 0);
             al_draw_scaled_bitmap(oxigenio,0,0,oxigenioWidth,oxigenioHeight,xoxigenio+400,yoxigenio+650,oxigenioWidth,oxigenioHeight, 0);
+            al_draw_scaled_bitmap(gasolina,0,0,gasolinaWidth,gasolinaHeight,xgasolina+400,ygasolina+650,gasolinaWidth,gasolinaHeight, 0);
+            al_draw_scaled_bitmap(galao,0,0,galaoWidth,galaoHeight,xgalao+400,ygalao+650,galaoWidth,galaoHeight, 0);
 
             if(dist > (shipWidth/2)+(astWidth/2)){
                 al_draw_scaled_bitmap(asteroid,0,0,astWidth,astHeight,xAst-cameraX,yAst-cameraY,astWidth, astHeight, 0);
@@ -623,6 +642,8 @@ int main(int argc, char **argv){
     al_destroy_bitmap(barra);
     al_destroy_bitmap(vida);
     al_destroy_bitmap(oxigenio);
+    al_destroy_bitmap(galao);
+    al_destroy_bitmap(gasolina);
     al_destroy_sample(theme);
     al_destroy_sample(tiro);
     al_destroy_sample(explosao1);
