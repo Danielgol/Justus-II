@@ -209,6 +209,29 @@ int main(int argc, char **argv){
     int BGWidth = al_get_bitmap_width(background);
     int BGHeight = al_get_bitmap_height(background);
 
+    //BARRA DAS COISAS
+    ALLEGRO_BITMAP *barra;
+    barra=al_load_bitmap("images/barra/barra.png");
+    float xbarra = cameraX;
+    float ybarra = cameraY;
+    int barraWidth = al_get_bitmap_width(barra);
+    int barraHeight = al_get_bitmap_height(barra);
+
+    //BARRA DE VIDA
+    ALLEGRO_BITMAP *vida;
+    vida=al_load_bitmap("images/barra/vida.png");
+    float xvida = cameraX;
+    float yvida = cameraY;
+    int vidaWidth = al_get_bitmap_width(vida);
+    int vidaHeight = al_get_bitmap_height(vida);
+
+    ALLEGRO_BITMAP *oxigenio;
+    oxigenio=al_load_bitmap("images/barra/oxigenio.png");
+    float xoxigenio = cameraX;
+    float yoxigenio = cameraY;
+    int oxigenioWidth = al_get_bitmap_width(oxigenio);
+    int oxigenioHeight = al_get_bitmap_height(oxigenio);
+
     //SONS
     ALLEGRO_SAMPLE *theme;
     ALLEGRO_SAMPLE_INSTANCE *inst_theme;
@@ -566,6 +589,7 @@ int main(int argc, char **argv){
             if(key[KEY_UP] && controle){
                 al_draw_rotated_bitmap(fire[curFire],25, -200,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation+180)*3.14159/180),0);
             }
+
             al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation-90)*3.14159/180),0);
             al_draw_scaled_bitmap(ship,0,0,shipWidth,shipHeight,xShip-cameraX,yShip-cameraY,shipWidth, shipHeight, 0);
             al_draw_scaled_bitmap(comp,0,0,compWidth,compHeight,xShip-cameraX+shipWidth/2-10,yShip-cameraY+shipHeight/2-15,compWidth*compScale, compHeight*compScale, 0);
@@ -575,6 +599,10 @@ int main(int argc, char **argv){
             al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(sonic[curSonic/DELAY],0,0,sonicWidth,sonicHeight,xSonic+xShip-cameraX,ySonic+yShip-cameraY,sonicWidth, sonicHeight, 0);
             al_draw_scaled_bitmap(mega[curMega/DELAY],0,0,megaWidth,megaHeight,xMega+xShip-cameraX,yMega+yShip-cameraY,megaWidth, megaHeight, 0);
+            al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,xvida+400,yvida+650,vidaWidth,vidaHeight, 0);
+            al_draw_scaled_bitmap(barra,0,0,barraWidth,barraHeight,xbarra+400,ybarra+650,barraWidth,barraHeight, 0);
+            al_draw_scaled_bitmap(oxigenio,0,0,oxigenioWidth,oxigenioHeight,xoxigenio+400,yoxigenio+650,oxigenioWidth,oxigenioHeight, 0);
+
             if(dist > (shipWidth/2)+(astWidth/2)){
                 al_draw_scaled_bitmap(asteroid,0,0,astWidth,astHeight,xAst-cameraX,yAst-cameraY,astWidth, astHeight, 0);
             }
@@ -592,7 +620,9 @@ int main(int argc, char **argv){
     al_destroy_bitmap(ship);
     al_destroy_bitmap(comp);
     al_destroy_bitmap(asteroid);
-
+    al_destroy_bitmap(barra);
+    al_destroy_bitmap(vida);
+    al_destroy_bitmap(oxigenio);
     al_destroy_sample(theme);
     al_destroy_sample(tiro);
     al_destroy_sample(explosao1);
