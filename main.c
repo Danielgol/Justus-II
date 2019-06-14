@@ -616,11 +616,11 @@ int main(int argc, char **argv){
             al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(sonic[curSonic/DELAY],0,0,sonicWidth,sonicHeight,xSonic+xShip-cameraX,ySonic+yShip-cameraY,sonicWidth, sonicHeight, 0);
             al_draw_scaled_bitmap(mega[curMega/DELAY],0,0,megaWidth,megaHeight,xMega+xShip-cameraX,yMega+yShip-cameraY,megaWidth, megaHeight, 0);
-            al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,xvida+400,yvida+650,vidaWidth,vidaHeight, 0);
-            al_draw_scaled_bitmap(barra,0,0,barraWidth,barraHeight,xbarra+400,ybarra+650,barraWidth,barraHeight, 0);
-            al_draw_scaled_bitmap(oxigenio,0,0,oxigenioWidth,oxigenioHeight,xoxigenio+400,yoxigenio+650,oxigenioWidth,oxigenioHeight, 0);
-            al_draw_scaled_bitmap(gasolina,0,0,gasolinaWidth,gasolinaHeight,xgasolina+400,ygasolina+650,gasolinaWidth,gasolinaHeight, 0);
-            al_draw_scaled_bitmap(galao,0,0,galaoWidth,galaoHeight,xgalao+400,ygalao+650,galaoWidth,galaoHeight, 0);
+            al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,(SCREEN_W/2)-(vidaWidth/2),SCREEN_H-100,vidaWidth,vidaHeight, 0);
+            al_draw_scaled_bitmap(barra,0,0,barraWidth,barraHeight,SCREEN_W/2-barraWidth/2,SCREEN_H-100,barraWidth,barraHeight, 0);
+            al_draw_scaled_bitmap(oxigenio,0,0,oxigenioWidth,oxigenioHeight,SCREEN_W/2-oxigenioWidth/2,SCREEN_H-100,oxigenioWidth,oxigenioHeight, 0);
+            //al_draw_scaled_bitmap(gasolina,0,0,gasolinaWidth,gasolinaHeight,xgasolina+400,ygasolina+650,gasolinaWidth,gasolinaHeight, 0);
+            //al_draw_scaled_bitmap(galao,0,0,galaoWidth,galaoHeight,xgalao+400,ygalao+650,galaoWidth,galaoHeight, 0);
 
             if(dist > (shipWidth/2)+(astWidth/2)){
                 al_draw_scaled_bitmap(asteroid,0,0,astWidth,astHeight,xAst-cameraX,yAst-cameraY,astWidth, astHeight, 0);
