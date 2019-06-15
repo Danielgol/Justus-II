@@ -144,39 +144,43 @@ int main(int argc, char **argv){
     int fireWidth = al_get_bitmap_width(fire[0]);
     int fireHeight = al_get_bitmap_height(fire[0]);
 
-    //MEGAMEN
-    ALLEGRO_BITMAP  *mega[14];
-    mega[0] = al_load_bitmap("images/mega/mr1.png");
-    mega[1] = al_load_bitmap("images/mega/mr2.png");
-    mega[2] = al_load_bitmap("images/mega/mr3.png");
-    mega[3] = al_load_bitmap("images/mega/mr4.png");
-    mega[4] = al_load_bitmap("images/mega/mr5.png");
-    mega[5] = al_load_bitmap("images/mega/mr6.png");
-    mega[6] = al_load_bitmap("images/mega/mr7.png");
-    mega[7] = al_load_bitmap("images/mega/ml1.png");
-    mega[8] = al_load_bitmap("images/mega/ml2.png");
-    mega[9] = al_load_bitmap("images/mega/ml3.png");
-    mega[10] = al_load_bitmap("images/mega/ml4.png");
-    mega[11] = al_load_bitmap("images/mega/ml5.png");
-    mega[12] = al_load_bitmap("images/mega/ml6.png");
-    mega[13] = al_load_bitmap("images/mega/ml7.png");
-    int xMega = shipWidth/2, yMega = shipHeight/2, curMega = 0;
-    int megaWidth = al_get_bitmap_width(mega[0]), megaHeight = al_get_bitmap_height(mega[0]);
+    //PLAYER1
+    ALLEGRO_BITMAP  *player1[14];
+    player1[0] = al_load_bitmap("images/players/a01.png");
+    player1[1] = al_load_bitmap("images/players/a02.png");
+    player1[2] = al_load_bitmap("images/players/a03.png");
+    player1[3] = al_load_bitmap("images/players/a04.png");
+    player1[4] = al_load_bitmap("images/players/a05.png");
+    player1[5] = al_load_bitmap("images/players/a06.png");
+    player1[6] = al_load_bitmap("images/players/a07.png");
+    player1[7] = al_load_bitmap("images/players/a08.png");
+    player1[8] = al_load_bitmap("images/players/a09.png");
+    player1[9] = al_load_bitmap("images/players/a10.png");
+    player1[10] = al_load_bitmap("images/players/a11.png");
+    player1[11] = al_load_bitmap("images/players/a12.png");
+    player1[12] = al_load_bitmap("images/players/a13.png");
+    player1[13] = al_load_bitmap("images/players/a14.png");
+    int xplayer1 = shipWidth/2, yplayer1 = shipHeight/2, curplayer1 = 0;
+    int player1Width = al_get_bitmap_width(player1[0]), player1Height = al_get_bitmap_height(player1[0]);
 
-    //SONIC
-    ALLEGRO_BITMAP  *sonic[10];
-    sonic[0] = al_load_bitmap("images/sonic/r1.png");
-    sonic[1] = al_load_bitmap("images/sonic/r2.png");
-    sonic[2] = al_load_bitmap("images/sonic/r3.png");
-    sonic[3] = al_load_bitmap("images/sonic/r4.png");
-    sonic[4] = al_load_bitmap("images/sonic/r5.png");
-    sonic[5] = al_load_bitmap("images/sonic/l1.png");
-    sonic[6] = al_load_bitmap("images/sonic/l2.png");
-    sonic[7] = al_load_bitmap("images/sonic/l3.png");
-    sonic[8] = al_load_bitmap("images/sonic/l4.png");
-    sonic[9] = al_load_bitmap("images/sonic/l5.png");
-    int xSonic = shipWidth/2, ySonic = shipHeight/2, curSonic = 0;
-    int sonicWidth = al_get_bitmap_width(sonic[0]), sonicHeight = al_get_bitmap_height(sonic[0]);
+    //PLAYER2
+    ALLEGRO_BITMAP  *player2[14];
+    player2[0] = al_load_bitmap("images/players/b01.png");
+    player2[1] = al_load_bitmap("images/players/b02.png");
+    player2[2] = al_load_bitmap("images/players/b03.png");
+    player2[3] = al_load_bitmap("images/players/b04.png");
+    player2[4] = al_load_bitmap("images/players/b05.png");
+    player2[5] = al_load_bitmap("images/players/b06.png");
+    player2[6] = al_load_bitmap("images/players/b07.png");
+    player2[7] = al_load_bitmap("images/players/b08.png");
+    player2[8] = al_load_bitmap("images/players/b09.png");
+    player2[9] = al_load_bitmap("images/players/b10.png");
+    player2[10] = al_load_bitmap("images/players/b11.png");
+    player2[11] = al_load_bitmap("images/players/b12.png");
+    player2[12] = al_load_bitmap("images/players/b13.png");
+    player2[13] = al_load_bitmap("images/players/b14.png");
+    int xplayer2 = shipWidth/2-50, yplayer2 = shipHeight/2, curplayer2 = 0;
+    int player2Width = al_get_bitmap_width(player2[0]), player2Height = al_get_bitmap_height(player2[0]);
 
     //COMPUTADOR NAVE
     ALLEGRO_BITMAP *comp;
@@ -411,28 +415,28 @@ int main(int argc, char **argv){
                 }
 
             }else{
-                //MOVIMENTOS MEGAMEN
-                if(key[KEY_UP] && yMega > 0){
-                    yMega -= VELOCITY;
+                //MOVIMENTOS PLAYER1
+                if(key[KEY_UP] && yplayer1 > 0){
+                    yplayer1 -= VELOCITY;
                 }
-                if(key[KEY_DOWN] && yMega < shipHeight - megaHeight){
-                    yMega += VELOCITY;
+                if(key[KEY_DOWN] && yplayer1 < shipHeight - player1Height){
+                    yplayer1 += VELOCITY;
                 }
-                if(key[KEY_LEFT] && xMega > 0){
-                    xMega -= VELOCITY;
-                    curMega++;
+                if(key[KEY_LEFT] && xplayer1 > 0){
+                    xplayer1 -= VELOCITY;
+                    curplayer1++;
                 }
-                if(key[KEY_RIGHT] && xMega < shipWidth - megaWidth){
-                    xMega += VELOCITY;
-                    curMega--;
+                if(key[KEY_RIGHT] && xplayer1 < shipWidth - player1Width){
+                    xplayer1 += VELOCITY;
+                    curplayer1--;
                 }
 
             }
-            //ATUALIZA OS FRAMES MEGAMEN
-            if(curMega == 0){
-                curMega = 6*DELAY;
-            }else if(curMega == 14*DELAY){
-                curMega = 8*DELAY;
+            //ATUALIZA OS FRAMES PLAYER1
+            if(curplayer1 == 0){
+                curplayer1 = 6*DELAY;
+            }else if(curplayer1 == 14*DELAY){
+                curplayer1 = 8*DELAY;
             }
 
             //FAZ COM QUE A NAVE FREIE AOS POUCOS (PENSAR EM TIRAR)
@@ -509,27 +513,27 @@ int main(int argc, char **argv){
                     oxigenioscale = 0;
                 }
             }else{
-                //MOVIMENTOS SONIC
-                if(key[KEY_W] && ySonic > 0){
-                    ySonic -= VELOCITY;
+                //MOVIMENTOS PLAYER2
+                if(key[KEY_W] && yplayer2 > 0){
+                    yplayer2 -= VELOCITY;
                 }
-                if(key[KEY_S] && ySonic < shipHeight - sonicHeight){
-                    ySonic += VELOCITY;
+                if(key[KEY_S] && yplayer2 < shipHeight - player2Height){
+                    yplayer2 += VELOCITY;
                 }
-                if(key[KEY_A] && xSonic > 0){
-                    xSonic -= VELOCITY;
-                    curSonic++;
+                if(key[KEY_A] && xplayer2 > 0){
+                    xplayer2 -= VELOCITY;
+                    curplayer2++;
                 }
-                if(key[KEY_D] && xSonic < shipWidth - sonicWidth){
-                    xSonic += VELOCITY;
-                    curSonic--;
+                if(key[KEY_D] && xplayer2 < shipWidth - player2Width){
+                    xplayer2 += VELOCITY;
+                    curplayer2--;
                 }
             }
-            //ATUALIZA OS FRAMES SONIC
-            if(curSonic == 0){
-                curSonic = 4*DELAY;
-            }else if(curSonic == 10*DELAY){
-                curSonic = 6*DELAY;
+            //ATUALIZA OS FRAMES PLAYER2
+            if(curplayer2 == 0){
+                curplayer2 = 6*DELAY;
+            }else if(curplayer2 == 14*DELAY){
+                curplayer2 = 8*DELAY;
             }
 
             //ATUALIZA A CÂMERA AO OBJETO EM MOVIMENTO
@@ -558,7 +562,7 @@ int main(int argc, char **argv){
         //ATIVA AS TECLAS PRESSIONADAS
         }else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
             switch(ev.keyboard.keycode) {
-                //MEGAMEN
+                //PLAYER1
                 case ALLEGRO_KEY_UP:
                     key[KEY_UP] = true;
                     break;
@@ -578,7 +582,7 @@ int main(int argc, char **argv){
                         controle = 1;
                     }
                     break;
-                //SONIC
+                //PLAYER2
                 case ALLEGRO_KEY_W:
                     key[KEY_W] = true;
                     break;
@@ -603,7 +607,7 @@ int main(int argc, char **argv){
         //DESATIVA AS TECLAS PRESSIONADAS
         }else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
             switch(ev.keyboard.keycode) {
-                //MEGAMEN
+                //PLAYER1
                 case ALLEGRO_KEY_UP:
                     key[KEY_UP] = false;
                     break;
@@ -612,13 +616,13 @@ int main(int argc, char **argv){
                     break;
                 case ALLEGRO_KEY_LEFT:
                     key[KEY_LEFT] = false;
-                    curMega=7*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
+                    curplayer1=7*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     break;
                 case ALLEGRO_KEY_RIGHT:
                     key[KEY_RIGHT] = false;
-                    curMega=6*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
+                    curplayer1=6*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     break;
-                //SONIC
+                //PLAYER2
                 case ALLEGRO_KEY_W:
                     key[KEY_W] = false;
                     break;
@@ -627,10 +631,10 @@ int main(int argc, char **argv){
                     break;
                 case ALLEGRO_KEY_A:
                     key[KEY_A] = false;
-                    curSonic=5*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
+                    curplayer2=7*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     break;
                 case ALLEGRO_KEY_D:
-                    curSonic=4*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
+                    curplayer2=6*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     key[KEY_D] = false;
                     break;
 
@@ -656,8 +660,8 @@ int main(int argc, char **argv){
             al_draw_scaled_bitmap(compShot[1],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+110,yShip-cameraY+shipHeight/2-20,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(compShot[2],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+15,yShip-cameraY+shipHeight/2-150,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
-            al_draw_scaled_bitmap(sonic[curSonic/DELAY],0,0,sonicWidth,sonicHeight,xSonic+xShip-cameraX,ySonic+yShip-cameraY,sonicWidth, sonicHeight, 0);
-            al_draw_scaled_bitmap(mega[curMega/DELAY],0,0,megaWidth,megaHeight,xMega+xShip-cameraX,yMega+yShip-cameraY,megaWidth, megaHeight, 0);
+            al_draw_scaled_bitmap(player2[curplayer2/DELAY],0,0,player2Width,player2Height,xplayer2+xShip-cameraX,yplayer2+yShip-cameraY,player2Width, player2Height, 0);
+            al_draw_scaled_bitmap(player1[curplayer1/DELAY],0,0,player1Width,player1Height,xplayer1+xShip-cameraX,yplayer1+yShip-cameraY,player1Width, player1Height, 0);
             al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,(SCREEN_W/2)-(vidaWidth/2)-15,SCREEN_H-43,vidaWidth-vidascale,vidaHeight, 0);
             al_draw_scaled_bitmap(oxigenio,0,0,oxigenioWidth,oxigenioHeight,SCREEN_W/2-oxigenioWidth/2-15,SCREEN_H-36,oxigenioWidth-oxigenioscale,oxigenioHeight, 0);
             al_draw_scaled_bitmap(barra,0,0,barraWidth,barraHeight,SCREEN_W/2-barraWidth/2,SCREEN_H-100,barraWidth,barraHeight, 0);
@@ -712,10 +716,10 @@ int main(int argc, char **argv){
         al_destroy_bitmap(compShot[i]);
     }
     for(int i=0; i<14; i++){
-        al_destroy_bitmap(mega[i]);
+        al_destroy_bitmap(player1[i]);
     }
-    for(int i=0; i<10; i++){
-        al_destroy_bitmap(sonic[i]);
+    for(int i=0; i<14; i++){
+        al_destroy_bitmap(player2[i]);
     }
     al_destroy_event_queue(event_queue);
 
