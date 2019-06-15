@@ -62,7 +62,7 @@ const int VELOCITY = 2;
 const int DELAY = 6;
 
 enum MYKEYS {
-   KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_W, KEY_A, KEY_S, KEY_D, KEY_L
+   KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_W, KEY_A, KEY_S, KEY_D, KEY_L, KEY_E
 };
 
 int main(int argc, char **argv){
@@ -224,6 +224,7 @@ int main(int argc, char **argv){
     float yvida = cameraY;
     int vidaWidth = al_get_bitmap_width(vida);
     int vidaHeight = al_get_bitmap_height(vida);
+    float vidascale = 0;
 
     //BARRA DE OXIGENIO
     ALLEGRO_BITMAP *oxigenio;
@@ -232,6 +233,8 @@ int main(int argc, char **argv){
     float yoxigenio = cameraY;
     int oxigenioWidth = al_get_bitmap_width(oxigenio);
     int oxigenioHeight = al_get_bitmap_height(oxigenio);
+    float oxigenioscale = 0;
+    int oxi = 0;
 
     //GALAO
     ALLEGRO_BITMAP *galao;
@@ -335,6 +338,15 @@ int main(int argc, char **argv){
 
         ALLEGRO_EVENT ev;
         al_wait_for_event(event_queue, &ev);
+
+        //EVENTOS RELACIONADO A VIDA
+        if(oxigenioscale==oxigenioWidth)
+        {
+            if(vidascale < vidaWidth)
+            {
+                vidascale+=0.1;
+            }
+        }
 
         //EVENTOS REAIS (TEMPO)
         if(ev.type == ALLEGRO_EVENT_TIMER) {
@@ -476,20 +488,42 @@ int main(int argc, char **argv){
                 forceX=0;
             }
 
-            //MOVIMENTOS SONIC
-            if(key[KEY_W] && ySonic > 0){
-                ySonic -= VELOCITY;
+            //EVENTOS RELACIONADO AO OXIGENIO
+            if (oxigenioscale < oxigenioWidth)
+            {
+                oxigenioscale += 0.2;
             }
-            if(key[KEY_S] && ySonic < shipHeight - sonicHeight){
-                ySonic += VELOCITY;
+            else
+            {
+                oxigenioscale=oxigenioWidth;
             }
-            if(key[KEY_A] && xSonic > 0){
-                xSonic -= VELOCITY;
-                curSonic++;
-            }
-            if(key[KEY_D] && xSonic < shipWidth - sonicWidth){
-                xSonic += VELOCITY;
-                curSonic--;
+
+            if(oxi == 1)
+            {
+                if (oxigenioscale <= oxigenioWidth && oxigenioscale>0)
+                {
+                    oxigenioscale -= 1;
+                }
+                else
+                {
+                    oxigenioscale = 0;
+                }
+            }else{
+                //MOVIMENTOS SONIC
+                if(key[KEY_W] && ySonic > 0){
+                    ySonic -= VELOCITY;
+                }
+                if(key[KEY_S] && ySonic < shipHeight - sonicHeight){
+                    ySonic += VELOCITY;
+                }
+                if(key[KEY_A] && xSonic > 0){
+                    xSonic -= VELOCITY;
+                    curSonic++;
+                }
+                if(key[KEY_D] && xSonic < shipWidth - sonicWidth){
+                    xSonic += VELOCITY;
+                    curSonic--;
+                }
             }
             //ATUALIZA OS FRAMES SONIC
             if(curSonic == 0){
@@ -557,6 +591,13 @@ int main(int argc, char **argv){
                 case ALLEGRO_KEY_D:
                     key[KEY_D] = true;
                     break;
+                case ALLEGRO_KEY_E:
+                    if(oxi == 1){
+                        oxi = 0;
+                    }else{
+                        oxi = 1;
+                    }
+                    break;
             }
 
         //DESATIVA AS TECLAS PRESSIONADAS
@@ -592,6 +633,7 @@ int main(int argc, char **argv){
                     curSonic=4*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     key[KEY_D] = false;
                     break;
+
             }
         }else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             break;
@@ -616,9 +658,9 @@ int main(int argc, char **argv){
             al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(sonic[curSonic/DELAY],0,0,sonicWidth,sonicHeight,xSonic+xShip-cameraX,ySonic+yShip-cameraY,sonicWidth, sonicHeight, 0);
             al_draw_scaled_bitmap(mega[curMega/DELAY],0,0,megaWidth,megaHeight,xMega+xShip-cameraX,yMega+yShip-cameraY,megaWidth, megaHeight, 0);
-            al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,(SCREEN_W/2)-(vidaWidth/2),SCREEN_H-100,vidaWidth,vidaHeight, 0);
+            al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,(SCREEN_W/2)-(vidaWidth/2)-15,SCREEN_H-43,vidaWidth-vidascale,vidaHeight, 0);
+            al_draw_scaled_bitmap(oxigenio,0,0,oxigenioWidth,oxigenioHeight,SCREEN_W/2-oxigenioWidth/2-15,SCREEN_H-36,oxigenioWidth-oxigenioscale,oxigenioHeight, 0);
             al_draw_scaled_bitmap(barra,0,0,barraWidth,barraHeight,SCREEN_W/2-barraWidth/2,SCREEN_H-100,barraWidth,barraHeight, 0);
-            al_draw_scaled_bitmap(oxigenio,0,0,oxigenioWidth,oxigenioHeight,SCREEN_W/2-oxigenioWidth/2,SCREEN_H-100,oxigenioWidth,oxigenioHeight, 0);
             //al_draw_scaled_bitmap(gasolina,0,0,gasolinaWidth,gasolinaHeight,xgasolina+400,ygasolina+650,gasolinaWidth,gasolinaHeight, 0);
             //al_draw_scaled_bitmap(galao,0,0,galaoWidth,galaoHeight,xgalao+400,ygalao+650,galaoWidth,galaoHeight, 0);
 
