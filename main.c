@@ -116,13 +116,13 @@ int main(int argc, char **argv){
 
     //NAVE
     ALLEGRO_BITMAP *ship;
-    ship = al_load_bitmap("images/ship/shipBig.png");
+    ship = al_load_bitmap("images/ship/shipWhite.png");
     float xShip = WORLD_W/2, yShip = WORLD_H/2;
     int shipWidth = al_get_bitmap_width(ship), shipHeight = al_get_bitmap_height(ship);
     int controle = 0;
     float forceX = 0, forceY = 0;
     ALLEGRO_BITMAP *propulsor;
-    propulsor = al_load_bitmap("images/ship/Propulsor.png");
+    propulsor = al_load_bitmap("images/ship/propulsorWhite.png");
     int propWidth = al_get_bitmap_width(propulsor), propHeight = al_get_bitmap_height(propulsor);
     int rotation = 90;
 
@@ -160,7 +160,7 @@ int main(int argc, char **argv){
     player1[11] = al_load_bitmap("images/players/a12.png");
     player1[12] = al_load_bitmap("images/players/a13.png");
     player1[13] = al_load_bitmap("images/players/a14.png");
-    int xplayer1 = shipWidth/2, yplayer1 = shipHeight/2, curplayer1 = 0;
+    int xplayer1 = shipWidth/2+30, yplayer1 = shipHeight/2+10, curplayer1 = 0;
     int player1Width = al_get_bitmap_width(player1[0]), player1Height = al_get_bitmap_height(player1[0]);
 
     //PLAYER2
@@ -179,23 +179,23 @@ int main(int argc, char **argv){
     player2[11] = al_load_bitmap("images/players/b12.png");
     player2[12] = al_load_bitmap("images/players/b13.png");
     player2[13] = al_load_bitmap("images/players/b14.png");
-    int xplayer2 = shipWidth/2-50, yplayer2 = shipHeight/2, curplayer2 = 0;
+    int xplayer2 = shipWidth/2-50, yplayer2 = shipHeight/2+10, curplayer2 = 0;
     int player2Width = al_get_bitmap_width(player2[0]), player2Height = al_get_bitmap_height(player2[0]);
 
     //COMPUTADOR NAVE
-    ALLEGRO_BITMAP *comp;
-    comp = al_load_bitmap("images/ship/comp.png");
-    float compScale = 0.3;
-    int compWidth = al_get_bitmap_width(comp), compHeight = al_get_bitmap_height(comp);
+    //ALLEGRO_BITMAP *comp;
+    //comp = al_load_bitmap("images/ship/comp.png");
+    //float compScale = 0.3;
+    //int compWidth = al_get_bitmap_width(comp), compHeight = al_get_bitmap_height(comp);
 
     //COMPUTADORES DE TIRO
-    ALLEGRO_BITMAP *compShot[4];
-    compShot[0] = al_load_bitmap("images/ship/compShot.png");
-    compShot[1] = al_load_bitmap("images/ship/compShot.png");
-    compShot[2] = al_load_bitmap("images/ship/compShot.png");
-    compShot[3] = al_load_bitmap("images/ship/compShot.png");
-    int compShotWidth = al_get_bitmap_width(compShot[0]);
-    int compShotHeight = al_get_bitmap_height(compShot[0]);
+    //ALLEGRO_BITMAP *compShot[4];
+    //compShot[0] = al_load_bitmap("images/ship/compShot.png");
+    //compShot[1] = al_load_bitmap("images/ship/compShot.png");
+    //compShot[2] = al_load_bitmap("images/ship/compShot.png");
+    //compShot[3] = al_load_bitmap("images/ship/compShot.png");
+    //int compShotWidth = al_get_bitmap_width(compShot[0]);
+    //int compShotHeight = al_get_bitmap_height(compShot[0]);
 
     //ASTEROIDE
     ALLEGRO_BITMAP *asteroid;
@@ -655,11 +655,11 @@ int main(int argc, char **argv){
 
             al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation-90)*3.14159/180),0);
             al_draw_scaled_bitmap(ship,0,0,shipWidth,shipHeight,xShip-cameraX,yShip-cameraY,shipWidth, shipHeight, 0);
-            al_draw_scaled_bitmap(comp,0,0,compWidth,compHeight,xShip-cameraX+shipWidth/2-10,yShip-cameraY+shipHeight/2-15,compWidth*compScale, compHeight*compScale, 0);
-            al_draw_scaled_bitmap(compShot[0],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-140,yShip-cameraY+shipHeight/2-15,compShotWidth*compScale, compShotHeight*compScale, 0);
-            al_draw_scaled_bitmap(compShot[1],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+110,yShip-cameraY+shipHeight/2-20,compShotWidth*compScale, compShotHeight*compScale, 0);
-            al_draw_scaled_bitmap(compShot[2],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+15,yShip-cameraY+shipHeight/2-150,compShotWidth*compScale, compShotHeight*compScale, 0);
-            al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
+            //al_draw_scaled_bitmap(comp,0,0,compWidth,compHeight,xShip-cameraX+shipWidth/2-10,yShip-cameraY+shipHeight/2-15,compWidth*compScale, compHeight*compScale, 0);
+            //al_draw_scaled_bitmap(compShot[0],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-140,yShip-cameraY+shipHeight/2-15,compShotWidth*compScale, compShotHeight*compScale, 0);
+            //al_draw_scaled_bitmap(compShot[1],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+110,yShip-cameraY+shipHeight/2-20,compShotWidth*compScale, compShotHeight*compScale, 0);
+            //al_draw_scaled_bitmap(compShot[2],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+15,yShip-cameraY+shipHeight/2-150,compShotWidth*compScale, compShotHeight*compScale, 0);
+            //al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(player2[curplayer2/DELAY],0,0,player2Width,player2Height,xplayer2+xShip-cameraX,yplayer2+yShip-cameraY,player2Width, player2Height, 0);
             al_draw_scaled_bitmap(player1[curplayer1/DELAY],0,0,player1Width,player1Height,xplayer1+xShip-cameraX,yplayer1+yShip-cameraY,player1Width, player1Height, 0);
             al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,(SCREEN_W/2)-(vidaWidth/2)-15,SCREEN_H-43,vidaWidth-vidascale,vidaHeight, 0);
@@ -683,7 +683,7 @@ int main(int argc, char **argv){
     al_destroy_bitmap(background);
     al_destroy_bitmap(propulsor);
     al_destroy_bitmap(ship);
-    al_destroy_bitmap(comp);
+    //al_destroy_bitmap(comp);
     al_destroy_bitmap(asteroid);
     al_destroy_bitmap(barra);
     al_destroy_bitmap(vida);
@@ -712,9 +712,9 @@ int main(int argc, char **argv){
     for(int i=0; i<12; i++){
         al_destroy_bitmap(fire[i]);
     }
-    for(int i=0; i<4; i++){
-        al_destroy_bitmap(compShot[i]);
-    }
+    //for(int i=0; i<4; i++){
+    //    al_destroy_bitmap(compShot[i]);
+    //}
     for(int i=0; i<14; i++){
         al_destroy_bitmap(player1[i]);
     }
