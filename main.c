@@ -145,42 +145,56 @@ int main(int argc, char **argv){
     int fireHeight = al_get_bitmap_height(fire[0]);
 
     //PLAYER1
-    ALLEGRO_BITMAP  *player1[14];
-    player1[0] = al_load_bitmap("images/players/a01.png");
-    player1[1] = al_load_bitmap("images/players/a02.png");
-    player1[2] = al_load_bitmap("images/players/a03.png");
-    player1[3] = al_load_bitmap("images/players/a04.png");
-    player1[4] = al_load_bitmap("images/players/a05.png");
-    player1[5] = al_load_bitmap("images/players/a06.png");
-    player1[6] = al_load_bitmap("images/players/a07.png");
-    player1[7] = al_load_bitmap("images/players/a08.png");
-    player1[8] = al_load_bitmap("images/players/a09.png");
-    player1[9] = al_load_bitmap("images/players/a10.png");
-    player1[10] = al_load_bitmap("images/players/a11.png");
-    player1[11] = al_load_bitmap("images/players/a12.png");
-    player1[12] = al_load_bitmap("images/players/a13.png");
-    player1[13] = al_load_bitmap("images/players/a14.png");
+    ALLEGRO_BITMAP  *player1[20];
+    player1[0] = al_load_bitmap("images/players/a00.png");
+    player1[1] = al_load_bitmap("images/players/a01.png");
+    player1[2] = al_load_bitmap("images/players/a02.png");
+    player1[3] = al_load_bitmap("images/players/a03.png");
+    player1[4] = al_load_bitmap("images/players/a04.png");
+    player1[5] = al_load_bitmap("images/players/a05.png");
+    player1[6] = al_load_bitmap("images/players/a06.png");
+    player1[7] = al_load_bitmap("images/players/a07.png");
+    player1[8] = al_load_bitmap("images/players/a08.png");
+    player1[9] = al_load_bitmap("images/players/a09.png");
+    player1[10] = al_load_bitmap("images/players/a10.png");
+    player1[11] = al_load_bitmap("images/players/a11.png");
+    player1[12] = al_load_bitmap("images/players/a12.png");
+    player1[13] = al_load_bitmap("images/players/a13.png");
+    player1[14] = al_load_bitmap("images/players/a14.png");
+    player1[15] = al_load_bitmap("images/players/a15.png");
+    player1[16] = al_load_bitmap("images/players/a16.png");
+    player1[17] = al_load_bitmap("images/players/a17.png");
+    player1[18] = al_load_bitmap("images/players/a18.png");
+    player1[19] = al_load_bitmap("images/players/a19.png");
     int xplayer1 = shipWidth/2+30, yplayer1 = shipHeight/2+10, curplayer1 = 0;
     int player1Width = al_get_bitmap_width(player1[0]), player1Height = al_get_bitmap_height(player1[0]);
+    int dir = 0;
 
     //PLAYER2
-    ALLEGRO_BITMAP  *player2[14];
-    player2[0] = al_load_bitmap("images/players/b01.png");
-    player2[1] = al_load_bitmap("images/players/b02.png");
-    player2[2] = al_load_bitmap("images/players/b03.png");
-    player2[3] = al_load_bitmap("images/players/b04.png");
-    player2[4] = al_load_bitmap("images/players/b05.png");
-    player2[5] = al_load_bitmap("images/players/b06.png");
-    player2[6] = al_load_bitmap("images/players/b07.png");
-    player2[7] = al_load_bitmap("images/players/b08.png");
-    player2[8] = al_load_bitmap("images/players/b09.png");
-    player2[9] = al_load_bitmap("images/players/b10.png");
-    player2[10] = al_load_bitmap("images/players/b11.png");
-    player2[11] = al_load_bitmap("images/players/b12.png");
-    player2[12] = al_load_bitmap("images/players/b13.png");
-    player2[13] = al_load_bitmap("images/players/b14.png");
+    ALLEGRO_BITMAP  *player2[20];
+    player2[0] = al_load_bitmap("images/players/b00.png");
+    player2[1] = al_load_bitmap("images/players/b01.png");
+    player2[2] = al_load_bitmap("images/players/b02.png");
+    player2[3] = al_load_bitmap("images/players/b03.png");
+    player2[4] = al_load_bitmap("images/players/b04.png");
+    player2[5] = al_load_bitmap("images/players/b05.png");
+    player2[6] = al_load_bitmap("images/players/b06.png");
+    player2[7] = al_load_bitmap("images/players/b07.png");
+    player2[8] = al_load_bitmap("images/players/b08.png");
+    player2[9] = al_load_bitmap("images/players/b09.png");
+    player2[10] = al_load_bitmap("images/players/b10.png");
+    player2[11] = al_load_bitmap("images/players/b11.png");
+    player2[12] = al_load_bitmap("images/players/b12.png");
+    player2[13] = al_load_bitmap("images/players/b13.png");
+    player2[14] = al_load_bitmap("images/players/b14.png");
+    player2[15] = al_load_bitmap("images/players/b15.png");
+    player2[16] = al_load_bitmap("images/players/b16.png");
+    player2[17] = al_load_bitmap("images/players/b17.png");
+    player2[18] = al_load_bitmap("images/players/b18.png");
+    player2[19] = al_load_bitmap("images/players/b19.png");
     int xplayer2 = shipWidth/2-50, yplayer2 = shipHeight/2+10, curplayer2 = 0;
     int player2Width = al_get_bitmap_width(player2[0]), player2Height = al_get_bitmap_height(player2[0]);
+    int dir2 = 0;
 
     //COMPUTADOR NAVE
     //ALLEGRO_BITMAP *comp;
@@ -416,27 +430,61 @@ int main(int argc, char **argv){
 
             }else{
                 //MOVIMENTOS PLAYER1
-                if(key[KEY_UP] && yplayer1 > 0){
-                    yplayer1 -= VELOCITY;
-                }
-                if(key[KEY_DOWN] && yplayer1 < shipHeight - player1Height){
-                    yplayer1 += VELOCITY;
+                int flag = 0;
+                if(key[KEY_RIGHT] && xplayer1 < shipWidth - player1Width){
+                    dir = 1;
+                    xplayer1 += VELOCITY;
+                    flag = 1;
                 }
                 if(key[KEY_LEFT] && xplayer1 > 0){
+                    dir = 2;
                     xplayer1 -= VELOCITY;
-                    curplayer1++;
+                    flag = 1;
                 }
-                if(key[KEY_RIGHT] && xplayer1 < shipWidth - player1Width){
-                    xplayer1 += VELOCITY;
-                    curplayer1--;
+                if(key[KEY_UP] && yplayer1 > 0){
+                    dir = 3;
+                    yplayer1 -= VELOCITY;
+                    flag = 1;
+                }
+                if(key[KEY_DOWN] && yplayer1 < shipHeight - player1Height){
+                    dir = 4;
+                    yplayer1 += VELOCITY;
+                    flag = 1;
                 }
 
-            }
-            //ATUALIZA OS FRAMES PLAYER1
-            if(curplayer1 == 0){
-                curplayer1 = 6*DELAY;
-            }else if(curplayer1 == 14*DELAY){
-                curplayer1 = 8*DELAY;
+                if(dir == 1){
+                    if(curplayer1 < 0 || curplayer1 > (7*DELAY)-2){
+                        curplayer1 = 0;
+                    }else if(flag){
+                        curplayer1++;
+                    }else{
+                        curplayer1 = 0;
+                    }
+                }else if(dir == 2){
+                    if(curplayer1 < 7*DELAY || curplayer1 > (14*DELAY)-2){
+                        curplayer1 = 7*DELAY;
+                    }else if(flag){
+                        curplayer1++;
+                    }else{
+                        curplayer1 = 7*DELAY;
+                    }
+                }else if(dir == 3){
+                    if(curplayer1 < 14*DELAY || curplayer1 > (17*DELAY)-2){
+                        curplayer1 = 14*DELAY;
+                    }else if(flag){
+                        curplayer1++;
+                    }else{
+                        curplayer1 = 15*DELAY;
+                    }
+                }else if(dir == 4){
+                    if(curplayer1 < 17*DELAY || curplayer1 > (20*DELAY)-2){
+                        curplayer1 = 17*DELAY;
+                    }else if(flag){
+                        curplayer1++;
+                    }else{
+                        curplayer1 = 18*DELAY;
+                    }
+                }
             }
 
             //FAZ COM QUE A NAVE FREIE AOS POUCOS (PENSAR EM TIRAR)
@@ -514,26 +562,61 @@ int main(int argc, char **argv){
                 }
             }else{
                 //MOVIMENTOS PLAYER2
-                if(key[KEY_W] && yplayer2 > 0){
-                    yplayer2 -= VELOCITY;
-                }
-                if(key[KEY_S] && yplayer2 < shipHeight - player2Height){
-                    yplayer2 += VELOCITY;
+                int flag = 0;
+                if(key[KEY_D] && xplayer2 < shipWidth - player2Width){
+                    dir2 = 1;
+                    xplayer2 += VELOCITY;
+                    flag = 1;
                 }
                 if(key[KEY_A] && xplayer2 > 0){
+                    dir2 = 2;
                     xplayer2 -= VELOCITY;
-                    curplayer2++;
+                    flag = 1;
                 }
-                if(key[KEY_D] && xplayer2 < shipWidth - player2Width){
-                    xplayer2 += VELOCITY;
-                    curplayer2--;
+                if(key[KEY_W] && yplayer2 > 0){
+                    dir2 = 3;
+                    yplayer2 -= VELOCITY;
+                    flag = 1;
                 }
-            }
-            //ATUALIZA OS FRAMES PLAYER2
-            if(curplayer2 == 0){
-                curplayer2 = 6*DELAY;
-            }else if(curplayer2 == 14*DELAY){
-                curplayer2 = 8*DELAY;
+                if(key[KEY_S] && yplayer2 < shipHeight - player2Height){
+                    dir2 = 4;
+                    yplayer2 += VELOCITY;
+                    flag = 1;
+                }
+
+                if(dir2 == 1){
+                    if(curplayer2 < 0 || curplayer2 > (7*DELAY)-2){
+                        curplayer2 = 0;
+                    }else if(flag){
+                        curplayer2++;
+                    }else{
+                        curplayer2 = 0;
+                    }
+                }else if(dir2 == 2){
+                    if(curplayer2 < 7*DELAY || curplayer2 > (14*DELAY)-2){
+                        curplayer2 = 7*DELAY;
+                    }else if(flag){
+                        curplayer2++;
+                    }else{
+                        curplayer2 = 7*DELAY;
+                    }
+                }else if(dir2 == 3){
+                    if(curplayer2 < 14*DELAY || curplayer2 > (17*DELAY)-2){
+                        curplayer2 = 14*DELAY;
+                    }else if(flag){
+                        curplayer2++;
+                    }else{
+                        curplayer2 = 15*DELAY;
+                    }
+                }else if(dir2 == 4){
+                    if(curplayer2 < 17*DELAY || curplayer2 > (20*DELAY)-2){
+                        curplayer2 = 17*DELAY;
+                    }else if(flag){
+                        curplayer2++;
+                    }else{
+                        curplayer2 = 18*DELAY;
+                    }
+                }
             }
 
             //ATUALIZA A CÂMERA AO OBJETO EM MOVIMENTO
@@ -616,11 +699,9 @@ int main(int argc, char **argv){
                     break;
                 case ALLEGRO_KEY_LEFT:
                     key[KEY_LEFT] = false;
-                    curplayer1=7*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     break;
                 case ALLEGRO_KEY_RIGHT:
                     key[KEY_RIGHT] = false;
-                    curplayer1=6*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     break;
                 //PLAYER2
                 case ALLEGRO_KEY_W:
@@ -631,10 +712,8 @@ int main(int argc, char **argv){
                     break;
                 case ALLEGRO_KEY_A:
                     key[KEY_A] = false;
-                    curplayer2=7*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     break;
                 case ALLEGRO_KEY_D:
-                    curplayer2=6*DELAY; //RETORNA PARA O FRAME DO PERSONAGEM PARADO
                     key[KEY_D] = false;
                     break;
 
@@ -715,10 +794,10 @@ int main(int argc, char **argv){
     //for(int i=0; i<4; i++){
     //    al_destroy_bitmap(compShot[i]);
     //}
-    for(int i=0; i<14; i++){
+    for(int i=0; i<20; i++){
         al_destroy_bitmap(player1[i]);
     }
-    for(int i=0; i<14; i++){
+    for(int i=0; i<20; i++){
         al_destroy_bitmap(player2[i]);
     }
     al_destroy_event_queue(event_queue);
