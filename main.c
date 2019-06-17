@@ -58,7 +58,7 @@
 //*APAGAR OS DADOS QUE CRIAM O OBJETO
 //*APAGAR OS COMANDOS DO TECLADO
 //*APAGAR O COMANDO DE DESENHO
-//*APAGAR OS DESTROYERS
+//*APAGAR OS DESTROYERSç
 
 const float FPS = 60;
 const int WORLD_W = 3000;
@@ -188,7 +188,7 @@ int main(int argc, char **argv){
     int fireHeight = al_get_bitmap_height(fire[0]);
 
     //PLAYER1
-    ALLEGRO_BITMAP  *player1[20];
+    ALLEGRO_BITMAP  *player1[22];
     player1[0] = al_load_bitmap("images/players/a00.png");
     player1[1] = al_load_bitmap("images/players/a01.png");
     player1[2] = al_load_bitmap("images/players/a02.png");
@@ -209,12 +209,14 @@ int main(int argc, char **argv){
     player1[17] = al_load_bitmap("images/players/a17.png");
     player1[18] = al_load_bitmap("images/players/a18.png");
     player1[19] = al_load_bitmap("images/players/a19.png");
-    int xplayer1 = shipWidth/2+30, yplayer1 = shipHeight/2+10, curplayer1 = 0;
+    player1[20] = al_load_bitmap("images/players/a20.png");
+    player1[21] = al_load_bitmap("images/players/a21.png");
+    int xplayer1 = shipWidth/2+7, yplayer1 = shipHeight/2+20, curplayer1 = 0;
     int player1Width = al_get_bitmap_width(player1[0]), player1Height = al_get_bitmap_height(player1[0]);
-    int dir = 0;
+    int dir = 1;
 
     //PLAYER2
-    ALLEGRO_BITMAP  *player2[20];
+    ALLEGRO_BITMAP  *player2[22];
     player2[0] = al_load_bitmap("images/players/b00.png");
     player2[1] = al_load_bitmap("images/players/b01.png");
     player2[2] = al_load_bitmap("images/players/b02.png");
@@ -235,9 +237,11 @@ int main(int argc, char **argv){
     player2[17] = al_load_bitmap("images/players/b17.png");
     player2[18] = al_load_bitmap("images/players/b18.png");
     player2[19] = al_load_bitmap("images/players/b19.png");
-    int xplayer2 = shipWidth/2-50, yplayer2 = shipHeight/2+10, curplayer2 = 0;
+    player2[20] = al_load_bitmap("images/players/b20.png");
+    player2[21] = al_load_bitmap("images/players/b21.png");
+    int xplayer2 = shipWidth/2-35, yplayer2 = shipHeight/2+20, curplayer2 = 0;
     int player2Width = al_get_bitmap_width(player2[0]), player2Height = al_get_bitmap_height(player2[0]);
-    int dir2 = 0;
+    int dir2 = 2;
 
     //COMPUTADOR NAVE
     //ALLEGRO_BITMAP *comp;
@@ -519,7 +523,7 @@ int main(int argc, char **argv){
                         curplayer1 = 7*DELAY;
                     }
                 }else if(dir == 3){
-                    if(curplayer1 < 14*DELAY || curplayer1 > (17*DELAY)-2){
+                    if(curplayer1 < 14*DELAY || curplayer1 > (18*DELAY)-2){
                         curplayer1 = 14*DELAY;
                     }else if(flag){
                         curplayer1++;
@@ -527,12 +531,12 @@ int main(int argc, char **argv){
                         curplayer1 = 15*DELAY;
                     }
                 }else if(dir == 4){
-                    if(curplayer1 < 17*DELAY || curplayer1 > (20*DELAY)-2){
-                        curplayer1 = 17*DELAY;
+                    if(curplayer1 < 18*DELAY || curplayer1 > (22*DELAY)-2){
+                        curplayer1 = 18*DELAY;
                     }else if(flag){
                         curplayer1++;
                     }else{
-                        curplayer1 = 18*DELAY;
+                        curplayer1 = 19*DELAY;
                     }
                 }
             }
@@ -685,7 +689,7 @@ int main(int argc, char **argv){
                         curplayer2 = 7*DELAY;
                     }
                 }else if(dir2 == 3){
-                    if(curplayer2 < 14*DELAY || curplayer2 > (17*DELAY)-2){
+                    if(curplayer2 < 14*DELAY || curplayer2 > (18*DELAY)-2){
                         curplayer2 = 14*DELAY;
                     }else if(flag){
                         curplayer2++;
@@ -693,12 +697,12 @@ int main(int argc, char **argv){
                         curplayer2 = 15*DELAY;
                     }
                 }else if(dir2 == 4){
-                    if(curplayer2 < 17*DELAY || curplayer2 > (20*DELAY)-2){
-                        curplayer2 = 17*DELAY;
+                    if(curplayer2 < 18*DELAY || curplayer2 > (22*DELAY)-2){
+                        curplayer2 = 18*DELAY;
                     }else if(flag){
                         curplayer2++;
                     }else{
-                        curplayer2 = 18*DELAY;
+                        curplayer2 = 19*DELAY;
                     }
                 }
             }
@@ -882,10 +886,10 @@ int main(int argc, char **argv){
     //for(int i=0; i<4; i++){
     //    al_destroy_bitmap(compShot[i]);
     //}
-    for(int i=0; i<20; i++){
+    for(int i=0; i<22; i++){
         al_destroy_bitmap(player1[i]);
     }
-    for(int i=0; i<20; i++){
+    for(int i=0; i<22; i++){
         al_destroy_bitmap(player2[i]);
     }
     al_destroy_event_queue(event_queue);
