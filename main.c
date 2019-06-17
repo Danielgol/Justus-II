@@ -5,6 +5,11 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
+
+
+
 
 //-----------------------------------------------
 //TESTE CAIO COMETAS
@@ -61,12 +66,50 @@ const int WORLD_H = 1500;
 const int VELOCITY = 2;
 const int DELAY = 6;
 
+void MovimentoAsteroide(float dist, int shipWidth, int astWidth, int WORLD_W, int WORLD_H, int* dirAst, int* xAst, int* yAst)
+{
+
+        if(*dirAst == 1 && *xAst != astWidth && *yAst != astWidth)
+        {
+            *xAst -= 1;
+            *yAst -= 1;
+        }
+        else if(*dirAst == 2 && *xAst != astWidth && *yAst != WORLD_H - astWidth)
+        {
+                *xAst -= 1;
+                *yAst += 1;
+        }
+        else if(*dirAst == 3 && *xAst != WORLD_W - astWidth && *yAst != astWidth)
+        {
+                *xAst += 1;
+                *yAst -= 1;
+        }
+        else if(*dirAst == 4 && *xAst != WORLD_W - astWidth && *yAst != WORLD_H - astWidth)
+        {
+                *xAst += 1;
+                *yAst += 1;
+        }
+        else
+        {
+            *dirAst = rand()%4 + 1;
+
+        }
+}
+
+void ColisaoNaveAst ()
+{
+    //if(dist > (shipWidth/2)+(astWidth/2))
+   // {
+
+    //}
+}
+
 enum MYKEYS {
    KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_W, KEY_A, KEY_S, KEY_D, KEY_L, KEY_E
 };
 
 int main(int argc, char **argv){
-
+    srand(time(NULL));
     //---------------------------------------------
     //TESTE CAIO COMETAS
     //Cometa cometas[NUM_COMETA]
@@ -99,7 +142,7 @@ int main(int argc, char **argv){
     al_init_image_addon();
     al_install_audio();
     al_init_acodec_addon();
-    al_reserve_samples(20);
+    al_reserve_samples(20); // MOVIMENTO ASTEROIDE
     //al_init_primitives_addon(); //FULLSCREEN
     al_install_keyboard();
     timer = al_create_timer(1.0 / FPS);
@@ -218,6 +261,7 @@ int main(int argc, char **argv){
     int astWidth = al_get_bitmap_width(asteroid);
     int astHeight = al_get_bitmap_height(asteroid);
     float dist;
+    int dirAst = 1;
 
     //PLANO DE FUNDO
     ALLEGRO_BITMAP *background;
@@ -351,11 +395,16 @@ int main(int argc, char **argv){
     //INICIALIZAÇÃO DA TRILHA SONORA
     al_play_sample_instance(inst_theme);
 
+    //FORÇA ASTEROIDE
+    float forceAX = 0;
+    float forceAY = 0;
 
     while(1){
 
         ALLEGRO_EVENT ev;
         al_wait_for_event(event_queue, &ev);
+
+
 
         //EVENTOS RELACIONADO A VIDA
         if(oxigenioscale==oxigenioWidth)
@@ -383,7 +432,8 @@ int main(int argc, char **argv){
                     //float angle = rotation*3.14159/180;
                     //float senof = 0;
                     //float cosef = 0;
-                    //if(-3.14159/2 <= angle && angle <= 3.14159/2){
+                    //if(-3.14159/2 <= angle && angle <= 3  if(dist > (shipWidth/2)+(astWidth/2))
+
                     //    senof = 2*angle/3.14159;
                     //    cosef = 1-senof;
                     //}else{
@@ -418,7 +468,7 @@ int main(int argc, char **argv){
                     rotation+=1;
 
                     al_play_sample_instance(inst_rotacao_h);
-                }else{
+                }else{if(dist > (shipWidth/2)+(astWidth/2))
                     al_stop_sample_instance(inst_rotacao_h);
                 }
                 if(key[KEY_RIGHT]){
@@ -442,7 +492,7 @@ int main(int argc, char **argv){
                     flag = 1;
                 }
                 if(key[KEY_UP] && yplayer1 > 0){
-                    dir = 3;
+                    dir = 3;if(dist > (shipWidth/2)+(astWidth/2))
                     yplayer1 -= VELOCITY;
                     flag = 1;
                 }
@@ -490,7 +540,7 @@ int main(int argc, char **argv){
             //FAZ COM QUE A NAVE FREIE AOS POUCOS (PENSAR EM TIRAR)
             if(forceY < 0){
                     forceY += 0.002;
-                    if(forceY>0){
+                    if(forceY>0){if(dist > (shipWidth/2)+(astWidth/2))
                         forceY=0;
                     }
             }else if(forceY > 0){
@@ -517,6 +567,40 @@ int main(int argc, char **argv){
             }else if(rotation < 0){
                 rotation = 359;
             }
+
+             // MOVIMENTO ASTEROIDE
+            MovimentoAsteroide(dist, shipWidth, astWidth, WORLD_W, WORLD_H, &dirAst, &xAst, &yAst);
+
+            dist = sqrt((pow((xShip+shipWidth/2)-(xAst+astWidth/2), 2))+(pow((yShip+shipWidth/2)-(yAst+astHeight/2), 2)));
+            if(dist <= (shipWidth/2)+(astWidth/2))
+            {
+                float vx = xShip - xAst;
+                float vy = yShip - yAst;
+
+                float lenSq = (vx*vx + vy*vy);
+                float len = sqrt(lenSq);
+
+                vx /= len;
+                vy /= len;
+
+                forceAX += -vx*0.1;
+                forceAY += -vy*0.1;
+            }
+            if(forceAY < -1.5){
+                forceAY = -1.5;
+            }
+            if(forceAY > 1.5){
+                forceAY = 1.5;
+            }
+            if(forceAX < -1.5){
+                forceAX = -1.5;
+            }
+            if(forceAX > 1.5){
+                forceAX = 1.5;
+            }
+
+            xAst += forceAX;
+            yAst += forceAY;
 
             //APLICA AS FORÇAS NA NAVE
             yShip += forceY;
@@ -624,7 +708,7 @@ int main(int argc, char **argv){
             cameraY = yShip - SCREEN_H/2 +shipHeight/2;
 
             //CALCULA DISTÂNCIA ENTRE O ASTEROID E A NAVE
-            dist = sqrt((pow((xShip+shipWidth/2)-(xAst+astWidth/2), 2))+(pow((yShip+shipWidth/2)-(yAst+astHeight/2), 2)));
+          //  dist = sqrt((pow((xShip+shipWidth/2)-(xAst+astWidth/2), 2))+(pow((yShip+shipWidth/2)-(yAst+astHeight/2), 2)));
 
             //LIMITA A CAMERA NAS BORDAS DO MAPA (PENSAR UM LIMITE DE ASTEROIDS E NÃO DA CÂMERA)
             if(cameraX < 0){
@@ -646,7 +730,7 @@ int main(int argc, char **argv){
         }else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
             switch(ev.keyboard.keycode) {
                 //PLAYER1
-                case ALLEGRO_KEY_UP:
+                case ALLEGRO_KEY_UP:if(dist > (shipWidth/2)+(astWidth/2))
                     key[KEY_UP] = true;
                     break;
                 case ALLEGRO_KEY_DOWN:
@@ -657,7 +741,7 @@ int main(int argc, char **argv){
                     break;
                 case ALLEGRO_KEY_RIGHT:
                     key[KEY_RIGHT] = true;
-                    break;
+            break;
                 case ALLEGRO_KEY_L:
                     if(controle == 1){
                         controle = 0;
@@ -746,10 +830,14 @@ int main(int argc, char **argv){
             al_draw_scaled_bitmap(barra,0,0,barraWidth,barraHeight,SCREEN_W/2-barraWidth/2,SCREEN_H-100,barraWidth,barraHeight, 0);
             //al_draw_scaled_bitmap(gasolina,0,0,gasolinaWidth,gasolinaHeight,xgasolina+400,ygasolina+650,gasolinaWidth,gasolinaHeight, 0);
             //al_draw_scaled_bitmap(galao,0,0,galaoWidth,galaoHeight,xgalao+400,ygalao+650,galaoWidth,galaoHeight, 0);
+            al_draw_scaled_bitmap(asteroid,0,0,astWidth,astHeight,xAst-cameraX,yAst-cameraY,astWidth, astHeight, 0);
 
-            if(dist > (shipWidth/2)+(astWidth/2)){
-                al_draw_scaled_bitmap(asteroid,0,0,astWidth,astHeight,xAst-cameraX,yAst-cameraY,astWidth, astHeight, 0);
+            //FORMULA COLISÃO NAVE - ASTEROIDE
+            if(dist > (shipWidth/2)+(astWidth/2))
+            {
+
             }
+
             //AO DESENHAR QUALQUER COISA (FORA O OBJETO FOCO DA CAMERA) COLOCAR AS POSIÇÕES DE DESENHO "X_OBJETO - CAMERAX" E "Y_OBJETO - CAMERAY"
             al_flip_display();
         }
