@@ -837,8 +837,17 @@ int main(int argc, char **argv){
 
             al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation-90)*3.14159/180),0);
             al_draw_scaled_bitmap(ship,0,0,shipWidth,shipHeight,xShip-cameraX,yShip-cameraY,shipWidth, shipHeight, 0);
-            al_draw_scaled_bitmap(player2[curplayer2/DELAY],0,0,player2Width,player2Height,xplayer2+xShip-cameraX,yplayer2+yShip-cameraY,player2Width, player2Height, 0);
-            al_draw_scaled_bitmap(player1[curplayer1/DELAY],0,0,player1Width,player1Height,xplayer1+xShip-cameraX,yplayer1+yShip-cameraY,player1Width, player1Height, 0);
+            if(yplayer1>=yplayer2)
+            {
+                al_draw_scaled_bitmap(player2[curplayer2/DELAY],0,0,player2Width,player2Height,xplayer2+xShip-cameraX,yplayer2+yShip-cameraY,player2Width, player2Height, 0);
+                al_draw_scaled_bitmap(player1[curplayer1/DELAY],0,0,player1Width,player1Height,xplayer1+xShip-cameraX,yplayer1+yShip-cameraY,player1Width, player1Height, 0);
+            }
+            else
+            {
+                al_draw_scaled_bitmap(player1[curplayer1/DELAY],0,0,player1Width,player1Height,xplayer1+xShip-cameraX,yplayer1+yShip-cameraY,player1Width, player1Height, 0);
+                al_draw_scaled_bitmap(player2[curplayer2/DELAY],0,0,player2Width,player2Height,xplayer2+xShip-cameraX,yplayer2+yShip-cameraY,player2Width, player2Height, 0);
+            }
+
             al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,(SCREEN_W/2)-(vidaWidth/2)-15,SCREEN_H-43,vidaWidth-vidascale,vidaHeight, 0);
             al_draw_scaled_bitmap(oxigenio,0,0,oxigenioWidth,oxigenioHeight,SCREEN_W/2-oxigenioWidth/2-15,SCREEN_H-36,oxigenioWidth-oxigenioscale,oxigenioHeight, 0);
             al_draw_scaled_bitmap(barra,0,0,barraWidth,barraHeight,SCREEN_W/2-barraWidth/2,SCREEN_H-100,barraWidth,barraHeight, 0);
