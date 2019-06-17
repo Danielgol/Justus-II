@@ -487,23 +487,40 @@ int main(int argc, char **argv){
                 int flag = 0;
                 if(key[KEY_RIGHT] && xplayer1 < shipWidth - player1Width){
                     dir = 1;
-                    xplayer1 += VELOCITY;
-                    flag = 1;
+                    //LIMITES
+                    if(xplayer1 + VELOCITY !=255)
+                    {
+                      xplayer1 += VELOCITY;
+                      flag = 1;
+                    }
+
                 }
                 if(key[KEY_LEFT] && xplayer1 > 0){
                     dir = 2;
-                    xplayer1 -= VELOCITY;
-                    flag = 1;
+                    //LIMITES
+                    if(xplayer1 + VELOCITY !=99)
+                    {
+                        xplayer1 -= VELOCITY;
+                        flag = 1;
+                    }
                 }
                 if(key[KEY_UP] && yplayer1 > 0){
-                    dir = 3;if(dist > (shipWidth/2)+(astWidth/2))
+                    dir = 3;
+                    //LIMITES
+                    if(yplayer1 - VELOCITY != 76)
+                    {
                     yplayer1 -= VELOCITY;
                     flag = 1;
+                    }
                 }
                 if(key[KEY_DOWN] && yplayer1 < shipHeight - player1Height){
                     dir = 4;
+                    //LIMITES
+                    if(yplayer1 + VELOCITY != 244)
+                    {
                     yplayer1 += VELOCITY;
                     flag = 1;
+                    }
                 }
 
                 if(dir == 1){
@@ -653,23 +670,38 @@ int main(int argc, char **argv){
                 int flag = 0;
                 if(key[KEY_D] && xplayer2 < shipWidth - player2Width){
                     dir2 = 1;
-                    xplayer2 += VELOCITY;
-                    flag = 1;
+                    //LIMITES
+                    if(xplayer2+VELOCITY !=255)
+                    {
+                      xplayer2 += VELOCITY;
+                      flag = 1;
+                    }
                 }
                 if(key[KEY_A] && xplayer2 > 0){
                     dir2 = 2;
-                    xplayer2 -= VELOCITY;
-                    flag = 1;
+                    if(xplayer2 + VELOCITY !=99)
+                    {
+                        xplayer2 -= VELOCITY;
+                        flag = 1;
+                    }
                 }
                 if(key[KEY_W] && yplayer2 > 0){
                     dir2 = 3;
+                    //LIMITES
+                    if(yplayer2 - VELOCITY != 76)
+                    {
                     yplayer2 -= VELOCITY;
                     flag = 1;
+                    }
                 }
                 if(key[KEY_S] && yplayer2 < shipHeight - player2Height){
                     dir2 = 4;
+                    //LIMITES
+                    if(yplayer2 + VELOCITY != 244)
+                    {
                     yplayer2 += VELOCITY;
                     flag = 1;
+                    }
                 }
 
                 if(dir2 == 1){
