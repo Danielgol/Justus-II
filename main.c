@@ -473,39 +473,39 @@ int main(int argc, char **argv){
                 if(key[KEY_RIGHT] && xplayer1 < shipWidth - player1Width){
                     dir = 1;
                     //LIMITES
-                    if(xplayer1 + VELOCITY !=255)
+                    if(xplayer1 + VELOCITY <=255 && yplayer1>=76 && yplayer1 <=244 || yplayer1 >= 140 && yplayer1 <= 182 || xplayer1 + VELOCITY >=155 && xplayer1 + VELOCITY <=195 )
                     {
                       xplayer1 += VELOCITY;
-                      flag = 1;
                     }
+                    flag = 1;
 
                 }
                 if(key[KEY_LEFT] && xplayer1 > 0){
                     dir = 2;
                     //LIMITES
-                    if(xplayer1 + VELOCITY !=99)
+                    if(xplayer1 - VELOCITY >=99 && yplayer1>=76 && yplayer1 <=244 || yplayer1 >= 140 && yplayer1 <= 182 || xplayer1 - VELOCITY >=155 && xplayer1 - VELOCITY <=195 )
                     {
                         xplayer1 -= VELOCITY;
-                        flag = 1;
                     }
+                    flag = 1;
                 }
                 if(key[KEY_UP] && yplayer1 > 0){
                     dir = 3;
                     //LIMITES
-                    if(yplayer1 - VELOCITY != 76)
+                    if(yplayer1 - VELOCITY >= 76 && xplayer1>=99 && xplayer1<=255 || xplayer1 >= 155 && xplayer1 <= 195 || yplayer1 - VELOCITY >= 140 && yplayer1 - VELOCITY <= 182 )
                     {
                     yplayer1 -= VELOCITY;
-                    flag = 1;
                     }
+                    flag = 1;
                 }
                 if(key[KEY_DOWN] && yplayer1 < shipHeight - player1Height){
                     dir = 4;
                     //LIMITES
-                    if(yplayer1 + VELOCITY != 244)
+                    if(yplayer1 + VELOCITY <= 244 && xplayer1>=99 && xplayer1<=255 || xplayer1 >= 155 && xplayer1 <= 195 || yplayer1 + VELOCITY >= 140 && yplayer1 + VELOCITY <= 182 )
                     {
                     yplayer1 += VELOCITY;
-                    flag = 1;
                     }
+                    flag = 1;
                 }
 
                 if(dir == 1){
@@ -656,38 +656,38 @@ int main(int argc, char **argv){
                 if(key[KEY_D] && xplayer2 < shipWidth - player2Width){
                     dir2 = 1;
                     //LIMITES
-                    if(xplayer2+VELOCITY !=255)
+                    if(xplayer2 + VELOCITY <=255 && yplayer2>=76 && yplayer2 <=244 || yplayer2 >= 140 && yplayer2 <= 182 || xplayer2 + VELOCITY >=155 && xplayer2 + VELOCITY <=195)
                     {
                       xplayer2 += VELOCITY;
-                      flag = 1;
                     }
+                    flag = 1;
                 }
                 if(key[KEY_A] && xplayer2 > 0){
                     dir2 = 2;
                     //LIMITES
-                    if(xplayer2 + VELOCITY !=99)
+                    if(xplayer2 - VELOCITY >=99 && yplayer2>=76 && yplayer2 <=244 || yplayer2 >= 140 && yplayer2 <= 182 || xplayer2 - VELOCITY >=155 && xplayer2 - VELOCITY <=195)
                     {
                         xplayer2 -= VELOCITY;
-                        flag = 1;
                     }
+                    flag = 1;
                 }
                 if(key[KEY_W] && yplayer2 > 0){
                     dir2 = 3;
                     //LIMITES
-                    if(yplayer2 - VELOCITY != 76)
+                    if(yplayer2 - VELOCITY >= 76 && xplayer2>=99 && xplayer2<=255 || xplayer2 >= 155 && xplayer2 <= 195 || yplayer2 - VELOCITY >= 140 && yplayer2 - VELOCITY <= 182)
                     {
                     yplayer2 -= VELOCITY;
-                    flag = 1;
                     }
+                    flag = 1;
                 }
                 if(key[KEY_S] && yplayer2 < shipHeight - player2Height){
                     dir2 = 4;
                     //LIMITES
-                    if(yplayer2 + VELOCITY != 244)
+                    if(yplayer2 + VELOCITY <= 244 && xplayer2>=99 && xplayer2<=255 || xplayer2 >= 155 && xplayer2 <= 195 || yplayer2 + VELOCITY >= 140 && yplayer2 + VELOCITY <= 182)
                     {
                     yplayer2 += VELOCITY;
-                    flag = 1;
                     }
+                    flag = 1;
                 }
 
                 if(dir2 == 1){
