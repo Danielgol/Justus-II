@@ -243,21 +243,6 @@ int main(int argc, char **argv){
     int player2Width = al_get_bitmap_width(player2[0]), player2Height = al_get_bitmap_height(player2[0]);
     int dir2 = 2;
 
-    //COMPUTADOR NAVE
-    //ALLEGRO_BITMAP *comp;
-    //comp = al_load_bitmap("images/ship/comp.png");
-    //float compScale = 0.3;
-    //int compWidth = al_get_bitmap_width(comp), compHeight = al_get_bitmap_height(comp);
-
-    //COMPUTADORES DE TIRO
-    //ALLEGRO_BITMAP *compShot[4];
-    //compShot[0] = al_load_bitmap("images/ship/compShot.png");
-    //compShot[1] = al_load_bitmap("images/ship/compShot.png");
-    //compShot[2] = al_load_bitmap("images/ship/compShot.png");
-    //compShot[3] = al_load_bitmap("images/ship/compShot.png");
-    //int compShotWidth = al_get_bitmap_width(compShot[0]);
-    //int compShotHeight = al_get_bitmap_height(compShot[0]);
-
     //ASTEROIDE
     ALLEGRO_BITMAP *asteroid;
     asteroid = al_load_bitmap("images/asteroids/Asteroid.png");
@@ -436,7 +421,7 @@ int main(int argc, char **argv){
                     //float angle = rotation*3.14159/180;
                     //float senof = 0;
                     //float cosef = 0;
-                    //if(-3.14159/2 <= angle && angle <= 3  if(dist > (shipWidth/2)+(astWidth/2))
+                    //if(-3.14159/2 <= angle && angle <= 3
 
                     //    senof = 2*angle/3.14159;
                     //    cosef = 1-senof;
@@ -472,7 +457,7 @@ int main(int argc, char **argv){
                     rotation+=1;
 
                     al_play_sample_instance(inst_rotacao_h);
-                }else{if(dist > (shipWidth/2)+(astWidth/2))
+                }else{
                     al_stop_sample_instance(inst_rotacao_h);
                 }
                 if(key[KEY_RIGHT]){
@@ -561,7 +546,7 @@ int main(int argc, char **argv){
             //FAZ COM QUE A NAVE FREIE AOS POUCOS (PENSAR EM TIRAR)
             if(forceY < 0){
                     forceY += 0.002;
-                    if(forceY>0){if(dist > (shipWidth/2)+(astWidth/2))
+                    if(forceY>0){
                         forceY=0;
                     }
             }else if(forceY > 0){
@@ -679,6 +664,7 @@ int main(int argc, char **argv){
                 }
                 if(key[KEY_A] && xplayer2 > 0){
                     dir2 = 2;
+                    //LIMITES
                     if(xplayer2 + VELOCITY !=99)
                     {
                         xplayer2 -= VELOCITY;
@@ -743,9 +729,6 @@ int main(int argc, char **argv){
             cameraX = xShip - SCREEN_W/2 +shipWidth/2;
             cameraY = yShip - SCREEN_H/2 +shipHeight/2;
 
-            //CALCULA DISTÂNCIA ENTRE O ASTEROID E A NAVE
-          //  dist = sqrt((pow((xShip+shipWidth/2)-(xAst+astWidth/2), 2))+(pow((yShip+shipWidth/2)-(yAst+astHeight/2), 2)));
-
             //LIMITA A CAMERA NAS BORDAS DO MAPA (PENSAR UM LIMITE DE ASTEROIDS E NÃO DA CÂMERA)
             if(cameraX < 0){
                 cameraX = 0;
@@ -766,7 +749,7 @@ int main(int argc, char **argv){
         }else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
             switch(ev.keyboard.keycode) {
                 //PLAYER1
-                case ALLEGRO_KEY_UP:if(dist > (shipWidth/2)+(astWidth/2))
+                case ALLEGRO_KEY_UP:
                     key[KEY_UP] = true;
                     break;
                 case ALLEGRO_KEY_DOWN:
@@ -854,11 +837,6 @@ int main(int argc, char **argv){
 
             al_draw_rotated_bitmap(propulsor,propHeight/2, propHeight/2,xShip-cameraX+shipWidth/2, yShip-cameraY+shipHeight/2,((rotation-90)*3.14159/180),0);
             al_draw_scaled_bitmap(ship,0,0,shipWidth,shipHeight,xShip-cameraX,yShip-cameraY,shipWidth, shipHeight, 0);
-            //al_draw_scaled_bitmap(comp,0,0,compWidth,compHeight,xShip-cameraX+shipWidth/2-10,yShip-cameraY+shipHeight/2-15,compWidth*compScale, compHeight*compScale, 0);
-            //al_draw_scaled_bitmap(compShot[0],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-140,yShip-cameraY+shipHeight/2-15,compShotWidth*compScale, compShotHeight*compScale, 0);
-            //al_draw_scaled_bitmap(compShot[1],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+110,yShip-cameraY+shipHeight/2-20,compShotWidth*compScale, compShotHeight*compScale, 0);
-            //al_draw_scaled_bitmap(compShot[2],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2+15,yShip-cameraY+shipHeight/2-150,compShotWidth*compScale, compShotHeight*compScale, 0);
-            //al_draw_scaled_bitmap(compShot[3],0,0,compShotWidth,compShotHeight,xShip-cameraX+shipWidth/2-5,yShip-cameraY+shipHeight/2+100,compShotWidth*compScale, compShotHeight*compScale, 0);
             al_draw_scaled_bitmap(player2[curplayer2/DELAY],0,0,player2Width,player2Height,xplayer2+xShip-cameraX,yplayer2+yShip-cameraY,player2Width, player2Height, 0);
             al_draw_scaled_bitmap(player1[curplayer1/DELAY],0,0,player1Width,player1Height,xplayer1+xShip-cameraX,yplayer1+yShip-cameraY,player1Width, player1Height, 0);
             al_draw_scaled_bitmap(vida,0,0,vidaWidth,vidaHeight,(SCREEN_W/2)-(vidaWidth/2)-15,SCREEN_H-43,vidaWidth-vidascale,vidaHeight, 0);
@@ -873,7 +851,6 @@ int main(int argc, char **argv){
             {
 
             }
-
             //AO DESENHAR QUALQUER COISA (FORA O OBJETO FOCO DA CAMERA) COLOCAR AS POSIÇÕES DE DESENHO "X_OBJETO - CAMERAX" E "Y_OBJETO - CAMERAY"
             al_flip_display();
         }
@@ -886,7 +863,6 @@ int main(int argc, char **argv){
     al_destroy_bitmap(background);
     al_destroy_bitmap(propulsor);
     al_destroy_bitmap(ship);
-    //al_destroy_bitmap(comp);
     al_destroy_bitmap(asteroid);
     al_destroy_bitmap(barra);
     al_destroy_bitmap(vida);
@@ -915,9 +891,6 @@ int main(int argc, char **argv){
     for(int i=0; i<12; i++){
         al_destroy_bitmap(fire[i]);
     }
-    //for(int i=0; i<4; i++){
-    //    al_destroy_bitmap(compShot[i]);
-    //}
     for(int i=0; i<22; i++){
         al_destroy_bitmap(player1[i]);
     }
