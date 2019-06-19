@@ -9,6 +9,13 @@
 #include <malloc.h>
 #include <math.h>
 
+//FAZER UM TIMER
+//srand(time(NULL));
+
+//TEM QUE PERGUNTAR SE TEM ALGUM COMETA VIVO APOS CADA AÇAO DO PLAYER
+//TEM QUE ATUALIZAR CADA COMETA A CADA AÇÃO TBM
+//StartCometa(cometa, NUM_COMETA);
+//UpdateCometa(cometa, NUM_COMETA);
 //-----------------------------------------------
 //TESTE CAIO COMETAS
 //const int NUM_COMETA = 10;
@@ -35,12 +42,51 @@
 //   {
 //     if(cometa[i].live)
 //      {
-//        al_draw_filled_circle(cometas[i].x,cometas[i].y,20,al_map_rgb(255,0,0));
+//        al_load_bitmap("images/asteroids/Asteroid.png");
 //      }
 //   }
 //};
-//void StartCometa(Cometa cometas[],int size);
-//void UpdateCometa(Cometa cometas[],int size);
+
+//LEMBRAR DE FAZER NUMERO MAXIMO DE COMETAS NA TELA
+//void StartCometa(Cometa cometas[],int size)
+//{
+//    for(int i = 0; i <size; i++)
+//    {
+//      if(!cometa[i].live)
+//      {
+//
+//         if(rand % 2000 == 0) FAZER DE OUTRA FORMA DEPOIS
+//             {
+//                 cometa[i].live = true;
+//                 cometa[i].x = TEM QUE SER ALEATORIO mas n em cima da nave, entao algo do tipo nave x + rand ou outro if;
+//                 cometa[i].y = TEM QUE SER ALEATORIO ;
+//                 break;
+//             }
+//       }
+//    }
+//}
+//void UpdateCometa(Cometa cometas[],int size)
+//{
+//   for(int i = 0; i <size; i++)
+//     {
+//        if(cometa[i].live)
+//        {
+//          FAZER O COMETA IR EM DIREÇÃO DA NAVEV
+//          cometa[i].x -= cometa[i].speed;
+//          cometa[i].y -= cometa[i].speed;
+//          //DESTRUIR O COMETA SE ELE TOCAR NA BORDA DO MAPA
+//
+//          if(cometa[i].x < 0)
+//           {
+//             cometa[i].live = false;
+//           }
+//          if(cometa[i].y < 0)
+//           {
+//             cometa[i].live = false;
+//           }
+//        }
+//     }
+//}
 //-----------------------------------------------
 
 //ISSUES:
