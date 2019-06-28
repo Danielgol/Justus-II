@@ -505,14 +505,26 @@ int main(int argc, char **argv){
                 if(key[KEY_RIGHT] && player1.x < ship.width - player1.width){
                     player1.dir = 1;
                     if(player1.x + VELOCITY <=255 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x + VELOCITY >=155 && player1.x + VELOCITY <=195 ){
-                      player1.x += VELOCITY;
+                      if((player1.x + VELOCITY < 141)||(player1.x + VELOCITY > 141 && player1.x + VELOCITY < 195 && player1.y < 182 && player1.y > 122)||(player1.y > 182)||(player1.y <= 122 && player1.y>90) || (player1.y <=90 && player1.x <= 200) || (player1.x + VELOCITY > 195 && player1.x + VELOCITY < 290 && player1.y >= 90))
+                      {
+                        if((player1.x + VELOCITY > 195 && player1.y>120 && player1.y < 145 && player1.x + VELOCITY <235)||(player1.x<=195)||(player1.x>195 && player1.y<120)||(player1.x>195 && player1.y>145)|| (player1.x>=255))
+                        {
+                           player1.x += VELOCITY;
+                        }
+                      }
                     }
                     flag = 1;
                 }
                 if(key[KEY_LEFT] && player1.x > 0){
                     player1.dir = 2;
                     if(player1.x - VELOCITY >=99 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x - VELOCITY >=155 && player1.x - VELOCITY <=195 ){
-                        player1.x -= VELOCITY;
+                        if((player1.x - VELOCITY > 55 && player1.x - VELOCITY < 159 && player1.y < 230)||(player1.x-VELOCITY>159 && player1.x-VELOCITY<205 && player1.y <182 && player1.y > 122)||(player1.y > 182 && player1.x > 130)||(player1.y <= 122) || (player1.x - VELOCITY > 209))
+                        {
+                            if((player1.x - VELOCITY < 135 && player1.y>120 && player1.y<145 && player1.x - VELOCITY > 119)||(player1.x >=135)||(player1.x <135 && player1.y<120)||(player1.x<135 && player1.y > 145)||(player1.x<=99))
+                            {
+                                player1.x -= VELOCITY;
+                            }
+                        }
                     }
                     flag = 1;
                 }
