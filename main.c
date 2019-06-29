@@ -614,28 +614,52 @@ int main(int argc, char **argv){
                 if(key[KEY_D] && player2.x < ship.width - player2.width){
                     player2.dir = 1;
                     if(player2.x + VELOCITY <=255 && player2.y>=76 && player2.y <=244 || player2.y >= 140 && player2.y <= 182 || player2.x + VELOCITY >=155 && player2.x + VELOCITY <=195 ){
-                      player2.x += VELOCITY;
+                      if((player2.x + VELOCITY < 141)||(player2.x + VELOCITY > 141 && player2.x + VELOCITY < 195 && player2.y < 182 && player2.y > 122)||(player2.y > 182)||(player2.y <= 122 && player2.y>90) || (player2.y <=90 && player2.x <= 200) || (player2.x + VELOCITY > 195 && player2.x + VELOCITY < 290 && player2.y >= 90))
+                      {
+                        if((player2.x + VELOCITY > 195 && player2.y>120 && player2.y < 142 && player2.x + VELOCITY <235)||(player2.x<=195)||(player2.x>195 && player2.y<120)||(player2.x>195 && player2.y>142)|| (player2.x>=255))
+                        {
+                           player2.x += VELOCITY;
+                        }
+                      }
                     }
                     flag = 1;
                 }
                 if(key[KEY_A] && player2.x > 0){
                     player2.dir = 2;
                     if(player2.x - VELOCITY >=99 && player2.y>=76 && player2.y <=244 || player2.y >= 140 && player2.y <= 182 || player2.x - VELOCITY >=155 && player2.x - VELOCITY <=195 ){
-                        player2.x -= VELOCITY;
+                        if((player2.x - VELOCITY > 55 && player2.x - VELOCITY < 159 && player2.y < 230)||(player2.x-VELOCITY>159 && player2.x-VELOCITY<205 && player2.y <182 && player2.y > 122)||(player2.y > 182 && player2.x > 130)||(player2.y <= 122) || (player2.x - VELOCITY > 209))
+                        {
+                            if((player2.x - VELOCITY < 135 && player2.y>120 && player2.y<142 && player2.x - VELOCITY > 119)||(player2.x >=135)||(player2.x <135 && player2.y<120)||(player2.x<135 && player2.y > 142)||(player2.x<=99))
+                            {
+                                player2.x -= VELOCITY;
+                            }
+                        }
                     }
                     flag = 1;
                 }
                 if(key[KEY_W] && player2.y > 0){
                     player2.dir = 3;
                     if(player2.y - VELOCITY >= 76 && player2.x>=99 && player2.x<=255 || player2.x >= 155 && player2.x <= 195 || player2.y - VELOCITY >= 140 && player2.y - VELOCITY <= 182 ){
-                        player2.y -= VELOCITY;
+                        if((player2.y - VELOCITY> 30 && player2.y - VELOCITY <= 76)||(player2.x >= 135 && player2.x <= 205 && player2.y - VELOCITY > 184)|| (player2.x > 205 && player2.y > 90 )||(player2.y<=90 && player2.y>=76 && player2.x<205)||(player2.x <= 140)||(player2.y-VELOCITY <= 155 && player2.y-VELOCITY>=76 && player2.x >=135 && player2.x<=205))
+                        {
+                            if((player2.x>50 && player2.y - VELOCITY>142)||(player2.y - VELOCITY <=142 && player2.x>110 && player2.x<242)||(player2.y-VELOCITY<=120))
+                            {
+                                player2.y -= VELOCITY;
+                            }
+                        }
                     }
                     flag = 1;
                 }
                 if(key[KEY_S] && player2.y < ship.height - player2.height){
                     player2.dir = 4;
                     if(player2.y + VELOCITY <= 244 && player2.x>=99 && player2.x<=255 || player2.x >= 155 && player2.x <= 195 || player2.y + VELOCITY >= 140 && player2.y + VELOCITY <= 182 ){
-                        player2.y += VELOCITY;
+                        if((player2.y + VELOCITY>= 244 && player2.y + VELOCITY < 295)||(player2.x >= 135 && player2.x <= 205 && player2.y + VELOCITY < 150)|| (player2.x > 205 )||(player2.x <= 140 && player2.y + VELOCITY < 230)||(player2.y + VELOCITY>= 230 && player2.x>115 && player2.x <=135)||(player2.x >= 135 && player2.x<=205 && player2.y + VELOCITY < 295 && player2.y>180))
+                        {
+                            if((player2.x>50 && player2.y + VELOCITY< 120)||(player2.y + VELOCITY >= 120 && player2.x>110 && player2.x<140 )||(player2.y + VELOCITY >= 120 && player2.x>159 && player2.x<195)||(player2.y + VELOCITY >= 120 && player2.x>209 && player2.x<242)||(player2.y+VELOCITY >= 142))
+                                {
+                                player2.y += VELOCITY;
+                                }
+                        }
                     }
                     flag = 1;
                 }
