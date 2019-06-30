@@ -258,6 +258,110 @@ enum MYKEYS {
    KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_W, KEY_A, KEY_S, KEY_D, KEY_L, KEY_E
 };
 
+/* tirar o comment qnd o tiro tiver implementado
+//Verificar se o tiro acertou o asteroide, if(1) == ocorreu a coliãso, asteroid perde vida.
+// Observação: COLOQUEI COMO NOME DA VARIÁVEL DO TIRO "TIRO", quando for implantado, me retornar para eu mudar para o nome que vcs decidirem.
+int VerifyColisionTiroAsteroid (TIRO *tiro, ASTEROID *asteroid)
+{
+    float dist = sqrt((pow((tiro->x + tiro->width/2)-(asteroid->x + asteroid->width/2), 2)) + (pow((tiro->y + tiro->height/2)-(asteroid->y + asteroid->height/2), 2)));
+    if (dist <= (shot->width/2)+(asteroid->width/2))
+    {
+        return 1;
+    }
+    return 0;
+}
+*/
+//Verificar se o Asteroide bateu na nave - A decidir o que vai acontecer - Retornar 1 significa que ocorreu a colisão.
+int VerifyColisionShipAsteroid (SHIP *ship, ASTEROID *asteroid)
+{
+    //distancia de dois pontos cartesianos = raiz de (x2-x1)^2 + (y2-y1)^2
+    // ship.x+ship.width/2 é o ponto central da nave
+    // asteroid.x+asteroid.width/2 é o ponto central do asteroide
+    // Dist é calculada pela distância entre os centros dos dois objetos, lembrando que por serem círculos, os raios são os mesmos, portanto, height e widht são iguais.
+    float dist = sqrt((pow((ship->x+ship->width/2)-(asteroid->x+asteroid->width/2), 2))+(pow((ship->y+ship->width/2)-(asteroid->y+asteroid->height/2), 2)));
+    if(dist <= (ship->width/2) + (asteroid->width/2))
+    {
+        return 1;
+    }
+    return 0;
+}
+
+int VerifyColisionInterAsteroids (ASTEROID *asteroid1, ASTEROID *asteroid2)
+{
+    float dist = sqrt((pow((asteroid1->x + asteroid1->width/2)-(asteroid2->x + asteroid2->width/2), 2)) + (pow((asteroid1->y + asteroid1->height/2)-(asteroid2->y + asteroid2->height/2), 2)));
+    if (dist <= (asteroid1->width/2) + (asteroid2->width/2))
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+/*
+void ColisaoShipAsteroid (SHIP *ship, ASTEROID *asteroid)
+{
+    float vx = (ship->x+(ship->width/2)) - (asteroid->x + (asteroid->width/2));
+    float vy = (ship->y+(ship->height/2)) - (asteroid->y + (asteroid->height/2));
+
+    float lenSq = (vx*vx + vy*vy);
+    float len = sqrt(lenSq);
+
+    vx /= len;
+    vy /= len;
+
+    asteroid->forceX += -vx;
+    asteroid->forceY += -vy;
+
+    limitarForcas(&asteroid->forceX, &asteroid->forceY, 1.5);
+
+    ship->forceX -= asteroid->forceX/10;
+    ship->forceY -= asteroid->forceY/10;
+
+
+
+}
+ tirar comment qnd o tiro tiver implementado
+void ColisaoTiroAsteroid (TIRO *tiro, ASTEROID *asteroid)
+{
+    float dist = sqrt((pow((tiro->x + tiro->width/2)-(asteroid->x + asteroid->width/2), 2)) + (pow((tiro->y + tiro->height/2)-(asteroid->y + asteroid->height/2), 2)));
+    if(dist <= (tiro->width/2)+(asteroid->width/2)){
+        return 1;
+    }
+    return 0;
+
+
+}
+
+void ColisaoInterAsteroids (ASTEROID *asteroid1, ASTEROID *asteroid2)
+{
+    float vx = (asteroid1->x+(asteroid1->width/2)) - (asteroid2->x + (asteroid2->width/2));
+    float vy = (asteroid1->y+(asteroid1->height/2)) - (asteroid2->y + (asteroid2->height/2));
+
+    float lenSq = (vx*vx + vy*vy);
+    float len = sqrt(lenSq);
+
+    vx /= len;
+    vy /= len;
+
+    asteroid2->forceX += -vx;
+    asteroid2->forceY += -vy;
+
+    limitarForcas(&asteroid2->forceX, &asteroid2->forceY, 1.5);
+
+    asteroid1->forceX -= asteroid2->forceX;
+    asteroid1->forceY -= asteroid2->forceY;
+
+    asteroid2->forceX *= 0.6;
+    asteroid2->forceY *= 0.6;
+
+    limitarForcas(&asteroid1->forceX, &asteroid1->forceY, 1.5);
+
+    asteroid1->forceX *= 0.6;
+    asteroid1->forceY *= 0.6;
+
+
+}
+*/
 int main(int argc, char **argv){
 
     //---------------------------------------------
@@ -589,6 +693,44 @@ int main(int argc, char **argv){
                     }
                 }
             }
+
+                        //COLISÃO ============================================================================================================================================================
+
+            /*
+            for(int i = 0; i < QUANT_ASTEROIDS; i++)
+           {
+                int colisao = VerifyColisionShipAsteroid(&ship, &asteroids[i]);
+                if(colisao)
+                {
+                    if(asteroids[i].vida > 0)
+                    {
+                        ColisaoShipAsteroid(&ship, &asteroids[i]);
+                    }
+                }
+            }
+
+            for(int i = 0; i < QUANT_ASTEROIDS; i++)
+                {
+                for(int x = 0; x < QUANT_ASTEROIDS; x++)
+                {
+                    if(asteroids[i].vida > 0)
+                    {
+                        if(i != x && asteroids[x].vida > 0)
+                        {
+                            int colidiu = VerifyColisionInterAsteroids(&asteroids[i], &asteroids[x]);
+                            if(colidiu){
+                                realizar_Colisao_ASTEROIDS(&asteroids[i], &asteroids[x]);
+                            }
+                        }
+                    }else{
+                        break;
+                    }
+                }
+            }
+*/
+
+            // FIM COLISÃO =========================================================================================================================================================
+
 
             //EVENTOS RELACIONADO AO OXIGENIO
 
