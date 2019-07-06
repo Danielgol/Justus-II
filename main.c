@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+    #include <stdlib.h>
 #include <allegro5/allegro.h>
 #include "allegro5/allegro_image.h"
 #include "allegro5/allegro_native_dialog.h"
@@ -130,6 +130,7 @@ typedef struct{
 }PLAYER;
 
 typedef struct{
+    int vida;
     float x,y;
     float forceX, forceY;
     int width,height;
@@ -254,6 +255,28 @@ SHIP build_ship(float x, float y, float forceX, float forceY, int controle, int 
     return ship;
 }
 
+void adaptarCamera(float *cameraX, float *cameraY, float x, float y, int width, int height, int SCREEN_W, int SCREEN_H){
+
+    //ATUALIZA A CÂMERA AO OBJETO EM MOVIMENTO
+    *cameraX = x - SCREEN_W/2 +width/2;
+    *cameraY = y - SCREEN_H/2 +height/2;
+
+    //LIMITA A CAMERA NAS BORDAS DO MAPA (PENSAR UM LIMITE DE ASTEROIDS E NÃO DA CÂMERA)
+    if(*cameraX < 0){
+        *cameraX = 0;
+    }
+    if(*cameraY < 0){
+        *cameraY = 0;
+    }
+    if(*cameraX > WORLD_W - SCREEN_W){
+        *cameraX = WORLD_W - SCREEN_W;
+    }
+    if(*cameraY > WORLD_H - SCREEN_H){
+        *cameraY = WORLD_H - SCREEN_H;
+    }
+
+}
+
 enum MYKEYS {
    KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_W, KEY_A, KEY_S, KEY_D, KEY_L, KEY_E
 };
@@ -285,6 +308,94 @@ int VerifyColisionShipAsteroid (SHIP *ship, ASTEROID *asteroid)
     }
     return 0;
 }
+
+//void limitarAsteroideMundo(float *x, float *y, float *forceX, float *forceY, int width, int height){
+
+    //REPELE O ASTEROIDE NAS BORDAS (PENSAR EM TIRAR)
+   // if(*x <= 0){
+   //     *forceX = -*forceX;
+   // }
+   // if(*x + width >= WORLD_W){
+    //    *forceX = -*forceX;
+   // }
+   // if(*y <= 0){
+    //    *forceY = -*forceY;
+   // }
+   // if(*y + height >= WORLD_H){
+    //    *forceY = -*forceY;
+   // }
+
+void generateAsteroids(int quant, ASTEROID *asteroids){
+
+    float Fx = (rand()%15)/10+0.5;
+    float Fy = (rand()%15)/10+0.5;
+
+    (asteroids[0]) = build_asteroid(0, 0, Fx, Fy,"images/asteroids/Asteroid.png");
+
+    int xA = rand()%(WORLD_W-(asteroids->width));
+    int yA = rand()%(WORLD_H-(asteroids->height));
+
+    (asteroids)->x = xA;
+    (asteroids)->y = yA;
+
+    for(int i=1; i<quant; i++){
+        Fx = (rand()%15)/10+0.5;
+        Fy = (rand()%15)/10+0.5;
+
+        xA = rand()%(WORLD_W-(asteroids->width));
+        yA = rand()%(WORLD_H-(asteroids->width));
+
+        (asteroids[i]) = build_asteroid(xA, yA, Fx, Fy,"images/asteroids/Asteroid.png");
+    }
+}
+
+void aplicarForcas(float *x, float *y, float forceX, float forceY){
+    *x += forceX;
+    *y += forceY;
+}
+
+void limitarForcas(float *forceX, float *forceY, float limite){
+
+    if(*forceY < -limite){
+        *forceY = -limite;
+    }
+    if(*forceY > limite){
+        *forceY = limite;
+    }
+    if(*forceX < -limite){
+        *forceX = -limite;
+    }
+    if(*forceX > limite){
+        *forceX = limite;
+    }
+
+}
+
+void frearObjetos(float *forceX, float *forceY, float freio){
+    if(*forceY < 0){
+        *forceY += freio;
+        if(*forceY>0){
+            *forceY=0;
+        }
+    }else if(*forceY > 0){
+        *forceY -= freio;
+        if(*forceY < 0){
+            *forceY = 0;
+        }
+    }
+    if(*forceX < 0){
+        *forceX += freio;
+        if(*forceX>0){
+            *forceX=0;
+        }
+    }else if(*forceX > 0){
+        *forceX -= freio;
+        if(*forceX < 0){
+            *forceX = 0;
+        }
+    }
+}
+
 
 int VerifyColisionInterAsteroids (ASTEROID *asteroid1, ASTEROID *asteroid2)
 {
@@ -364,20 +475,6 @@ void ColisaoInterAsteroids (ASTEROID *asteroid1, ASTEROID *asteroid2)
 */
 int main(int argc, char **argv){
 
-    //---------------------------------------------
-    //TESTE CAIO COMETAS
-    //Cometa cometas[NUM_COMETA]
-    //struct cometa
-    //{
-    //int ID;
-    //int x;
-    //int y;
-    //bool live;
-    //int speed;
-    //int boundx;
-    //int boundy;
-    //};
-    //---------------------------------------------
 
     ALLEGRO_DISPLAY *display = NULL;
     //ALLEGRO_DISPLAY_MODE   disp_data; //FULLSCREEN
@@ -411,6 +508,8 @@ int main(int argc, char **argv){
     int SCREEN_H = 780;
     display = al_create_display(SCREEN_W, SCREEN_H);
 
+    srand(time(NULL));
+
 
 
     SHIP ship;
@@ -428,9 +527,14 @@ int main(int argc, char **argv){
     PLAYER player2;
     player2 = build_player(ship.width/2-35,ship.height/2+10,22,"images/players/","b##.png",0,2);
 
-    ASTEROID asteroid;
-    asteroid = build_asteroid((WORLD_W/2)-200, (WORLD_H/2)-200, 0, 0,"images/asteroids/Asteroid.png");
-    float dist = 1000;
+    //ASTEROIDS------------------------------------------------------{
+    int QUANT_ASTEROIDS = 30;
+    ASTEROID asteroids[QUANT_ASTEROIDS];
+    generateAsteroids(QUANT_ASTEROIDS , &asteroids);
+    for(int i=0; i<QUANT_ASTEROIDS; i++){
+        asteroids[i].vida = 4;
+    }
+    //ASTEROIDS
 
     SIMP_OBJECT background;
     background = build_Simple_Object("images/background.jpg");
@@ -566,6 +670,7 @@ int main(int argc, char **argv){
             ALLEGRO_EVENT ev;
             al_wait_for_event(event_queue, &ev);
 
+
             //EVENTOS RELACIONADO A VIDA
             if(oxigenioscale == oxigenio.width){
                 if(vidascale < vida.width){
@@ -644,20 +749,20 @@ int main(int argc, char **argv){
 
                     //MOVIMENTOS PLAYER 1
 
-                    int flag = 0;
-                    if(key[KEY_RIGHT] && player1.x < ship.width - player1.width){
-                        player1.dir = 1;
-                        if(player1.x + VELOCITY <=255 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x + VELOCITY >=155 && player1.x + VELOCITY <=195 ){
-                          if((player1.x + VELOCITY < 141)||(player1.x + VELOCITY > 141 && player1.x + VELOCITY < 195 && player1.y < 182 && player1.y > 122)||(player1.y > 182)||(player1.y <= 122 && player1.y>90) || (player1.y <=90 && player1.x <= 200) || (player1.x + VELOCITY > 195 && player1.x + VELOCITY < 290 && player1.y >= 90))
-                          {
-                            if((player1.x + VELOCITY > 195 && player1.y>120 && player1.y < 142 && player1.x + VELOCITY <235)||(player1.x<=195)||(player1.x>195 && player1.y<120)||(player1.x>195 && player1.y>142)|| (player1.x>=255))
-                            {
-                               player1.x += VELOCITY;
-                            }
-                          }
+                int flag = 0;
+                if(key[KEY_RIGHT] && player1.x < ship.width - player1.width){
+                    player1.dir = 1;
+                    if(player1.x + VELOCITY <=255 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x + VELOCITY >=155 && player1.x + VELOCITY <=195 ){
+                        if((player1.x + VELOCITY < 141)||(player1.x + VELOCITY > 141 && player1.x + VELOCITY < 195 && player1.y < 182 && player1.y > 122)||(player1.y > 182)||(player1.y <= 122 && player1.y>90) || (player1.y <=90 && player1.x <= 200) || (player1.x + VELOCITY > 195 && player1.x + VELOCITY < 290 && player1.y >= 90))
+                        {
+                        if((player1.x + VELOCITY > 195 && player1.y>120 && player1.y < 142 && player1.x + VELOCITY <235)||(player1.x<=195)||(player1.x>195 && player1.y<120)||(player1.x>195 && player1.y>142)|| (player1.x>=255))
+                        {
+                            player1.x += VELOCITY;
                         }
-                        flag = 1;
+                        }
                     }
+                       flag = 1;
+                }
                     if(key[KEY_LEFT] && player1.x > 0){
                         player1.dir = 2;
                         if(player1.x - VELOCITY >=99 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x - VELOCITY >=155 && player1.x - VELOCITY <=195 ){
@@ -911,56 +1016,7 @@ int main(int argc, char **argv){
                     ship.rotation = 359;
                 }
 
-                //CALCULA DISTÂNCIA ENTRE O ASTEROID E A NAVE
-                dist = sqrt((pow((ship.x+ship.width/2)-(asteroid.x+asteroid.width/2), 2))+(pow((ship.y+ship.width/2)-(asteroid.y+asteroid.height/2), 2)));
 
-                if(dist <= (ship.width/2)+(asteroid.width/2)){
-
-                    float vx = (ship.x+(ship.width/2)) - (asteroid.x + (asteroid.width/2));
-                    float vy = (ship.y+(ship.height/2)) - (asteroid.y + (asteroid.height/2));
-
-                    float lenSq = (vx*vx + vy*vy);
-                    float len = sqrt(lenSq);
-
-                    vx /= len;
-                    vy /= len;
-
-                    asteroid.forceX += -vx;
-                    asteroid.forceY += -vy;
-
-                    if(asteroid.forceY < -1.5){
-                        asteroid.forceY = -1.5;
-                    }
-                    if(asteroid.forceY > 1.5){
-                        asteroid.forceY = 1.5;
-                    }
-                    if(asteroid.forceX < -1.5){
-                        asteroid.forceX = -1.5;
-                    }
-                    if(asteroid.forceX > 1.5){
-                        asteroid.forceX = 1.5;
-                    }
-
-                    ship.forceX -= asteroid.forceX/10;
-                    ship.forceY -= asteroid.forceY/10;
-
-                }
-
-                if(asteroid.x <= 0){
-                    asteroid.forceX = -asteroid.forceX;
-                }
-                if(asteroid.x + asteroid.width >= WORLD_W){
-                    asteroid.forceX = -asteroid.forceX;
-                }
-                if(asteroid.y <= 0){
-                    asteroid.forceY = -asteroid.forceY;
-                }
-                if(asteroid.y + asteroid.height >= WORLD_H){
-                    asteroid.forceY = -asteroid.forceY;
-                }
-
-                asteroid.x += asteroid.forceX;
-                asteroid.y += asteroid.forceY;
 
                 //APLICA AS FORÇAS NA NAVE
                 ship.y += ship.forceY;
@@ -1003,6 +1059,26 @@ int main(int argc, char **argv){
                 }
 
                 redraw = true;
+
+            //ASTEROIDS---------------------------------------------------------------------------------------------------------{
+            //for(int i=0; i<QUANT_ASTEROIDS; i++){
+             //   if(asteroids[i].vida > 0){
+             //       limitarAsteroideMundo(&asteroids[i].x, &asteroids[i].y, &asteroids[i].forceX, &asteroids[i].forceY, asteroids[i].width, asteroids[i].height);
+              //  }
+           // }
+            //ASTEROIDS---------------------------------------------------------------------------------------------------------}
+
+            aplicarForcas(&ship.x, &ship.y, ship.forceX, ship.forceY);
+            //ASTEROIDS---------------------------------------------------------------------------------------------------------{
+            for(int i=0; i<QUANT_ASTEROIDS; i++){
+                 if(asteroids[i].vida > 0){
+                    aplicarForcas(&asteroids[i].x, &asteroids[i].y, asteroids[i].forceX, asteroids[i].forceY);
+                 }
+            }
+            //ASTEROIDS---------------------------------------------------------------------------------------------------------}
+
+            adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
+            redraw = true;
 
             //ATIVA AS TECLAS PRESSIONADAS
             }else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -1086,37 +1162,46 @@ int main(int argc, char **argv){
             }
 
             //DESENHOS
-            if(redraw && al_is_event_queue_empty(event_queue)) {
+        if(redraw && al_is_event_queue_empty(event_queue)) {
 
-                redraw = false;
-                al_draw_scaled_bitmap(background.img,0,0,background.width,background.height,0-(cameraX/2),0-(cameraY/2),background.width*BGScale, background.height*BGScale, 0);
+            redraw = false;
+            al_draw_scaled_bitmap(background.img,0,0,background.width,background.height,0-(cameraX/2.5),0-(cameraY/2.5),background.width*BGScale, background.height*BGScale, 0);
 
-                if(key[KEY_UP] && ship.controle){
-                    al_draw_rotated_bitmap(fire.imgs[fire.cur_Frame],25, -200,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation+180)*3.14159/180),0);
-                }
-                al_draw_rotated_bitmap(propulsor.img,propulsor.height/2, propulsor.height/2,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation-90)*3.14159/180),0);
-                al_draw_scaled_bitmap(ship.img,0,0,ship.width,ship.height,ship.x-cameraX,ship.y-cameraY,ship.width, ship.height, 0);
-
-                if(player1.y >= player2.y){
-                    al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
-                    al_draw_scaled_bitmap(player1.imgs[player1.cur_Frame/DELAY],0,0,player1.width,player1.height,player1.x+ship.x-cameraX,player1.y+ship.y-cameraY,player1.width, player1.height, 0);
-                }
-                else{
-                    al_draw_scaled_bitmap(player1.imgs[player1.cur_Frame/DELAY],0,0,player1.width,player1.height,player1.x+ship.x-cameraX,player1.y+ship.y-cameraY,player1.width, player1.height, 0);
-                    al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
-                }
-
-                al_draw_scaled_bitmap(asteroid.img,0,0,asteroid.width,asteroid.height,asteroid.x-cameraX,asteroid.y-cameraY,asteroid.width, asteroid.height, 0);
-
-                al_draw_scaled_bitmap(vida.img,0,0,vida.width,vida.height,(SCREEN_W/2)-(vida.width/2)-15,SCREEN_H-43,vida.width-vidascale,vida.height, 0);
-                al_draw_scaled_bitmap(oxigenio.img,0,0,oxigenio.width,oxigenio.height,SCREEN_W/2-oxigenio.width/2-15,SCREEN_H-36,oxigenio.width-oxigenioscale,oxigenio.height, 0);
-                al_draw_scaled_bitmap(barra.img,0,0,barra.width,barra.height,SCREEN_W/2-barra.width/2,SCREEN_H-100,barra.width,barra.height, 0);
-
-                al_flip_display();
-
+            if((key[KEY_UP] && ship.controle==1) || (key[KEY_W] && ship.controle==2) ){
+                al_draw_rotated_bitmap(fire.imgs[fire.cur_Frame],25, -200,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation+180)*3.14159/180),0);
             }
 
+            al_draw_rotated_bitmap(propulsor.img,propulsor.height/2, propulsor.height/2,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation-90)*3.14159/180),0);
+            al_draw_scaled_bitmap(ship.img,0,0,ship.width,ship.height,ship.x-cameraX,ship.y-cameraY,ship.width, ship.height, 0);
+
+            //al_draw_rotated_bitmap(canhao.img,12, canhao.height/2, ship.x-cameraX+ship.width/2+2, ship.y-cameraY-6,(gunUP.angle*3.14159/180), 0);
+            //al_draw_rotated_bitmap(canhao.img,12, canhao.height/2, ship.x-cameraX+ship.width+10, ship.y-cameraY+ship.height/2-4,(gunRIGHT.angle*3.14159/180), 0);
+            //al_draw_rotated_bitmap(canhao.img,12, canhao.height/2, ship.x-cameraX-6, ship.y-cameraY+ship.height/2-3,(gunLEFT.angle*3.14159/180), 0);
+            //al_draw_rotated_bitmap(canhao.img,12, canhao.height/2, ship.x-cameraX+ship.width/2+2, ship.y-cameraY+ship.height+7,(gunDOWN.angle*3.14159/180), 0);
+
+            //al_draw_rotated_bitmap(canhaoBase.img,12, canhaoBase.height/2, ship.x-cameraX+ship.width/2-12, ship.y-cameraY-10,0, 0);
+            //al_draw_rotated_bitmap(canhaoBase.img,12, canhaoBase.height/2, ship.x-cameraX+ship.width+15, ship.y-cameraY+ship.height/2-17,(90*3.14159/180), 0);
+            //al_draw_rotated_bitmap(canhaoBase.img,12, canhaoBase.height/2, ship.x-cameraX-12, ship.y-cameraY+ship.height/2+12,(-90*3.14159/180), 0);
+            //al_draw_rotated_bitmap(canhaoBase.img,12, canhaoBase.height/2, ship.x-cameraX+ship.width/2+16, ship.y-cameraY+ship.height+12,180*3.14159/180, 0);
+
+            if(player1.y >= player2.y){
+                al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
+                al_draw_scaled_bitmap(player1.imgs[player1.cur_Frame/DELAY],0,0,player1.width,player1.height,player1.x+ship.x-cameraX,player1.y+ship.y-cameraY,player1.width, player1.height, 0);
+            }
+            else{
+                al_draw_scaled_bitmap(player1.imgs[player1.cur_Frame/DELAY],0,0,player1.width,player1.height,player1.x+ship.x-cameraX,player1.y+ship.y-cameraY,player1.width, player1.height, 0);
+                al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
+            }
+
+            for(int i=0; i<QUANT_ASTEROIDS; i++){
+                if(asteroids[i].vida > 0){
+                    al_draw_scaled_bitmap(asteroids[i].img,0,0,asteroids[i].width,asteroids[i].height,asteroids[i].x-cameraX,asteroids[i].y-cameraY,asteroids[i].width, asteroids[i].height, 0);
+                }
+            }
+
+
         }
+     }
         /*
         ------------------------------------
         ---------MENU ENCECRRAMENTO---------
@@ -1142,7 +1227,6 @@ int main(int argc, char **argv){
     al_destroy_bitmap(background.img);
     al_destroy_bitmap(propulsor.img);
     al_destroy_bitmap(ship.img);
-    al_destroy_bitmap(asteroid.img);
     al_destroy_bitmap(barra.img);
     al_destroy_bitmap(vida.img);
     al_destroy_bitmap(oxigenio.img);
@@ -1176,6 +1260,10 @@ int main(int argc, char **argv){
         al_destroy_bitmap(player2.imgs[i]);
     }
     al_destroy_event_queue(event_queue);
+    for(int i=0; i<QUANT_ASTEROIDS; i++){
+        al_destroy_bitmap(asteroids[i].img);
+    }
+
 
     return 0;
 }
