@@ -398,6 +398,7 @@ int main(int argc, char **argv){
     al_reserve_samples(20);
     //al_init_primitives_addon(); //FULLSCREEN
     al_install_keyboard();
+    al_install_mouse();
     timer = al_create_timer(1.0 / FPS);
 
     //FULLSCREEN
@@ -520,562 +521,619 @@ int main(int argc, char **argv){
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue, al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_mouse_event_source());
     al_flip_display();
     al_start_timer(timer);
 
     //INICIALIZAÇÃO DA TRILHA SONORA
     al_play_sample_instance(inst_theme);
+    //VARIAVEL PRA FECHAR O WHILE DO JOGO
+    int fechar = 0;
 
-    while(1){
+     while(1){
+        ALLEGRO_EVENT ev2;
+        al_wait_for_event(event_queue, &ev2);
 
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(event_queue, &ev);
-
-        //EVENTOS RELACIONADO A VIDA
-        if(oxigenioscale == oxigenio.width){
-            if(vidascale < vida.width){
-                vidascale += 0.1;
-            }
-        }
-
-        //EVENTOS REAIS (TEMPO)
-        if(ev.type == ALLEGRO_EVENT_TIMER) {
-
-            //MOVIMENTOS NAVE
-            if(ship.controle == 1){
-
-                if(key[KEY_UP]){
-
-                    fire.cur_Frame+=1;
-                    if(fire.cur_Frame == 12){
-                        fire.cur_Frame = 0;
-                    }
-
-                    //IDEIA:
-                    //https://www.efunda.com/math/fourier_series/display.cfm?name=triangle
-                    //float angle = rotation*3.14159/180;
-                    //float senof = 0;
-                    //float cosef = 0;
-                    //if(-3.14159/2 <= angle && angle <= 3
-
-                    //    senof = 2*angle/3.14159;
-                    //    cosef = 1-senof;
-                    //}else{
-                    //    senof = (2*(3.14159-angle))/3.14159;
-                    //    cosef = 1-senof;
-                    //}
-                    //forceX -= senof*0.01;
-                    //forceY += cosef*0.01;
-
-                    al_play_sample_instance(inst_som_propulsor);
-
-                    ship.forceX -= sin(ship.rotation*3.14159/180)*0.01;
-                    ship.forceY += cos(ship.rotation*3.14159/180)*0.01;
-
-                    if(ship.forceY < -2){
-                        ship.forceY = -2;
-                    }
-                    if(ship.forceY > 2){
-                        ship.forceY = 2;
-                    }
-                    if(ship.forceX < -2){
-                        ship.forceX = -2;
-                    }
-                    if(ship.forceX > 2){
-                        ship.forceX = 2;
-                    }
-                }else{
-                    al_stop_sample_instance(inst_som_propulsor);
-                }
-
-                if(key[KEY_LEFT]){
-                    ship.rotation+=1;
-                    al_play_sample_instance(inst_rotacao_h);
-                }else{
-                    al_stop_sample_instance(inst_rotacao_h);
-                }
-                if(key[KEY_RIGHT]){
-                    ship.rotation-=1;
-                    al_play_sample_instance(inst_rotacao_a);
-                }else{
-                    al_stop_sample_instance(inst_rotacao_a);
-                }
-
-            }else{
-
-                //MOVIMENTOS PLAYER 1
-
-                int flag = 0;
-                if(key[KEY_RIGHT] && player1.x < ship.width - player1.width){
-                    player1.dir = 1;
-                    if(player1.x + VELOCITY <=255 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x + VELOCITY >=155 && player1.x + VELOCITY <=195 ){
-                      if((player1.x + VELOCITY < 141)||(player1.x + VELOCITY > 141 && player1.x + VELOCITY < 195 && player1.y < 182 && player1.y > 122)||(player1.y > 182)||(player1.y <= 122 && player1.y>90) || (player1.y <=90 && player1.x <= 200) || (player1.x + VELOCITY > 195 && player1.x + VELOCITY < 290 && player1.y >= 90))
-                      {
-                        if((player1.x + VELOCITY > 195 && player1.y>120 && player1.y < 142 && player1.x + VELOCITY <235)||(player1.x<=195)||(player1.x>195 && player1.y<120)||(player1.x>195 && player1.y>142)|| (player1.x>=255))
-                        {
-                           player1.x += VELOCITY;
-                        }
-                      }
-                    }
-                    flag = 1;
-                }
-                if(key[KEY_LEFT] && player1.x > 0){
-                    player1.dir = 2;
-                    if(player1.x - VELOCITY >=99 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x - VELOCITY >=155 && player1.x - VELOCITY <=195 ){
-                        if((player1.x - VELOCITY > 55 && player1.x - VELOCITY < 159 && player1.y < 230)||(player1.x-VELOCITY>159 && player1.x-VELOCITY<205 && player1.y <182 && player1.y > 122)||(player1.y > 182 && player1.x > 130)||(player1.y <= 122) || (player1.x - VELOCITY > 209))
-                        {
-                            if((player1.x - VELOCITY < 135 && player1.y>120 && player1.y<142 && player1.x - VELOCITY > 119)||(player1.x >=135)||(player1.x <135 && player1.y<120)||(player1.x<135 && player1.y > 142)||(player1.x<=99))
-                            {
-                                player1.x -= VELOCITY;
-                            }
-                        }
-                    }
-                    flag = 1;
-                }
-                if(key[KEY_UP] && player1.y > 0){
-                    player1.dir = 3;
-                    if(player1.y - VELOCITY >= 76 && player1.x>=99 && player1.x<=255 || player1.x >= 155 && player1.x <= 195 || player1.y - VELOCITY >= 140 && player1.y - VELOCITY <= 182 ){
-                        if((player1.y - VELOCITY> 30 && player1.y - VELOCITY <= 76)||(player1.x >= 135 && player1.x <= 205 && player1.y - VELOCITY > 184)|| (player1.x > 205 && player1.y > 90 )||(player1.y<=90 && player1.y>=76 && player1.x<205)||(player1.x <= 140)||(player1.y-VELOCITY <= 155 && player1.y-VELOCITY>=76 && player1.x >=135 && player1.x<=205))
-                        {
-                            if((player1.x>50 && player1.y - VELOCITY>142)||(player1.y - VELOCITY <=142 && player1.x>110 && player1.x<242)||(player1.y-VELOCITY<=120))
-                            {
-                                player1.y -= VELOCITY;
-                            }
-                        }
-                    }
-                    flag = 1;
-                }
-                if(key[KEY_DOWN] && player1.y < ship.height - player1.height){
-                    player1.dir = 4;
-                    if(player1.y + VELOCITY <= 244 && player1.x>=99 && player1.x<=255 || player1.x >= 155 && player1.x <= 195 || player1.y + VELOCITY >= 140 && player1.y + VELOCITY <= 182 ){
-                        if((player1.y + VELOCITY>= 244 && player1.y + VELOCITY < 295)||(player1.x >= 135 && player1.x <= 205 && player1.y + VELOCITY < 150)|| (player1.x > 205 )||(player1.x <= 140 && player1.y + VELOCITY < 230)||(player1.y + VELOCITY>= 230 && player1.x>115 && player1.x <=135)||(player1.x >= 135 && player1.x<=205 && player1.y + VELOCITY < 295 && player1.y>180))
-                        {
-                            if((player1.x>50 && player1.y + VELOCITY< 120)||(player1.y + VELOCITY >= 120 && player1.x>110 && player1.x<140 )||(player1.y + VELOCITY >= 120 && player1.x>159 && player1.x<195)||(player1.y + VELOCITY >= 120 && player1.x>209 && player1.x<242)||(player1.y+VELOCITY >= 142))
-                                {
-                                player1.y += VELOCITY;
-                                }
-                        }
-                    }
-                    flag = 1;
-                }
-
-                if(player1.dir == 1){
-                    if(player1.cur_Frame < 0 || player1.cur_Frame > (7*DELAY)-2){
-                        player1.cur_Frame = 0;
-                    }else if(flag){
-                        player1.cur_Frame++;
-                    }else{
-                        player1.cur_Frame = 0;
-                    }
-                }else if(player1.dir == 2){
-                    if(player1.cur_Frame < 7*DELAY || player1.cur_Frame > (14*DELAY)-2){
-                        player1.cur_Frame = 7*DELAY;
-                    }else if(flag){
-                        player1.cur_Frame++;
-                    }else{
-                        player1.cur_Frame = 7*DELAY;
-                    }
-                }else if(player1.dir == 3){
-                    if(player1.cur_Frame < 14*DELAY || player1.cur_Frame > (18*DELAY)-2){
-                        player1.cur_Frame = 14*DELAY;
-                    }else if(flag){
-                        player1.cur_Frame++;
-                    }else{
-                        player1.cur_Frame = 15*DELAY;
-                    }
-                }else if(player1.dir == 4){
-                    if(player1.cur_Frame < 18*DELAY || player1.cur_Frame > (22*DELAY)-2){
-                        player1.cur_Frame = 18*DELAY;
-                    }else if(flag){
-                        player1.cur_Frame++;
-                    }else{
-                        player1.cur_Frame = 19*DELAY;
-                    }
-                }
-            }
-
-                        //COLISÃO ============================================================================================================================================================
-
-            /*
-            for(int i = 0; i < QUANT_ASTEROIDS; i++)
-           {
-                int colisao = VerifyColisionShipAsteroid(&ship, &asteroids[i]);
-                if(colisao)
-                {
-                    if(asteroids[i].vida > 0)
-                    {
-                        ColisaoShipAsteroid(&ship, &asteroids[i]);
-                    }
-                }
-            }
-
-            for(int i = 0; i < QUANT_ASTEROIDS; i++)
-                {
-                for(int x = 0; x < QUANT_ASTEROIDS; x++)
-                {
-                    if(asteroids[i].vida > 0)
-                    {
-                        if(i != x && asteroids[x].vida > 0)
-                        {
-                            int colidiu = VerifyColisionInterAsteroids(&asteroids[i], &asteroids[x]);
-                            if(colidiu){
-                                realizar_Colisao_ASTEROIDS(&asteroids[i], &asteroids[x]);
-                            }
-                        }
-                    }else{
-                        break;
-                    }
-                }
-            }
-*/
-
-            // FIM COLISÃO =========================================================================================================================================================
-
-
-            //EVENTOS RELACIONADO AO OXIGENIO
-
-            if(oxigenioscale < oxigenio.width){
-                oxigenioscale += 0.2;
-            }
-            else{
-                oxigenioscale = oxigenio.width;
-            }
-            if(ship.repondoOxi == 1){
-
-                if (oxigenioscale <= oxigenio.width && oxigenioscale>0){
-                    oxigenioscale -= 1;
-                }else{
-                    oxigenioscale = 0;
-                }
-
-            }else{
-
-                //MOVIMENTOS PLAYER2
-
-                int flag = 0;
-                if(key[KEY_D] && player2.x < ship.width - player2.width){
-                    player2.dir = 1;
-                    if(player2.x + VELOCITY <=255 && player2.y>=76 && player2.y <=244 || player2.y >= 140 && player2.y <= 182 || player2.x + VELOCITY >=155 && player2.x + VELOCITY <=195 ){
-                      if((player2.x + VELOCITY < 141)||(player2.x + VELOCITY > 141 && player2.x + VELOCITY < 195 && player2.y < 182 && player2.y > 122)||(player2.y > 182)||(player2.y <= 122 && player2.y>90) || (player2.y <=90 && player2.x <= 200) || (player2.x + VELOCITY > 195 && player2.x + VELOCITY < 290 && player2.y >= 90))
-                      {
-                        if((player2.x + VELOCITY > 195 && player2.y>120 && player2.y < 142 && player2.x + VELOCITY <235)||(player2.x<=195)||(player2.x>195 && player2.y<120)||(player2.x>195 && player2.y>142)|| (player2.x>=255))
-                        {
-                           player2.x += VELOCITY;
-                        }
-                      }
-                    }
-                    flag = 1;
-                }
-                if(key[KEY_A] && player2.x > 0){
-                    player2.dir = 2;
-                    if(player2.x - VELOCITY >=99 && player2.y>=76 && player2.y <=244 || player2.y >= 140 && player2.y <= 182 || player2.x - VELOCITY >=155 && player2.x - VELOCITY <=195 ){
-                        if((player2.x - VELOCITY > 55 && player2.x - VELOCITY < 159 && player2.y < 230)||(player2.x-VELOCITY>159 && player2.x-VELOCITY<205 && player2.y <182 && player2.y > 122)||(player2.y > 182 && player2.x > 130)||(player2.y <= 122) || (player2.x - VELOCITY > 209))
-                        {
-                            if((player2.x - VELOCITY < 135 && player2.y>120 && player2.y<142 && player2.x - VELOCITY > 119)||(player2.x >=135)||(player2.x <135 && player2.y<120)||(player2.x<135 && player2.y > 142)||(player2.x<=99))
-                            {
-                                player2.x -= VELOCITY;
-                            }
-                        }
-                    }
-                    flag = 1;
-                }
-                if(key[KEY_W] && player2.y > 0){
-                    player2.dir = 3;
-                    if(player2.y - VELOCITY >= 76 && player2.x>=99 && player2.x<=255 || player2.x >= 155 && player2.x <= 195 || player2.y - VELOCITY >= 140 && player2.y - VELOCITY <= 182 ){
-                        if((player2.y - VELOCITY> 30 && player2.y - VELOCITY <= 76)||(player2.x >= 135 && player2.x <= 205 && player2.y - VELOCITY > 184)|| (player2.x > 205 && player2.y > 90 )||(player2.y<=90 && player2.y>=76 && player2.x<205)||(player2.x <= 140)||(player2.y-VELOCITY <= 155 && player2.y-VELOCITY>=76 && player2.x >=135 && player2.x<=205))
-                        {
-                            if((player2.x>50 && player2.y - VELOCITY>142)||(player2.y - VELOCITY <=142 && player2.x>110 && player2.x<242)||(player2.y-VELOCITY<=120))
-                            {
-                                player2.y -= VELOCITY;
-                            }
-                        }
-                    }
-                    flag = 1;
-                }
-                if(key[KEY_S] && player2.y < ship.height - player2.height){
-                    player2.dir = 4;
-                    if(player2.y + VELOCITY <= 244 && player2.x>=99 && player2.x<=255 || player2.x >= 155 && player2.x <= 195 || player2.y + VELOCITY >= 140 && player2.y + VELOCITY <= 182 ){
-                        if((player2.y + VELOCITY>= 244 && player2.y + VELOCITY < 295)||(player2.x >= 135 && player2.x <= 205 && player2.y + VELOCITY < 150)|| (player2.x > 205 )||(player2.x <= 140 && player2.y + VELOCITY < 230)||(player2.y + VELOCITY>= 230 && player2.x>115 && player2.x <=135)||(player2.x >= 135 && player2.x<=205 && player2.y + VELOCITY < 295 && player2.y>180))
-                        {
-                            if((player2.x>50 && player2.y + VELOCITY< 120)||(player2.y + VELOCITY >= 120 && player2.x>110 && player2.x<140 )||(player2.y + VELOCITY >= 120 && player2.x>159 && player2.x<195)||(player2.y + VELOCITY >= 120 && player2.x>209 && player2.x<242)||(player2.y+VELOCITY >= 142))
-                                {
-                                player2.y += VELOCITY;
-                                }
-                        }
-                    }
-                    flag = 1;
-                }
-
-                if(player2.dir == 1){
-                    if(player2.cur_Frame < 0 || player2.cur_Frame > (7*DELAY)-2){
-                        player2.cur_Frame = 0;
-                    }else if(flag){
-                        player2.cur_Frame++;
-                    }else{
-                        player2.cur_Frame = 0;
-                    }
-                }else if(player2.dir == 2){
-                    if(player2.cur_Frame < 7*DELAY || player2.cur_Frame > (14*DELAY)-2){
-                        player2.cur_Frame = 7*DELAY;
-                    }else if(flag){
-                        player2.cur_Frame++;
-                    }else{
-                        player2.cur_Frame = 7*DELAY;
-                    }
-                }else if(player2.dir == 3){
-                    if(player2.cur_Frame < 14*DELAY || player2.cur_Frame > (18*DELAY)-2){
-                        player2.cur_Frame = 14*DELAY;
-                    }else if(flag){
-                        player2.cur_Frame++;
-                    }else{
-                        player2.cur_Frame = 15*DELAY;
-                    }
-                }else if(player2.dir == 4){
-                    if(player2.cur_Frame < 18*DELAY || player2.cur_Frame > (22*DELAY)-2){
-                        player2.cur_Frame = 18*DELAY;
-                    }else if(flag){
-                        player2.cur_Frame++;
-                    }else{
-                        player2.cur_Frame = 19*DELAY;
-                    }
-                }
-            }
-
-            //FAZ COM QUE A NAVE FREIE AOS POUCOS (PENSAR EM TIRAR)
-            if(ship.forceY < 0){
-                    ship.forceY += 0.002;
-                    if(ship.forceY>0){
-                        ship.forceY=0;
-                    }
-            }else if(ship.forceY > 0){
-                    ship.forceY -= 0.002;
-                    if(ship.forceY < 0){
-                        ship.forceY = 0;
-                    }
-            }
-            if(ship.forceX < 0){
-                    ship.forceX += 0.002;
-                    if(ship.forceX>0){
-                        ship.forceX=0;
-                    }
-            }else if(ship.forceX > 0){
-                    ship.forceX -= 0.002;
-                    if(ship.forceX < 0){
-                        ship.forceX = 0;
-                    }
-            }
-
-            //LIMITA O VALOR DA ROTAÇÃO NO INTERVALO [0,359]
-            if(ship.rotation >= 360){
-                ship.rotation = 0;
-            }else if(ship.rotation < 0){
-                ship.rotation = 359;
-            }
-
-            //CALCULA DISTÂNCIA ENTRE O ASTEROID E A NAVE
-            dist = sqrt((pow((ship.x+ship.width/2)-(asteroid.x+asteroid.width/2), 2))+(pow((ship.y+ship.width/2)-(asteroid.y+asteroid.height/2), 2)));
-
-            if(dist <= (ship.width/2)+(asteroid.width/2)){
-
-                float vx = (ship.x+(ship.width/2)) - (asteroid.x + (asteroid.width/2));
-                float vy = (ship.y+(ship.height/2)) - (asteroid.y + (asteroid.height/2));
-
-                float lenSq = (vx*vx + vy*vy);
-                float len = sqrt(lenSq);
-
-                vx /= len;
-                vy /= len;
-
-                asteroid.forceX += -vx;
-                asteroid.forceY += -vy;
-
-                if(asteroid.forceY < -1.5){
-                    asteroid.forceY = -1.5;
-                }
-                if(asteroid.forceY > 1.5){
-                    asteroid.forceY = 1.5;
-                }
-                if(asteroid.forceX < -1.5){
-                    asteroid.forceX = -1.5;
-                }
-                if(asteroid.forceX > 1.5){
-                    asteroid.forceX = 1.5;
-                }
-
-                ship.forceX -= asteroid.forceX/10;
-                ship.forceY -= asteroid.forceY/10;
-
-            }
-
-            if(asteroid.x <= 0){
-                asteroid.forceX = -asteroid.forceX;
-            }
-            if(asteroid.x + asteroid.width >= WORLD_W){
-                asteroid.forceX = -asteroid.forceX;
-            }
-            if(asteroid.y <= 0){
-                asteroid.forceY = -asteroid.forceY;
-            }
-            if(asteroid.y + asteroid.height >= WORLD_H){
-                asteroid.forceY = -asteroid.forceY;
-            }
-
-            asteroid.x += asteroid.forceX;
-            asteroid.y += asteroid.forceY;
-
-            //APLICA AS FORÇAS NA NAVE
-            ship.y += ship.forceY;
-            ship.x += ship.forceX;
-
-            //IMPEDE QUE A NAVE SAIA DOS LIMITES DO MUNDO
-            if(ship.y < 0){
-                ship.y = 0;
-                ship.forceY=0;
-            }
-            if(ship.y > WORLD_H - ship.height){
-                ship.y = WORLD_H - ship.height;
-                ship.forceY=0;
-            }
-            if(ship.x < 0){
-                ship.x = 0;
-                ship.forceX=0;
-            }
-            if(ship.x > WORLD_W - ship.width){
-                ship.x = WORLD_W - ship.width;
-                ship.forceX=0;
-            }
-
-            //ATUALIZA A CÂMERA AO OBJETO EM MOVIMENTO
-            cameraX = ship.x - SCREEN_W/2 +ship.width/2;
-            cameraY = ship.y - SCREEN_H/2 +ship.height/2;
-
-            //LIMITA A CAMERA NAS BORDAS DO MAPA (PENSAR UM LIMITE DE ASTEROIDS E NÃO DA CÂMERA)
-            if(cameraX < 0){
-                cameraX = 0;
-            }
-            if (cameraY < 0){
-                cameraY = 0;
-            }
-            if (cameraX > WORLD_W - SCREEN_W){
-                cameraX = WORLD_W - SCREEN_W;
-            }
-            if (cameraY > WORLD_H - SCREEN_H){
-                cameraY = WORLD_H - SCREEN_H;
-            }
-
-            redraw = true;
-
-        //ATIVA AS TECLAS PRESSIONADAS
-        }else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-            switch(ev.keyboard.keycode) {
-                //PLAYER1
-                case ALLEGRO_KEY_UP:
-                    key[KEY_UP] = true;
-                    break;
-                case ALLEGRO_KEY_DOWN:
-                    key[KEY_DOWN] = true;
-                    break;
-                case ALLEGRO_KEY_LEFT:
-                    key[KEY_LEFT] = true;
-                    break;
-                case ALLEGRO_KEY_RIGHT:
-                    key[KEY_RIGHT] = true;
-                    break;
-                case ALLEGRO_KEY_L:
-                    if(ship.controle == 1){
-                        ship.controle = 0;
-                    }else{
-                        ship.controle = 1;
-                    }
-                    break;
-                //PLAYER2
-                case ALLEGRO_KEY_W:
-                    key[KEY_W] = true;
-                    break;
-                case ALLEGRO_KEY_S:
-                    key[KEY_S] = true;
-                    break;
-                case ALLEGRO_KEY_A:
-                    key[KEY_A] = true;
-                    break;
-                case ALLEGRO_KEY_D:
-                    key[KEY_D] = true;
-                    break;
-                case ALLEGRO_KEY_E:
-                    if(ship.repondoOxi == 1){
-                        ship.repondoOxi = 0;
-                    }else{
-                        ship.repondoOxi = 1;
-                    }
-                    break;
-            }
-
-        //DESATIVA AS TECLAS PRESSIONADASs
-        }else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
-            switch(ev.keyboard.keycode) {
-                //PLAYER1
-                case ALLEGRO_KEY_UP:
-                    key[KEY_UP] = false;
-                    break;
-                case ALLEGRO_KEY_DOWN:
-                    key[KEY_DOWN] = false;
-                    break;
-                case ALLEGRO_KEY_LEFT:
-                    key[KEY_LEFT] = false;
-                    break;
-                case ALLEGRO_KEY_RIGHT:
-                    key[KEY_RIGHT] = false;
-                    break;
-                //PLAYER2
-                case ALLEGRO_KEY_W:
-                    key[KEY_W] = false;
-                    break;
-                case ALLEGRO_KEY_S:
-                    key[KEY_S] = false;
-                    break;
-                case ALLEGRO_KEY_A:
-                    key[KEY_A] = false;
-                    break;
-                case ALLEGRO_KEY_D:
-                    key[KEY_D] = false;
-                    break;
-
-            }
-        }else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+        //EVENTOS RELACIONADO AO MOUSE (MENU INICIAL E FINAL)
+        if(ev2.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
             break;
         }
-
-        //DESENHOS
-        if(redraw && al_is_event_queue_empty(event_queue)) {
-
-            redraw = false;
-            al_draw_scaled_bitmap(background.img,0,0,background.width,background.height,0-(cameraX/2),0-(cameraY/2),background.width*BGScale, background.height*BGScale, 0);
-
-            if(key[KEY_UP] && ship.controle){
-                al_draw_rotated_bitmap(fire.imgs[fire.cur_Frame],25, -200,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation+180)*3.14159/180),0);
+        /*INTERAÇÃO DO MOUSE NO MENU
+        if(ev2.type == ALLEGRO_EVENT_MOUSE_AXES)
+        {
+            ----------------
+        }
+        if(ev2.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+        {
+            if(ev2.mouse.button & 1)
+            {
+                --------------------
             }
-            al_draw_rotated_bitmap(propulsor.img,propulsor.height/2, propulsor.height/2,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation-90)*3.14159/180),0);
-            al_draw_scaled_bitmap(ship.img,0,0,ship.width,ship.height,ship.x-cameraX,ship.y-cameraY,ship.width, ship.height, 0);
+        }
+        --------------------------------------------*/
 
-            if(player1.y >= player2.y){
-                al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
-                al_draw_scaled_bitmap(player1.imgs[player1.cur_Frame/DELAY],0,0,player1.width,player1.height,player1.x+ship.x-cameraX,player1.y+ship.y-cameraY,player1.width, player1.height, 0);
+
+        /*
+        -------------------------
+        -------------------------
+        ---MENU INICIAL(DIEGO)---
+        -------------------------
+        -------------------------
+        */
+
+        while((vidascale != vida.width)&&(fechar==0)){
+
+            ALLEGRO_EVENT ev;
+            al_wait_for_event(event_queue, &ev);
+
+            //EVENTOS RELACIONADO A VIDA
+            if(oxigenioscale == oxigenio.width){
+                if(vidascale < vida.width){
+                    vidascale += 0.9;
+                }
+                else{
+                    vidascale = vida.width;
+                }
+
             }
-            else{
-                al_draw_scaled_bitmap(player1.imgs[player1.cur_Frame/DELAY],0,0,player1.width,player1.height,player1.x+ship.x-cameraX,player1.y+ship.y-cameraY,player1.width, player1.height, 0);
-                al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
+
+            //EVENTOS REAIS (TEMPO)
+            if(ev.type == ALLEGRO_EVENT_TIMER) {
+
+                //MOVIMENTOS NAVE
+                if(ship.controle == 1){
+
+                    if(key[KEY_UP]){
+
+                        fire.cur_Frame+=1;
+                        if(fire.cur_Frame == 12){
+                            fire.cur_Frame = 0;
+                        }
+
+                        //IDEIA:
+                        //https://www.efunda.com/math/fourier_series/display.cfm?name=triangle
+                        //float angle = rotation*3.14159/180;
+                        //float senof = 0;
+                        //float cosef = 0;
+                        //if(-3.14159/2 <= angle && angle <= 3
+
+                        //    senof = 2*angle/3.14159;
+                        //    cosef = 1-senof;
+                        //}else{
+                        //    senof = (2*(3.14159-angle))/3.14159;
+                        //    cosef = 1-senof;
+                        //}
+                        //forceX -= senof*0.01;
+                        //forceY += cosef*0.01;
+
+                        al_play_sample_instance(inst_som_propulsor);
+
+                        ship.forceX -= sin(ship.rotation*3.14159/180)*0.01;
+                        ship.forceY += cos(ship.rotation*3.14159/180)*0.01;
+
+                        if(ship.forceY < -2){
+                            ship.forceY = -2;
+                        }
+                        if(ship.forceY > 2){
+                            ship.forceY = 2;
+                        }
+                        if(ship.forceX < -2){
+                            ship.forceX = -2;
+                        }
+                        if(ship.forceX > 2){
+                            ship.forceX = 2;
+                        }
+                    }else{
+                        al_stop_sample_instance(inst_som_propulsor);
+                    }
+
+                    if(key[KEY_LEFT]){
+                        ship.rotation+=1;
+                        al_play_sample_instance(inst_rotacao_h);
+                    }else{
+                        al_stop_sample_instance(inst_rotacao_h);
+                    }
+                    if(key[KEY_RIGHT]){
+                        ship.rotation-=1;
+                        al_play_sample_instance(inst_rotacao_a);
+                    }else{
+                        al_stop_sample_instance(inst_rotacao_a);
+                    }
+
+                }else{
+
+                    //MOVIMENTOS PLAYER 1
+
+                    int flag = 0;
+                    if(key[KEY_RIGHT] && player1.x < ship.width - player1.width){
+                        player1.dir = 1;
+                        if(player1.x + VELOCITY <=255 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x + VELOCITY >=155 && player1.x + VELOCITY <=195 ){
+                          if((player1.x + VELOCITY < 141)||(player1.x + VELOCITY > 141 && player1.x + VELOCITY < 195 && player1.y < 182 && player1.y > 122)||(player1.y > 182)||(player1.y <= 122 && player1.y>90) || (player1.y <=90 && player1.x <= 200) || (player1.x + VELOCITY > 195 && player1.x + VELOCITY < 290 && player1.y >= 90))
+                          {
+                            if((player1.x + VELOCITY > 195 && player1.y>120 && player1.y < 142 && player1.x + VELOCITY <235)||(player1.x<=195)||(player1.x>195 && player1.y<120)||(player1.x>195 && player1.y>142)|| (player1.x>=255))
+                            {
+                               player1.x += VELOCITY;
+                            }
+                          }
+                        }
+                        flag = 1;
+                    }
+                    if(key[KEY_LEFT] && player1.x > 0){
+                        player1.dir = 2;
+                        if(player1.x - VELOCITY >=99 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x - VELOCITY >=155 && player1.x - VELOCITY <=195 ){
+                            if((player1.x - VELOCITY > 55 && player1.x - VELOCITY < 159 && player1.y < 230)||(player1.x-VELOCITY>159 && player1.x-VELOCITY<205 && player1.y <182 && player1.y > 122)||(player1.y > 182 && player1.x > 130)||(player1.y <= 122) || (player1.x - VELOCITY > 209))
+                            {
+                                if((player1.x - VELOCITY < 135 && player1.y>120 && player1.y<142 && player1.x - VELOCITY > 119)||(player1.x >=135)||(player1.x <135 && player1.y<120)||(player1.x<135 && player1.y > 142)||(player1.x<=99))
+                                {
+                                    player1.x -= VELOCITY;
+                                }
+                            }
+                        }
+                        flag = 1;
+                    }
+                    if(key[KEY_UP] && player1.y > 0){
+                        player1.dir = 3;
+                        if(player1.y - VELOCITY >= 76 && player1.x>=99 && player1.x<=255 || player1.x >= 155 && player1.x <= 195 || player1.y - VELOCITY >= 140 && player1.y - VELOCITY <= 182 ){
+                            if((player1.y - VELOCITY> 30 && player1.y - VELOCITY <= 76)||(player1.x >= 135 && player1.x <= 205 && player1.y - VELOCITY > 184)|| (player1.x > 205 && player1.y > 90 )||(player1.y<=90 && player1.y>=76 && player1.x<205)||(player1.x <= 140)||(player1.y-VELOCITY <= 155 && player1.y-VELOCITY>=76 && player1.x >=135 && player1.x<=205))
+                            {
+                                if((player1.x>50 && player1.y - VELOCITY>142)||(player1.y - VELOCITY <=142 && player1.x>110 && player1.x<242)||(player1.y-VELOCITY<=120))
+                                {
+                                    player1.y -= VELOCITY;
+                                }
+                            }
+                        }
+                        flag = 1;
+                    }
+                    if(key[KEY_DOWN] && player1.y < ship.height - player1.height){
+                        player1.dir = 4;
+                        if(player1.y + VELOCITY <= 244 && player1.x>=99 && player1.x<=255 || player1.x >= 155 && player1.x <= 195 || player1.y + VELOCITY >= 140 && player1.y + VELOCITY <= 182 ){
+                            if((player1.y + VELOCITY>= 244 && player1.y + VELOCITY < 295)||(player1.x >= 135 && player1.x <= 205 && player1.y + VELOCITY < 150)|| (player1.x > 205 )||(player1.x <= 140 && player1.y + VELOCITY < 230)||(player1.y + VELOCITY>= 230 && player1.x>115 && player1.x <=135)||(player1.x >= 135 && player1.x<=205 && player1.y + VELOCITY < 295 && player1.y>180))
+                            {
+                                if((player1.x>50 && player1.y + VELOCITY< 120)||(player1.y + VELOCITY >= 120 && player1.x>110 && player1.x<140 )||(player1.y + VELOCITY >= 120 && player1.x>159 && player1.x<195)||(player1.y + VELOCITY >= 120 && player1.x>209 && player1.x<242)||(player1.y+VELOCITY >= 142))
+                                    {
+                                    player1.y += VELOCITY;
+                                    }
+                            }
+                        }
+                        flag = 1;
+                    }
+
+                    if(player1.dir == 1){
+                        if(player1.cur_Frame < 0 || player1.cur_Frame > (7*DELAY)-2){
+                            player1.cur_Frame = 0;
+                        }else if(flag){
+                            player1.cur_Frame++;
+                        }else{
+                            player1.cur_Frame = 0;
+                        }
+                    }else if(player1.dir == 2){
+                        if(player1.cur_Frame < 7*DELAY || player1.cur_Frame > (14*DELAY)-2){
+                            player1.cur_Frame = 7*DELAY;
+                        }else if(flag){
+                            player1.cur_Frame++;
+                        }else{
+                            player1.cur_Frame = 7*DELAY;
+                        }
+                    }else if(player1.dir == 3){
+                        if(player1.cur_Frame < 14*DELAY || player1.cur_Frame > (18*DELAY)-2){
+                            player1.cur_Frame = 14*DELAY;
+                        }else if(flag){
+                            player1.cur_Frame++;
+                        }else{
+                            player1.cur_Frame = 15*DELAY;
+                        }
+                    }else if(player1.dir == 4){
+                        if(player1.cur_Frame < 18*DELAY || player1.cur_Frame > (22*DELAY)-2){
+                            player1.cur_Frame = 18*DELAY;
+                        }else if(flag){
+                            player1.cur_Frame++;
+                        }else{
+                            player1.cur_Frame = 19*DELAY;
+                        }
+                    }
+                    al_play_sample_instance(inst_theme);
+                }
+
+                            //COLISÃO ============================================================================================================================================================
+
+                /*
+                for(int i = 0; i < QUANT_ASTEROIDS; i++)
+               {
+                    int colisao = VerifyColisionShipAsteroid(&ship, &asteroids[i]);
+                    if(colisao)
+                    {
+                        if(asteroids[i].vida > 0)
+                        {
+                            ColisaoShipAsteroid(&ship, &asteroids[i]);
+                        }
+                    }
+                }
+
+                for(int i = 0; i < QUANT_ASTEROIDS; i++)
+                    {
+                    for(int x = 0; x < QUANT_ASTEROIDS; x++)
+                    {
+                        if(asteroids[i].vida > 0)
+                        {
+                            if(i != x && asteroids[x].vida > 0)
+                            {
+                                int colidiu = VerifyColisionInterAsteroids(&asteroids[i], &asteroids[x]);
+                                if(colidiu){
+                                    realizar_Colisao_ASTEROIDS(&asteroids[i], &asteroids[x]);
+                                }
+                            }
+                        }else{
+                            break;
+                        }
+                    }
+                }
+    */
+
+                // FIM COLISÃO =========================================================================================================================================================
+
+
+                //EVENTOS RELACIONADO AO OXIGENIO
+
+                if(oxigenioscale < oxigenio.width){
+                    oxigenioscale += 0.9;
+                }
+                else{
+                    oxigenioscale = oxigenio.width;
+                }
+                if(ship.repondoOxi == 1){
+                    if (oxigenioscale <= oxigenio.width && oxigenioscale>0){
+                        oxigenioscale -= 1;
+                    }else{
+                        oxigenioscale = 0;
+                    }
+
+                }else{
+
+                    //MOVIMENTOS PLAYER2
+
+                    int flag = 0;
+                    if(key[KEY_D] && player2.x < ship.width - player2.width){
+                        player2.dir = 1;
+                        if(player2.x + VELOCITY <=255 && player2.y>=76 && player2.y <=244 || player2.y >= 140 && player2.y <= 182 || player2.x + VELOCITY >=155 && player2.x + VELOCITY <=195 ){
+                          if((player2.x + VELOCITY < 141)||(player2.x + VELOCITY > 141 && player2.x + VELOCITY < 195 && player2.y < 182 && player2.y > 122)||(player2.y > 182)||(player2.y <= 122 && player2.y>90) || (player2.y <=90 && player2.x <= 200) || (player2.x + VELOCITY > 195 && player2.x + VELOCITY < 290 && player2.y >= 90))
+                          {
+                            if((player2.x + VELOCITY > 195 && player2.y>120 && player2.y < 142 && player2.x + VELOCITY <235)||(player2.x<=195)||(player2.x>195 && player2.y<120)||(player2.x>195 && player2.y>142)|| (player2.x>=255))
+                            {
+                               player2.x += VELOCITY;
+                            }
+                          }
+                        }
+                        flag = 1;
+                    }
+                    if(key[KEY_A] && player2.x > 0){
+                        player2.dir = 2;
+                        if(player2.x - VELOCITY >=99 && player2.y>=76 && player2.y <=244 || player2.y >= 140 && player2.y <= 182 || player2.x - VELOCITY >=155 && player2.x - VELOCITY <=195 ){
+                            if((player2.x - VELOCITY > 55 && player2.x - VELOCITY < 159 && player2.y < 230)||(player2.x-VELOCITY>159 && player2.x-VELOCITY<205 && player2.y <182 && player2.y > 122)||(player2.y > 182 && player2.x > 130)||(player2.y <= 122) || (player2.x - VELOCITY > 209))
+                            {
+                                if((player2.x - VELOCITY < 135 && player2.y>120 && player2.y<142 && player2.x - VELOCITY > 119)||(player2.x >=135)||(player2.x <135 && player2.y<120)||(player2.x<135 && player2.y > 142)||(player2.x<=99))
+                                {
+                                    player2.x -= VELOCITY;
+                                }
+                            }
+                        }
+                        flag = 1;
+                    }
+                    if(key[KEY_W] && player2.y > 0){
+                        player2.dir = 3;
+                        if(player2.y - VELOCITY >= 76 && player2.x>=99 && player2.x<=255 || player2.x >= 155 && player2.x <= 195 || player2.y - VELOCITY >= 140 && player2.y - VELOCITY <= 182 ){
+                            if((player2.y - VELOCITY> 30 && player2.y - VELOCITY <= 76)||(player2.x >= 135 && player2.x <= 205 && player2.y - VELOCITY > 184)|| (player2.x > 205 && player2.y > 90 )||(player2.y<=90 && player2.y>=76 && player2.x<205)||(player2.x <= 140)||(player2.y-VELOCITY <= 155 && player2.y-VELOCITY>=76 && player2.x >=135 && player2.x<=205))
+                            {
+                                if((player2.x>50 && player2.y - VELOCITY>142)||(player2.y - VELOCITY <=142 && player2.x>110 && player2.x<242)||(player2.y-VELOCITY<=120))
+                                {
+                                    player2.y -= VELOCITY;
+                                }
+                            }
+                        }
+                        flag = 1;
+                    }
+                    if(key[KEY_S] && player2.y < ship.height - player2.height){
+                        player2.dir = 4;
+                        if(player2.y + VELOCITY <= 244 && player2.x>=99 && player2.x<=255 || player2.x >= 155 && player2.x <= 195 || player2.y + VELOCITY >= 140 && player2.y + VELOCITY <= 182 ){
+                            if((player2.y + VELOCITY>= 244 && player2.y + VELOCITY < 295)||(player2.x >= 135 && player2.x <= 205 && player2.y + VELOCITY < 150)|| (player2.x > 205 )||(player2.x <= 140 && player2.y + VELOCITY < 230)||(player2.y + VELOCITY>= 230 && player2.x>115 && player2.x <=135)||(player2.x >= 135 && player2.x<=205 && player2.y + VELOCITY < 295 && player2.y>180))
+                            {
+                                if((player2.x>50 && player2.y + VELOCITY< 120)||(player2.y + VELOCITY >= 120 && player2.x>110 && player2.x<140 )||(player2.y + VELOCITY >= 120 && player2.x>159 && player2.x<195)||(player2.y + VELOCITY >= 120 && player2.x>209 && player2.x<242)||(player2.y+VELOCITY >= 142))
+                                    {
+                                    player2.y += VELOCITY;
+                                    }
+                            }
+                        }
+                        flag = 1;
+                    }
+
+                    if(player2.dir == 1){
+                        if(player2.cur_Frame < 0 || player2.cur_Frame > (7*DELAY)-2){
+                            player2.cur_Frame = 0;
+                        }else if(flag){
+                            player2.cur_Frame++;
+                        }else{
+                            player2.cur_Frame = 0;
+                        }
+                    }else if(player2.dir == 2){
+                        if(player2.cur_Frame < 7*DELAY || player2.cur_Frame > (14*DELAY)-2){
+                            player2.cur_Frame = 7*DELAY;
+                        }else if(flag){
+                            player2.cur_Frame++;
+                        }else{
+                            player2.cur_Frame = 7*DELAY;
+                        }
+                    }else if(player2.dir == 3){
+                        if(player2.cur_Frame < 14*DELAY || player2.cur_Frame > (18*DELAY)-2){
+                            player2.cur_Frame = 14*DELAY;
+                        }else if(flag){
+                            player2.cur_Frame++;
+                        }else{
+                            player2.cur_Frame = 15*DELAY;
+                        }
+                    }else if(player2.dir == 4){
+                        if(player2.cur_Frame < 18*DELAY || player2.cur_Frame > (22*DELAY)-2){
+                            player2.cur_Frame = 18*DELAY;
+                        }else if(flag){
+                            player2.cur_Frame++;
+                        }else{
+                            player2.cur_Frame = 19*DELAY;
+                        }
+                    }
+                }
+
+                //FAZ COM QUE A NAVE FREIE AOS POUCOS (PENSAR EM TIRAR)
+                if(ship.forceY < 0){
+                        ship.forceY += 0.002;
+                        if(ship.forceY>0){
+                            ship.forceY=0;
+                        }
+                }else if(ship.forceY > 0){
+                        ship.forceY -= 0.002;
+                        if(ship.forceY < 0){
+                            ship.forceY = 0;
+                        }
+                }
+                if(ship.forceX < 0){
+                        ship.forceX += 0.002;
+                        if(ship.forceX>0){
+                            ship.forceX=0;
+                        }
+                }else if(ship.forceX > 0){
+                        ship.forceX -= 0.002;
+                        if(ship.forceX < 0){
+                            ship.forceX = 0;
+                        }
+                }
+
+                //LIMITA O VALOR DA ROTAÇÃO NO INTERVALO [0,359]
+                if(ship.rotation >= 360){
+                    ship.rotation = 0;
+                }else if(ship.rotation < 0){
+                    ship.rotation = 359;
+                }
+
+                //CALCULA DISTÂNCIA ENTRE O ASTEROID E A NAVE
+                dist = sqrt((pow((ship.x+ship.width/2)-(asteroid.x+asteroid.width/2), 2))+(pow((ship.y+ship.width/2)-(asteroid.y+asteroid.height/2), 2)));
+
+                if(dist <= (ship.width/2)+(asteroid.width/2)){
+
+                    float vx = (ship.x+(ship.width/2)) - (asteroid.x + (asteroid.width/2));
+                    float vy = (ship.y+(ship.height/2)) - (asteroid.y + (asteroid.height/2));
+
+                    float lenSq = (vx*vx + vy*vy);
+                    float len = sqrt(lenSq);
+
+                    vx /= len;
+                    vy /= len;
+
+                    asteroid.forceX += -vx;
+                    asteroid.forceY += -vy;
+
+                    if(asteroid.forceY < -1.5){
+                        asteroid.forceY = -1.5;
+                    }
+                    if(asteroid.forceY > 1.5){
+                        asteroid.forceY = 1.5;
+                    }
+                    if(asteroid.forceX < -1.5){
+                        asteroid.forceX = -1.5;
+                    }
+                    if(asteroid.forceX > 1.5){
+                        asteroid.forceX = 1.5;
+                    }
+
+                    ship.forceX -= asteroid.forceX/10;
+                    ship.forceY -= asteroid.forceY/10;
+
+                }
+
+                if(asteroid.x <= 0){
+                    asteroid.forceX = -asteroid.forceX;
+                }
+                if(asteroid.x + asteroid.width >= WORLD_W){
+                    asteroid.forceX = -asteroid.forceX;
+                }
+                if(asteroid.y <= 0){
+                    asteroid.forceY = -asteroid.forceY;
+                }
+                if(asteroid.y + asteroid.height >= WORLD_H){
+                    asteroid.forceY = -asteroid.forceY;
+                }
+
+                asteroid.x += asteroid.forceX;
+                asteroid.y += asteroid.forceY;
+
+                //APLICA AS FORÇAS NA NAVE
+                ship.y += ship.forceY;
+                ship.x += ship.forceX;
+
+                //IMPEDE QUE A NAVE SAIA DOS LIMITES DO MUNDO
+                if(ship.y < 0){
+                    ship.y = 0;
+                    ship.forceY=0;
+                }
+                if(ship.y > WORLD_H - ship.height){
+                    ship.y = WORLD_H - ship.height;
+                    ship.forceY=0;
+                }
+                if(ship.x < 0){
+                    ship.x = 0;
+                    ship.forceX=0;
+                }
+                if(ship.x > WORLD_W - ship.width){
+                    ship.x = WORLD_W - ship.width;
+                    ship.forceX=0;
+                }
+
+                //ATUALIZA A CÂMERA AO OBJETO EM MOVIMENTO
+                cameraX = ship.x - SCREEN_W/2 +ship.width/2;
+                cameraY = ship.y - SCREEN_H/2 +ship.height/2;
+
+                //LIMITA A CAMERA NAS BORDAS DO MAPA (PENSAR UM LIMITE DE ASTEROIDS E NÃO DA CÂMERA)
+                if(cameraX < 0){
+                    cameraX = 0;
+                }
+                if (cameraY < 0){
+                    cameraY = 0;
+                }
+                if (cameraX > WORLD_W - SCREEN_W){
+                    cameraX = WORLD_W - SCREEN_W;
+                }
+                if (cameraY > WORLD_H - SCREEN_H){
+                    cameraY = WORLD_H - SCREEN_H;
+                }
+
+                redraw = true;
+
+            //ATIVA AS TECLAS PRESSIONADAS
+            }else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+                switch(ev.keyboard.keycode) {
+                    //PLAYER1
+                    case ALLEGRO_KEY_UP:
+                        key[KEY_UP] = true;
+                        break;
+                    case ALLEGRO_KEY_DOWN:
+                        key[KEY_DOWN] = true;
+                        break;
+                    case ALLEGRO_KEY_LEFT:
+                        key[KEY_LEFT] = true;
+                        break;
+                    case ALLEGRO_KEY_RIGHT:
+                        key[KEY_RIGHT] = true;
+                        break;
+                    case ALLEGRO_KEY_L:
+                        if(ship.controle == 1){
+                            ship.controle = 0;
+                        }else{
+                            ship.controle = 1;
+                        }
+                        break;
+                    //PLAYER2
+                    case ALLEGRO_KEY_W:
+                        key[KEY_W] = true;
+                        break;
+                    case ALLEGRO_KEY_S:
+                        key[KEY_S] = true;
+                        break;
+                    case ALLEGRO_KEY_A:
+                        key[KEY_A] = true;
+                        break;
+                    case ALLEGRO_KEY_D:
+                        key[KEY_D] = true;
+                        break;
+                    case ALLEGRO_KEY_E:
+                        if(ship.repondoOxi == 1){
+                            ship.repondoOxi = 0;
+                        }else{
+                            ship.repondoOxi = 1;
+                        }
+                        break;
+                }
+
+            //DESATIVA AS TECLAS PRESSIONADASs
+            }else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
+                switch(ev.keyboard.keycode) {
+                    //PLAYER1
+                    case ALLEGRO_KEY_UP:
+                        key[KEY_UP] = false;
+                        break;
+                    case ALLEGRO_KEY_DOWN:
+                        key[KEY_DOWN] = false;
+                        break;
+                    case ALLEGRO_KEY_LEFT:
+                        key[KEY_LEFT] = false;
+                        break;
+                    case ALLEGRO_KEY_RIGHT:
+                        key[KEY_RIGHT] = false;
+                        break;
+                    //PLAYER2
+                    case ALLEGRO_KEY_W:
+                        key[KEY_W] = false;
+                        break;
+                    case ALLEGRO_KEY_S:
+                        key[KEY_S] = false;
+                        break;
+                    case ALLEGRO_KEY_A:
+                        key[KEY_A] = false;
+                        break;
+                    case ALLEGRO_KEY_D:
+                        key[KEY_D] = false;
+                        break;
+
+                }
+            }else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+                fechar = 1;
+                break;
             }
 
-            al_draw_scaled_bitmap(asteroid.img,0,0,asteroid.width,asteroid.height,asteroid.x-cameraX,asteroid.y-cameraY,asteroid.width, asteroid.height, 0);
+            //DESENHOS
+            if(redraw && al_is_event_queue_empty(event_queue)) {
 
-            al_draw_scaled_bitmap(vida.img,0,0,vida.width,vida.height,(SCREEN_W/2)-(vida.width/2)-15,SCREEN_H-43,vida.width-vidascale,vida.height, 0);
-            al_draw_scaled_bitmap(oxigenio.img,0,0,oxigenio.width,oxigenio.height,SCREEN_W/2-oxigenio.width/2-15,SCREEN_H-36,oxigenio.width-oxigenioscale,oxigenio.height, 0);
-            al_draw_scaled_bitmap(barra.img,0,0,barra.width,barra.height,SCREEN_W/2-barra.width/2,SCREEN_H-100,barra.width,barra.height, 0);
+                redraw = false;
+                al_draw_scaled_bitmap(background.img,0,0,background.width,background.height,0-(cameraX/2),0-(cameraY/2),background.width*BGScale, background.height*BGScale, 0);
 
-            al_flip_display();
+                if(key[KEY_UP] && ship.controle){
+                    al_draw_rotated_bitmap(fire.imgs[fire.cur_Frame],25, -200,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation+180)*3.14159/180),0);
+                }
+                al_draw_rotated_bitmap(propulsor.img,propulsor.height/2, propulsor.height/2,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation-90)*3.14159/180),0);
+                al_draw_scaled_bitmap(ship.img,0,0,ship.width,ship.height,ship.x-cameraX,ship.y-cameraY,ship.width, ship.height, 0);
+
+                if(player1.y >= player2.y){
+                    al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
+                    al_draw_scaled_bitmap(player1.imgs[player1.cur_Frame/DELAY],0,0,player1.width,player1.height,player1.x+ship.x-cameraX,player1.y+ship.y-cameraY,player1.width, player1.height, 0);
+                }
+                else{
+                    al_draw_scaled_bitmap(player1.imgs[player1.cur_Frame/DELAY],0,0,player1.width,player1.height,player1.x+ship.x-cameraX,player1.y+ship.y-cameraY,player1.width, player1.height, 0);
+                    al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
+                }
+
+                al_draw_scaled_bitmap(asteroid.img,0,0,asteroid.width,asteroid.height,asteroid.x-cameraX,asteroid.y-cameraY,asteroid.width, asteroid.height, 0);
+
+                al_draw_scaled_bitmap(vida.img,0,0,vida.width,vida.height,(SCREEN_W/2)-(vida.width/2)-15,SCREEN_H-43,vida.width-vidascale,vida.height, 0);
+                al_draw_scaled_bitmap(oxigenio.img,0,0,oxigenio.width,oxigenio.height,SCREEN_W/2-oxigenio.width/2-15,SCREEN_H-36,oxigenio.width-oxigenioscale,oxigenio.height, 0);
+                al_draw_scaled_bitmap(barra.img,0,0,barra.width,barra.height,SCREEN_W/2-barra.width/2,SCREEN_H-100,barra.width,barra.height, 0);
+
+                al_flip_display();
+
+            }
 
         }
+        /*
+        ------------------------------------
+        ---------MENU ENCECRRAMENTO---------
+        ---------------WEI------------------
+        ------------------------------------
+        */
 
+        al_stop_sample_instance(inst_theme);
+        al_stop_sample_instance(inst_tiro);
+        al_stop_sample_instance(inst_explosao1);
+        al_stop_sample_instance(inst_explosao2);
+        al_stop_sample_instance(inst_explosao3);
+        al_stop_sample_instance(inst_som_propulsor);
+        al_stop_sample_instance(inst_rotacao_a);
+        al_stop_sample_instance(inst_rotacao_h);
+        al_stop_sample_instance(inst_alerta);
+        al_flip_display();
     }
 
     //DESTROI TUDO DA MEMORIA
