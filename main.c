@@ -147,6 +147,21 @@ typedef struct{
     ALLEGRO_BITMAP *img;
 }SHIP;
 
+typedef struct{
+    float x,y;
+    int carga;
+    int controle;
+    int angle;
+}GUN;
+
+typedef struct{
+    int ativo;
+    float x,y;
+    float velX,velY;
+    int width, height;
+    ALLEGRO_BITMAP *img;
+}SHOT;
+
 //@OBSOLETE
 DYNF_OBJECT load_dynamic_frame_object_bitmaps(int quant, DYNF_OBJECT object, char path[], char img[]){
     //VERIFICAR SE ESSE CÓDIGO ALOCA 2 ESPAÇOS, SE SIM, DEVOLVER ESSE CÓDIGO PARA ANTES DA CHAMADA DESSE MÉTODO.
@@ -254,6 +269,17 @@ SHIP build_ship(float x, float y, float forceX, float forceY, int controle, int 
     ship.height = al_get_bitmap_height(ship.img);
     return ship;
 }
+
+GUN build_gun(float x, float y, int controle, int angle){
+    GUN gun;
+    gun.x = x;
+    gun.y = y;
+    gun.carga = 20;
+    gun.controle = controle;
+    gun.angle = angle;
+    return gun;
+}
+
 
 void adaptarCamera(float *cameraX, float *cameraY, float x, float y, int width, int height, int SCREEN_W, int SCREEN_H){
 
@@ -473,6 +499,69 @@ void ColisaoInterAsteroids (ASTEROID *asteroid1, ASTEROID *asteroid2)
 
 }
 */
+
+/*
+void atirar(SHOT *shots, bool UP, int *carga, float x, float y, int angle, int QUANT_SHOTS){
+    if(UP && *carga == 20){
+        for(int i=0; i<QUANT_SHOTS; i++){
+            if((shots+i)->ativo == 0 ){
+                (shots+i)->ativo = 1;
+                (shots+i)->x = x;
+                (shots+i)->y = y;
+                (shots+i)->velX = -sin(angle*3.14159/180)*38;
+                (shots+i)->velY = cos(angle*3.14159/180)*38;
+                break;
+            }
+        }
+        *carga = 0;
+    }
+}
+*/
+
+/*
+void controlarCanhao(bool LEFT, bool RIGHT, int *angle, int limite){
+    if(LEFT){
+        if(*angle - 2 > limite){
+            *angle -= 2;
+        }
+    }
+    if(RIGHT){
+        if(*angle + 2 < limite+180){
+            *angle += 2;
+        }
+    }
+}
+*/
+
+/*
+int verificar_Colisao_SHOT_ASTEROID(SHOT *shot, ASTEROID *asteroid){
+    float dist = sqrt((pow((shot->x + shot->width/2)-(asteroid->x + asteroid->width/2), 2)) + (pow((shot->y + shot->height/2)-(asteroid->y + asteroid->height/2), 2)));
+    if(dist <= (shot->width/2)+(asteroid->width/2)){
+        return 1;
+    }
+    return 0;
+}
+*/
+
+/*
+void realizar_Colisao_SHOT_ASTEROID(SHOT *shot, ASTEROID *asteroid){
+
+    float vx = (shot->x+(shot->width/2)) - (asteroid->x + (asteroid->width/2));
+    float vy = (shot->y+(shot->height/2)) - (asteroid->y + (asteroid->height/2));
+
+    float lenSq = (vx*vx + vy*vy);
+    float len = sqrt(lenSq);
+
+    vx /= len;
+    vy /= len;
+
+    asteroid->forceX += -vx/2;
+    asteroid->forceY += -vy/2;
+
+    limitarForcas(&asteroid->forceX, &asteroid->forceY, 1.5);
+}
+*/
+
 int main(int argc, char **argv){
 
 
@@ -535,6 +624,34 @@ int main(int argc, char **argv){
         asteroids[i].vida = 4;
     }
     //ASTEROIDS
+
+
+    //OS TIRO E CANHAO-------------------------------
+    /*
+    GUN gunUP;
+    gunUP = build_gun(ship.x+ship.width/2+2, ship.y-6, 0, -90);
+
+    GUN gunLEFT;
+    gunLEFT = build_gun(ship.x-6, ship.y+ship.height/2-3, 0, 180);
+
+    GUN gunRIGHT;
+    gunRIGHT = build_gun(ship.x+ship.width+10, ship.y+ship.height/2-4, 0, 0);
+
+    GUN gunDOWN;
+    gunDOWN = build_gun(ship.x+ship.width/2+2, ship.y+ship.height+7, 0, 90);
+
+    SIMP_OBJECT canhao;
+    canhao = build_Simple_Object("images/ship/canhao.png");
+
+    SIMP_OBJECT canhaoBase;
+    canhaoBase = build_Simple_Object("images/ship/gunBase.png");
+    */
+    //--------------------------------------------------------
+
+
+
+
+
 
     SIMP_OBJECT background;
     background = build_Simple_Object("images/background.jpg");
@@ -1230,6 +1347,8 @@ int main(int argc, char **argv){
     al_destroy_bitmap(barra.img);
     al_destroy_bitmap(vida.img);
     al_destroy_bitmap(oxigenio.img);
+    //al_destroy_bitmap(canhao.img);
+    //al_destroy_bitmap(canhaoBase.img);
 
     al_destroy_sample(theme);
     al_destroy_sample(tiro);
