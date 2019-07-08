@@ -10,8 +10,6 @@
 #include <time.h>
 #include <math.h>
 
-
-
 const float FPS = 60;
 const int WORLD_W = 3000; // 13250 - 11000 - 3000
 const int WORLD_H = 1500; // 7500 - 6250 - 1500
@@ -680,7 +678,7 @@ void add_new_asteroid(ASTEROID *asteroid, int cameraX, int cameraY, int SCREEN_W
 int main(int argc, char **argv){
 
     ALLEGRO_DISPLAY *display = NULL;
-    //ALLEGRO_DISPLAY_MODE   disp_data; //FULLSCREEN
+    ALLEGRO_DISPLAY_MODE   disp_data; //FULLSCREEN
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_TIMER *timer = NULL;
 
@@ -696,6 +694,7 @@ int main(int argc, char **argv){
     al_reserve_samples(20);
     //al_init_primitives_addon(); //FULLSCREEN
     al_install_keyboard();
+    al_install_mouse();
     timer = al_create_timer(1.0 / FPS);
 
     //FULLSCREEN
@@ -725,6 +724,12 @@ int main(int argc, char **argv){
 
     DYNF_OBJECT fire;
     fire = build_Dynamic_Object(12,"images/effects/fire/","f##.png",0);
+
+    DYNF_OBJECT game_over;
+    game_over = build_Dynamic_Object(10,"images/game_over/","g##.png",0);
+
+    DYNF_OBJECT reset;
+    reset = build_Dynamic_Object(10,"images/reset/","r##.png",0);
 
     DYNF_OBJECT faisca;
     faisca = build_Dynamic_Object(6,"images/effects/spark/","h##.png",0);
@@ -874,38 +879,20 @@ int main(int argc, char **argv){
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue, al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_mouse_event_source());
     al_flip_display();
     al_start_timer(timer);
 
 
     //INICIALIZAÇÃO DA TRILHA SONORA
     al_play_sample_instance(inst_theme);
+    //VARIAVEIS PARA USO DOS WHILES
     int fechar = 0;
-
+    int pos_x = SCREEN_W/2;
+    int pos_y = SCREEN_H/2;
 
     //MENU
     while(1){
-
-        ALLEGRO_EVENT ev2;
-        al_wait_for_event(event_queue, &ev2);
-
-        //EVENTOS RELACIONADO AO MOUSE (MENU INICIAL E FINAL)
-        if(ev2.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-            break;
-        }
-        /*INTERAÇÃO DO MOUSE NO MENU
-        if(ev2.type == ALLEGRO_EVENT_MOUSE_AXES)
-        {
-            ----------------
-        }
-        if(ev2.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-        {
-            if(ev2.mouse.button & 1)
-            {
-                --------------------
-            }
-        }
-        --------------------------------------------*/
 
         /*
         -------------------------
@@ -927,7 +914,7 @@ int main(int argc, char **argv){
                 //EVENTOS RELACIONADOS A VIDA
                 if(oxigenioscale == oxigenio.width){
                     if(vidascale < vida.width){
-                        vidascale += 0.1;
+                        vidascale += 0.5;
                     }else{
                         vidascale = vida.width;
                     }
@@ -1037,6 +1024,12 @@ int main(int argc, char **argv){
                     if(colidiu){
                         if(asteroids[i].vida > 0){
                             realizar_Colisao_SHIP_ASTEROID(&ship, &asteroids[i]);
+
+                            if(vidascale < vida.width){
+                                vidascale += 10;
+                            }else{
+                                vidascale = vida.width;
+                            }
                         }
                     }
                 }
@@ -1256,11 +1249,6 @@ int main(int argc, char **argv){
 
         }//JOGO
 
-
-        if(fechar){
-            break;
-        }
-
         al_stop_sample_instance(inst_theme);
         al_stop_sample_instance(inst_tiro);
         al_stop_sample_instance(inst_explosao1);
@@ -1270,15 +1258,60 @@ int main(int argc, char **argv){
         al_stop_sample_instance(inst_rotacao_a);
         al_stop_sample_instance(inst_rotacao_h);
         al_stop_sample_instance(inst_alerta);
+
+        while((vidascale == vida.width)&&(fechar==0)){
+
+            ALLEGRO_EVENT ev2;
+            al_wait_for_event(event_queue, &ev2);
+
+            if(ev2.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+                fechar = 1;
+                break;
+            }
+
+            else if(ev2.type == ALLEGRO_EVENT_MOUSE_AXES){
+                pos_x = ev2.mouse.x;
+                pos_y = ev2.mouse.y;
+            }
+
+            //EVENTOS RELACIONADO AO CLICK DO MOUSE
+            else if(ev2.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+            {
+                if(ev2.mouse.button & 1)
+                {
+                    if(pos_x >= SCREEN_W/2-(reset.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reset.width*0.9)/2)+reset.width*0.9 && pos_y >= SCREEN_H/2+(reset.height*0.9)/2 && pos_y <= (SCREEN_H/2+(reset.height*0.9)/2)+reset.height*0.9)
+                    {
+                        al_play_sample_instance(inst_theme);
+                        ship.x = WORLD_W/2;
+                        ship.y = WORLD_H/2;
+                        ship.forceX = 0;
+                        ship.forceY = 0;
+                        vidascale=0;
+                        oxigenioscale=0;
+
+                    }
+                }
+            }
+
+            game_over.cur_Frame++;
+            if(game_over.cur_Frame >= 10*7){
+                game_over.cur_Frame = 0;
+            }
+
+            al_draw_scaled_bitmap(game_over.imgs[game_over.cur_Frame/7],0,0,game_over.width,game_over.height,0,0,SCREEN_W, SCREEN_H, 0);
+
+            if(pos_x >= SCREEN_W/2-(reset.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reset.width*0.9)/2)+reset.width*0.9 && pos_y >= SCREEN_H/2+(reset.height*0.9)/2 && pos_y <= (SCREEN_H/2+(reset.height*0.9)/2)+reset.height*0.9){
+                al_draw_scaled_bitmap(reset.imgs[1],0,0,reset.width,reset.height,SCREEN_W/2-(reset.width*0.9)/2,SCREEN_H/2+(reset.height*0.9)/2,reset.width*0.9, reset.height*0.9, 0);
+            }else{
+                al_draw_scaled_bitmap(reset.imgs[0],0,0,reset.width,reset.height,SCREEN_W/2-(reset.width*0.9)/2,SCREEN_H/2+(reset.height*0.9)/2,reset.width*0.9, reset.height*0.9, 0);
+            }
+
+            al_flip_display();
+        }
+        if(fechar){
+                break;
+        }
         al_flip_display();
-
-        /*
-        ------------------------------------
-        ---------MENU ENCECRRAMENTO---------
-        ---------------WEI------------------
-        ------------------------------------
-        */
-
     }//MENUS
 
     al_destroy_timer(timer);
@@ -1291,6 +1324,8 @@ int main(int argc, char **argv){
     al_destroy_bitmap(oxigenio.img);
     al_destroy_bitmap(canhao.img);
     al_destroy_bitmap(canhaoBase.img);
+    al_destroy_bitmap(reset.imgs[0]);
+    al_destroy_bitmap(reset.imgs[1]);
 
     al_destroy_sample(theme);
     al_destroy_sample(tiro);
@@ -1329,6 +1364,9 @@ int main(int argc, char **argv){
     }
     for(int i=0; i<22; i++){
         al_destroy_bitmap(player1.imgs[i]);
+    }
+    for(int i=0; i<10; i++){
+        al_destroy_bitmap(game_over.imgs[i]);
     }
     for(int i=0; i<22; i++){
         al_destroy_bitmap(player2.imgs[i]);
