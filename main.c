@@ -790,6 +790,9 @@ int main(int argc, char **argv){
     SIMP_OBJECT barra;
     barra = build_Simple_Object("images/barra/barra.png");
 
+    SIMP_OBJECT barra2;
+    barra2 = build_Simple_Object("images/barra/barra2.png");
+
     SIMP_OBJECT vida;
     vida = build_Simple_Object("images/barra/vida.png");
     float vidascale = 0;
@@ -797,6 +800,10 @@ int main(int argc, char **argv){
     SIMP_OBJECT oxigenio;
     oxigenio = build_Simple_Object("images/barra/oxigenio.png");
     float oxigenioscale = 0;
+
+    SIMP_OBJECT oxigenio2;
+    oxigenio2 = build_Simple_Object("images/barra/oxigenio2.png");
+    float oxigenioscale2 = 0;
 
     SIMP_OBJECT background;
     background = build_Simple_Object("images/background.png");
@@ -1257,7 +1264,9 @@ int main(int argc, char **argv){
 
                 al_draw_scaled_bitmap(vida.img,0,0,vida.width,vida.height,(SCREEN_W/2)-(vida.width/2)-15,SCREEN_H-43,vida.width-vidascale,vida.height, 0);
                 al_draw_scaled_bitmap(oxigenio.img,0,0,oxigenio.width,oxigenio.height,SCREEN_W/2-oxigenio.width/2-15,SCREEN_H-36,oxigenio.width-oxigenioscale,oxigenio.height, 0);
+                al_draw_scaled_bitmap(oxigenio2.img,0,0,oxigenio2.width,oxigenio2.height,SCREEN_W/2-oxigenio2.width/2+337,SCREEN_H-71,oxigenio2.width-oxigenioscale2,oxigenio2.height, 0);
                 al_draw_scaled_bitmap(barra.img,0,0,barra.width,barra.height,SCREEN_W/2-barra.width/2,SCREEN_H-100,barra.width,barra.height, 0);
+                al_draw_scaled_bitmap(barra2.img,0,0,barra2.width,barra2.height,SCREEN_W/2-barra2.width/2+340,SCREEN_H-85,barra2.width,barra2.height, 0);
 
                 al_flip_display();
 
@@ -1295,16 +1304,47 @@ int main(int argc, char **argv){
                 {
                     if(pos_x >= SCREEN_W/2-(reset.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reset.width*0.9)/2)+reset.width*0.9 && pos_y >= SCREEN_H/2+(reset.height*0.9)/2 && pos_y <= (SCREEN_H/2+(reset.height*0.9)/2)+reset.height*0.9)
                     {
+                        //RESETANDO O GAME
                         al_play_sample_instance(inst_theme);
+
                         ship.x = WORLD_W/2;
                         ship.y = WORLD_H/2;
                         ship.forceX = 0;
                         ship.forceY = 0;
                         vidascale=0;
                         oxigenioscale=0;
+                        gunLEFT.controle=0;
+                        gunRIGHT.controle=0;
+                        gunUP.controle=0;
+                        gunDOWN.controle=0;
+                        ship.repondoOxi=0;
+                        ship.controle=0;
+                        asteroid_explode=0;
+                        explosion.cur_Frame =0;
+
+                        key[KEY_UP] = false;
+                        key[KEY_DOWN] = false;
+                        key[KEY_LEFT] = false;
+                        key[KEY_RIGHT] = false;
+                        key[KEY_W] = false;
+                        key[KEY_S] = false;
+                        key[KEY_A] = false;
+                        key[KEY_D] = false;
+
+                        player1.x=ship.width/2+7;
+                        player1.y=ship.height/2+10;
+                        player2.x=ship.width/2-35;
+                        player2.y=ship.height/2+10;
+
+                        for(int i=0; i<QUANT_SHOTS; i++){
+                            shots[i].ativo = 0;
+                        }
 
                         //RESETAR: ASTEROIDS, TIROS, POSIÇÃO DOS CANHOES, CONTROLE DOS CANHOES, CONTROLE DA NAVE, POSIÇÃO DOS ASTRONAUTAS, POSIÇÃO DO PROPULSOR
-
+                        adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
+                        for(int i=0; i<QUANT_ASTEROIDS; i++){
+                            add_new_asteroid(&asteroids[i], cameraX, cameraY, SCREEN_W, SCREEN_H);
+                        }
                         break;
                     }
                 }
@@ -1342,8 +1382,10 @@ int main(int argc, char **argv){
     al_destroy_bitmap(propulsor.img);
     al_destroy_bitmap(ship.img);
     al_destroy_bitmap(barra.img);
+    al_destroy_bitmap(barra2.img);
     al_destroy_bitmap(vida.img);
     al_destroy_bitmap(oxigenio.img);
+    al_destroy_bitmap(oxigenio2.img);
     al_destroy_bitmap(canhao.img);
     al_destroy_bitmap(canhaoBase.img);
     al_destroy_bitmap(reset.imgs[0]);
