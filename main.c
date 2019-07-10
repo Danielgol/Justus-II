@@ -482,7 +482,7 @@ void impulsionarNave(float *forceX, float *forceY, float rotation){
     *forceY += cos(rotation*3.14159/180)*0.01;
 }
 
-void atirar(SHOT *shots, bool UP, int *carga, float x, float y, int angle, int QUANT_SHOTS){
+void atirar(SHOT *shots, bool UP, int *carga, float x, float y, int angle, int QUANT_SHOTS , ALLEGRO_SAMPLE_INSTANCE* inst_tiro){
     if(UP && *carga == 20){
         for(int i=0; i<QUANT_SHOTS; i++){
             if((shots+i)->ativo == 0 ){
@@ -491,6 +491,8 @@ void atirar(SHOT *shots, bool UP, int *carga, float x, float y, int angle, int Q
                 (shots+i)->y = y;
                 (shots+i)->velX = -sin(angle*3.14159/180)*38;
                 (shots+i)->velY = cos(angle*3.14159/180)*38;
+                al_stop_sample_instance(inst_tiro);
+                al_play_sample_instance(inst_tiro);
                 break;
             }
         }
@@ -851,28 +853,28 @@ int main(int argc, char **argv){
     tiro = al_load_sample("sounds/tiro.wav");
     inst_tiro = al_create_sample_instance(tiro);
     al_attach_sample_instance_to_mixer(inst_tiro,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_tiro,0.9);
+    al_set_sample_instance_gain(inst_tiro,0.7);
 
     ALLEGRO_SAMPLE *explosao1;
     ALLEGRO_SAMPLE_INSTANCE *inst_explosao1;
     explosao1 = al_load_sample("sounds/explosao.wav");
     inst_explosao1 = al_create_sample_instance(explosao1);
     al_attach_sample_instance_to_mixer(inst_explosao1,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_explosao1,1.0);
+    al_set_sample_instance_gain(inst_explosao1,1.2);
 
     ALLEGRO_SAMPLE *explosao2;
     ALLEGRO_SAMPLE_INSTANCE *inst_explosao2;
-    explosao2 = al_load_sample("sounds/explosao2.wav");
+    explosao2 = al_load_sample("sounds/explosao2.ogg");
     inst_explosao2 = al_create_sample_instance(explosao2);
     al_attach_sample_instance_to_mixer(inst_explosao2,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_explosao2,1.0);
+    al_set_sample_instance_gain(inst_explosao2,0.6);
 
     ALLEGRO_SAMPLE *explosao3;
     ALLEGRO_SAMPLE_INSTANCE *inst_explosao3;
-    explosao3 = al_load_sample("sounds/explosao3.wav");
+    explosao3 = al_load_sample("sounds/explosao3.ogg");
     inst_explosao3 = al_create_sample_instance(explosao3);
     al_attach_sample_instance_to_mixer(inst_explosao3,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_explosao3,1.0);
+    al_set_sample_instance_gain(inst_explosao3,0.6);
 
     ALLEGRO_SAMPLE *som_propulsor;
     ALLEGRO_SAMPLE_INSTANCE *inst_som_propulsor;
@@ -886,14 +888,14 @@ int main(int argc, char **argv){
     rotacao_a = al_load_sample("sounds/rotacaoa.ogg");
     inst_rotacao_a = al_create_sample_instance(rotacao_a);
     al_attach_sample_instance_to_mixer(inst_rotacao_a,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_rotacao_a,1.4);
+    al_set_sample_instance_gain(inst_rotacao_a,1.6);
 
     ALLEGRO_SAMPLE *rotacao_h;
     ALLEGRO_SAMPLE_INSTANCE *inst_rotacao_h;
     rotacao_h = al_load_sample("sounds/rotacaoh.ogg");
     inst_rotacao_h = al_create_sample_instance(rotacao_h);
     al_attach_sample_instance_to_mixer(inst_rotacao_h,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_rotacao_h,0.8);
+    al_set_sample_instance_gain(inst_rotacao_h,1.6);
 
     ALLEGRO_SAMPLE *alerta;
     ALLEGRO_SAMPLE_INSTANCE *inst_alerta;
@@ -981,19 +983,19 @@ int main(int argc, char **argv){
                 if(gunLEFT.controle == 1){
                     player1.cur_Frame = 7*DELAY;
                     controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunLEFT.angle, 90);
-                    atirar(&shots, key[KEY_UP], &gunLEFT.carga, ship.x-6, ship.y+ship.height/2-10, gunLEFT.angle-90, QUANT_SHOTS);
+                    atirar(&shots, key[KEY_UP], &gunLEFT.carga, ship.x-6, ship.y+ship.height/2-10, gunLEFT.angle-90, QUANT_SHOTS , inst_tiro);
                 }else if(gunRIGHT.controle == 1){
                     player1.cur_Frame = 0;
                     controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunRIGHT.angle, -90);
-                    atirar(&shots, key[KEY_UP], &gunRIGHT.carga, ship.x+ship.width+6, ship.y+ship.height/2-10, gunRIGHT.angle-90, QUANT_SHOTS);
+                    atirar(&shots, key[KEY_UP], &gunRIGHT.carga, ship.x+ship.width+6, ship.y+ship.height/2-10, gunRIGHT.angle-90, QUANT_SHOTS , inst_tiro);
                 }else if(gunUP.controle == 1){
                     player1.cur_Frame = 15*DELAY;
                     controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunUP.angle, -180);
-                    atirar(&shots, key[KEY_UP], &gunUP.carga, ship.x+ship.width/2-6, ship.y-10, gunUP.angle-90, QUANT_SHOTS);
+                    atirar(&shots, key[KEY_UP], &gunUP.carga, ship.x+ship.width/2-6, ship.y-10, gunUP.angle-90, QUANT_SHOTS , inst_tiro);
                 }else if(gunDOWN.controle == 1){
                     player1.cur_Frame = 19*DELAY;
                     controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunDOWN.angle, 0);
-                    atirar(&shots, key[KEY_UP], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS);
+                    atirar(&shots, key[KEY_UP], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS , inst_tiro);
                 }else if(ship.repondoOxi == 1){
                     if(oxigenioscale <= oxigenio.width && oxigenioscale > 0){
                         oxigenioscale -= 1;
@@ -1014,19 +1016,19 @@ int main(int argc, char **argv){
                 if(gunLEFT.controle == 2){
                     player2.cur_Frame = 7*DELAY;
                     controlarCanhao(key[KEY_A], key[KEY_D], &gunLEFT.angle, 90);
-                    atirar(&shots, key[KEY_W], &gunLEFT.carga, ship.x-6, ship.y+ship.height/2-10, gunLEFT.angle-90, QUANT_SHOTS);
+                    atirar(&shots, key[KEY_W], &gunLEFT.carga, ship.x-6, ship.y+ship.height/2-10, gunLEFT.angle-90, QUANT_SHOTS, inst_tiro);
                 }else if(gunRIGHT.controle == 2){
                     player2.cur_Frame = 0;
                     controlarCanhao(key[KEY_A], key[KEY_D], &gunRIGHT.angle, -90);
-                    atirar(&shots, key[KEY_W], &gunRIGHT.carga, ship.x+ship.width+6, ship.y+ship.height/2-10, gunRIGHT.angle-90, QUANT_SHOTS);
+                    atirar(&shots, key[KEY_W], &gunRIGHT.carga, ship.x+ship.width+6, ship.y+ship.height/2-10, gunRIGHT.angle-90, QUANT_SHOTS, inst_tiro);
                 }else if(gunUP.controle == 2){
                     player2.cur_Frame = 15*DELAY;
                     controlarCanhao(key[KEY_A], key[KEY_D], &gunUP.angle, -180);
-                    atirar(&shots, key[KEY_W], &gunUP.carga, ship.x+ship.width/2-6, ship.y-10, gunUP.angle-90, QUANT_SHOTS);
+                    atirar(&shots, key[KEY_W], &gunUP.carga, ship.x+ship.width/2-6, ship.y-10, gunUP.angle-90, QUANT_SHOTS, inst_tiro);
                 }else if(gunDOWN.controle == 2){
                     player2.cur_Frame = 19*DELAY;
                     controlarCanhao(key[KEY_A], key[KEY_D], &gunDOWN.angle, 0);
-                    atirar(&shots, key[KEY_W], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS);
+                    atirar(&shots, key[KEY_W], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS, inst_tiro);
                 }else if(ship.repondoOxi == 2){
                     if(oxigenioscale <= oxigenio.width && oxigenioscale > 0){
                         oxigenioscale -= 1;
@@ -1139,7 +1141,23 @@ int main(int argc, char **argv){
                                        asteroid_explode = 1;
                                        xE = asteroids[x].x;
                                        yE = asteroids[x].y;
-                                       al_play_sample_instance(inst_explosao1);
+                                       int tempo=rand()%3;
+                                       if(tempo == 0)
+                                       {
+                                           al_stop_sample_instance(inst_explosao1);
+                                           al_play_sample_instance(inst_explosao1);
+                                       }
+                                       if(tempo == 1)
+                                       {
+                                           al_stop_sample_instance(inst_explosao2);
+                                           al_play_sample_instance(inst_explosao2);
+                                       }
+                                       if(tempo == 2)
+                                       {
+                                           al_stop_sample_instance(inst_explosao3);
+                                           al_play_sample_instance(inst_explosao3);
+                                       }
+
                                     }
                                     //------------------------------------------------------------------------------
 
