@@ -267,7 +267,7 @@ void moverPlayer(float *x, float *y, int *dir, int *flag, bool UP, bool LEFT, bo
     if(DOWN){
         *dir = 4;
         if(*y + VELOCITY <= 217 && *x>=65 && *x<=232 || *x >= 128 && *x <= 165 || *y + VELOCITY >= 110 && *y + VELOCITY <= 155 ){
-            if((*y <= 93) || (*y > 93 && *y < 124) || (*y > 163 && *x > 100)||(*x<=100 && *y < 193) || (*x < 116 && *y <=163) || (*x > 178)){
+            if((*y <= 93) || (*y > 93 && *y < 124) || (*y > 161 && *x > 100)||(*x<=100 && *y < 193) || (*x < 116 && *y <=163) || (*x > 178)){
                 if((*y > 93)|| (*x >128 && *x < 165)||(*x > 178)||(*x <116) || (*y < 93)){
                         if((*x > 80 && *x < 215)|| (*y < 91 && *x <= 80) || ((*y < 91 && *x >= 215)) || (*y >= 110)){
                             if(*y + VELOCITY <= 265){
@@ -899,10 +899,17 @@ int main(int argc, char **argv){
 
     ALLEGRO_SAMPLE *alerta;
     ALLEGRO_SAMPLE_INSTANCE *inst_alerta;
-    alerta = al_load_sample("sounds/alerta.wav");
+    alerta = al_load_sample("sounds/alerta.ogg");
     inst_alerta = al_create_sample_instance(alerta);
     al_attach_sample_instance_to_mixer(inst_alerta,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_alerta,1.0);
+    al_set_sample_instance_gain(inst_alerta,0.4);
+
+    ALLEGRO_SAMPLE *crash;
+    ALLEGRO_SAMPLE_INSTANCE *inst_crash;
+    crash = al_load_sample("sounds/crash.ogg");
+    inst_crash = al_create_sample_instance(crash);
+    al_attach_sample_instance_to_mixer(inst_crash,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_crash,1.0);
 
     ALLEGRO_SAMPLE *intro;
     ALLEGRO_SAMPLE_INSTANCE *inst_intro;
@@ -960,6 +967,7 @@ int main(int argc, char **argv){
 
                 if(oxigenioscale == oxigenio.width){
                    vidascale += 0.5;
+                   al_play_sample_instance(inst_alerta);
                 }
                 if(ship.x >= 14400 || ship.x <= 1850 || ship.y >= 15000 || ship.y <= 1400)
                 {
@@ -1077,6 +1085,8 @@ int main(int argc, char **argv){
                         if(asteroids[i].vida > 0){
                             realizar_Colisao_SHIP_ASTEROID(&ship, &asteroids[i]);
                             vidascale+=10;
+                            al_stop_sample_instance(inst_crash);
+                            al_play_sample_instance(inst_crash);
                         }
                     }else if(distancia >= 2000){
                         //------------------------------------------------------------------------------
