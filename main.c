@@ -232,17 +232,23 @@ void moverPlayer(float *x, float *y, int *dir, int *flag, bool UP, bool LEFT, bo
     if(RIGHT){
         *dir = 1;
         if(*x + VELOCITY <=232 && *y>=40 && *y <=217 || *y >= 110 && *y <= 155 || *x + VELOCITY >=128 && *x + VELOCITY <=165 ){
-            if(*x + VELOCITY <= 270){
-                *x += VELOCITY;
-            }
+            if( (*x < 110) || (*y > 160) || (*x > 128 && *x < 160) || (*x > 165 && *y > 60) || (*x < 165 && *y <= 93) || (*x < 172 && *y <= 93) ){
+                if((*y >= 93 && *y < 110 && *x < 212) || (*y < 93) || (*y >= 110)){
+                    if(*x + VELOCITY <= 270){
+                        *x += VELOCITY;
+                }
+            }}
         }
         *flag = 1;
     }
     if(LEFT){
         *dir = 2;
         if(*x - VELOCITY >=65 && *y>=40 && *y <=217 || *y >= 110 && *y <= 155 || *x - VELOCITY >=128 && *x - VELOCITY <=165 ){
-            if(*x - VELOCITY >= 23){
-                *x -= VELOCITY;
+            if( (*y > 160 && *x > 105) || (*x > 134 && *x < 165) || (*y < 198 && *x < 128) || (*y <= 93) || (*y >= 93 && *x > 188) ){
+                 if((*y >= 93 && *y < 110 && *x > 85)|| (*y < 93) || (*y >= 110)){
+                    if(*x - VELOCITY >= 23){
+                        *x -= VELOCITY;
+                }}
             }
         }
         *flag = 1;
@@ -250,18 +256,23 @@ void moverPlayer(float *x, float *y, int *dir, int *flag, bool UP, bool LEFT, bo
     if(UP){
         *dir = 3;
         if(*y - VELOCITY >= 40 && *x>=65 && *x<=232 || *x >= 128 && *x <= 165 || *y - VELOCITY >= 110 && *y - VELOCITY <= 155 ){
-            if(*y - VELOCITY >=7){
-                *y -= VELOCITY;
-            }
-        }
+            if((*y > 163) || (*x < 116 && *y <= 163) || (*y > 93 && *y < 130)|| (*y <= 93 && *x <= 175) || (*y > 63 && *x > 178)){
+               if((*y >= 93 && *y < 110 && *x > 80 && *x < 215)|| (*y < 93) || (*y >= 110)){
+                    if(*y - VELOCITY >=7){
+                        *y -= VELOCITY;
+                }}
+        }}
         *flag = 1;
     }
     if(DOWN){
         *dir = 4;
         if(*y + VELOCITY <= 217 && *x>=65 && *x<=232 || *x >= 128 && *x <= 165 || *y + VELOCITY >= 110 && *y + VELOCITY <= 155 ){
-            if(*y + VELOCITY <= 265){
-                *y += VELOCITY;
-            }
+            if((*y <= 93) || (*y > 93 && *y < 124) || (*y > 163 && *x > 100)||(*x<=100 && *y < 193) || (*x < 116 && *y <=163) || (*x > 178)){
+                if((*y > 93)|| (*x >128 && *x < 165)||(*x > 178)||(*x <116) || (*y < 93)){
+                        if((*x > 80 && *x < 215)|| (*y < 91 && *x <= 80) || ((*y < 91 && *x >= 215)) || (*y >= 110)){
+                            if(*y + VELOCITY <= 265){
+                                *y += VELOCITY;
+            }}}}
         }
         *flag = 1;
     }
