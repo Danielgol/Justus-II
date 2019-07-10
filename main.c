@@ -13,8 +13,8 @@
 
 
 const float FPS = 60;
-const int WORLD_W = 3000; // 13250 - 11000 - 3000
-const int WORLD_H = 1500; // 7500 - 6250 - 1500
+const int WORLD_W = 16000; // 13250 - 11000 - 3000
+const int WORLD_H = 16000; // 7500 - 6250 - 1500
 const int VELOCITY = 2;
 const int DELAY = 6;
 
@@ -809,6 +809,13 @@ int main(int argc, char **argv){
     background = build_Simple_Object("images/background.png");
     float BGScale = 1.7;
 
+    SIMP_OBJECT beltside;
+    beltside = build_Simple_Object("images/asteroids/belt.png");
+    float beltScale = 2.3;
+
+    SIMP_OBJECT belttop;
+    belttop = build_Simple_Object("images/asteroids/beltup.png");
+
     //WEI-----------------------------------------------------------------------------
     DYNF_OBJECT game_over;
     game_over = build_Dynamic_Object(10,"images/game_over/","g##.png",0);
@@ -929,6 +936,7 @@ int main(int argc, char **argv){
         //JOGO
         while((vidascale != vida.width)){
 
+
             ALLEGRO_EVENT ev;
             al_wait_for_event(event_queue, &ev);
 
@@ -936,13 +944,20 @@ int main(int argc, char **argv){
             if(ev.type == ALLEGRO_EVENT_TIMER) {
 
                 //EVENTOS RELACIONADOS A VIDA
+
                 if(oxigenioscale == oxigenio.width){
+                   vidascale += 0.5;
+                }
+                if(ship.x >= 14400 || ship.x <= 1850 || ship.y >= 15000 || ship.y <= 1400)
+                {
                     vidascale += 0.5;
                 }
 
                 if(vidascale >= vida.width){
                     vidascale = vida.width;
                 }
+
+
 
                 //EVENTOS RELACIONADOS AO OXIGENIO
                 if(oxigenioscale < oxigenio.width){
@@ -1217,6 +1232,10 @@ int main(int argc, char **argv){
 
                 redraw = false;
                 al_draw_scaled_bitmap(background.img,0,0,background.width,background.height,0-(cameraX/2.5),0-(cameraY/2.5),background.width*BGScale, background.height*BGScale, 0);
+                al_draw_scaled_bitmap(beltside.img,0,0,beltside.width,beltside.height,1300-(cameraX/1.5),0-(cameraY/1.5),beltside.width*beltScale, beltside.height*beltScale, 0);//LEFT
+                al_draw_scaled_bitmap(beltside.img,0,0,beltside.width,beltside.height,(WORLD_W-7500)-(cameraX/1.5),0-(cameraY/1.5),beltside.width*beltScale, beltside.height*beltScale, 0);//RIGTH
+                al_draw_scaled_bitmap(belttop.img,0,0,belttop.width,belttop.height,1300-(cameraX/1.5),900-(cameraY/1.5),belttop.width*beltScale, belttop.height*beltScale, 0);//UP
+                al_draw_scaled_bitmap(belttop.img,0,0,belttop.width,belttop.height,1300-(cameraX/1.5),(WORLD_H-7000)-(cameraY/1.5),belttop.width*beltScale, belttop.height*beltScale, 0);//DOWN
 
                 if((key[KEY_UP] && ship.controle==1) || (key[KEY_W] && ship.controle==2) ){
                     al_draw_rotated_bitmap(fire.imgs[fire.cur_Frame],25, -200,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation+180)*3.14159/180),0);
@@ -1390,6 +1409,8 @@ int main(int argc, char **argv){
     al_destroy_bitmap(canhaoBase.img);
     al_destroy_bitmap(reset.imgs[0]);
     al_destroy_bitmap(reset.imgs[1]);
+    al_destroy_bitmap(belttop.img);
+    al_destroy_bitmap(beltside.img);
 
     al_destroy_sample(theme);
     al_destroy_sample(tiro);
