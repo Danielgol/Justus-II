@@ -757,7 +757,22 @@ int main(int argc, char **argv){
     explosion = build_Dynamic_Object(12,"images/effects/explosion/","e##.png",0);
     int asteroid_explode = 0;
     float xE, yE;
+   int pontucao = 0;
 
+    DYNF_OBJECT unidades;
+    unidades = build_Dynamic_Object(10,"images/numbers/","##.png", 0);
+
+    DYNF_OBJECT dezenas;
+    dezenas = unidades;
+
+    DYNF_OBJECT centenas;
+    centenas = unidades;
+
+    DYNF_OBJECT milhares;
+    milhares = unidades;
+
+    DYNF_OBJECT milhoes;
+    milhoes = unidades;
 
 
     int QUANT_ASTEROIDS = 30;
@@ -1052,6 +1067,7 @@ int main(int argc, char **argv){
                     al_draw_scaled_bitmap(sair.imgs[0],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width*0.9)/2,SCREEN_H/2+(sair.height*0.9)/2+260,sair.width*0.9, sair.height*0.9, 0);
                 }
 
+
                 al_flip_display();
             }
         }
@@ -1257,7 +1273,33 @@ int main(int argc, char **argv){
 
                                     //EXPLOSÃO----------------------------------------------------------------------
                                     if(asteroids[x].vida <= 0){
+
                                        asteroid_explode = 1;
+                                //PARTE DE ADICIONAR PONTOS
+                                        pontucao += 50;
+                                    int point_converter = pontucao;
+                                        int dez = 0;
+                                       int uni = 0;
+                                       int cen=0;
+                                       int mil = 0;
+                                       int milho = 0;
+                                       milho = point_converter/10000;
+                                       point_converter = point_converter - milho/10000;
+                                         mil = point_converter/1000; //0
+                                        point_converter = point_converter - mil*1000;
+                                         cen = point_converter/100; //6
+                                        point_converter = point_converter - cen*100;
+                                        dez = point_converter/10; //3
+                                       point_converter = point_converter - dez*10; //8
+                                        uni = point_converter;
+                                       dezenas.cur_Frame = dez;
+                                       unidades.cur_Frame = uni;
+                                       centenas.cur_Frame = cen;
+                                       milhares.cur_Frame = mil;
+                                       milhoes.cur_Frame = milho;
+
+
+                            //ACABOU PARTE DE ADICIONAR PONTOS
                                        xE = asteroids[x].x;
                                        yE = asteroids[x].y;
                                        int tempo=rand()%3;
@@ -1428,6 +1470,12 @@ int main(int argc, char **argv){
                         al_draw_scaled_bitmap(shots[i].img,0,0, shots[i].width, shots[i].height, shots[i].x-cameraX, shots[i].y-cameraY, shots[i].width*0.7, shots[i].height*0.7, 0);
                     }
                 }
+                //CAIO
+               al_draw_scaled_bitmap(unidades.imgs[unidades.cur_Frame],0,0,unidades.width,unidades.height,100,60,unidades.width, unidades.height, 0);
+               al_draw_scaled_bitmap(dezenas.imgs[dezenas.cur_Frame],0,0,dezenas.width,dezenas.height,80,60,dezenas.width, dezenas.height, 0);
+               al_draw_scaled_bitmap(centenas.imgs[centenas.cur_Frame],0,0,centenas.width,centenas.height,60,60,centenas.width, centenas.height, 0);
+               al_draw_scaled_bitmap(milhares.imgs[milhares.cur_Frame],0,0,milhares.width,milhares.height,40,60,milhares.width, milhares.height, 0);
+               al_draw_scaled_bitmap(milhoes.imgs[milhoes.cur_Frame],0,0,milhoes.width,milhoes.height,20,60,milhoes.width, milhoes.height, 0);
 
                 al_draw_scaled_bitmap(vida.img,0,0,vida.width,vida.height,(SCREEN_W/2)-(vida.width/2)-15,SCREEN_H-43,vida.width-vidascale,vida.height, 0);
                 al_draw_scaled_bitmap(oxigenio.img,0,0,oxigenio.width,oxigenio.height,SCREEN_W/2-oxigenio.width/2-15,SCREEN_H-36,oxigenio.width-oxigenioscale,oxigenio.height, 0);
@@ -1619,6 +1667,14 @@ int main(int argc, char **argv){
     }
     for(int i=0; i<10; i++){
         al_destroy_bitmap(game_over.imgs[i]);
+    }
+
+    for(int i=0; i<10; i++){
+        al_destroy_bitmap(unidades.imgs[i]);
+        al_destroy_bitmap(dezenas.imgs[i]);
+        al_destroy_bitmap(centenas.imgs[i]);
+        al_destroy_bitmap(milhares.imgs[i]);
+        al_destroy_bitmap(milhoes.imgs[i]);
     }
 
     al_destroy_event_queue(event_queue);
