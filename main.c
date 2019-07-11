@@ -829,6 +829,24 @@ int main(int argc, char **argv){
     SIMP_OBJECT belttop;
     belttop = build_Simple_Object("images/asteroids/beltup.png");
 
+    SIMP_OBJECT menu_background;
+    menu_background = build_Simple_Object("images/menu/menu_background.png");
+
+    SIMP_OBJECT logo;
+    logo = build_Simple_Object("images/menu/logo.png");
+
+    DYNF_OBJECT iniciar;
+    iniciar = build_Dynamic_Object(2,"images/menu/","iniciar##.png", 0);
+
+    DYNF_OBJECT story;
+    story = build_Dynamic_Object(2,"images/menu/","storymode##.png", 0);
+
+    DYNF_OBJECT creditos;
+    creditos = build_Dynamic_Object(2,"images/menu/","creditos##.png",0);
+
+    DYNF_OBJECT sair;
+    sair = build_Dynamic_Object(2,"images/menu/","sair##.png", 0);
+
     //WEI-----------------------------------------------------------------------------
     DYNF_OBJECT game_over;
     game_over = build_Dynamic_Object(10,"images/game_over/","g##.png",0);
@@ -848,12 +866,34 @@ int main(int argc, char **argv){
     al_set_sample_instance_playmode(inst_theme, ALLEGRO_PLAYMODE_LOOP);
     al_set_sample_instance_gain(inst_theme,0.8);
 
+    ALLEGRO_SAMPLE *menu_music;
+    ALLEGRO_SAMPLE_INSTANCE *inst_menu_music;
+    menu_music = al_load_sample("sounds/menu_music.ogg");
+    inst_menu_music = al_create_sample_instance(menu_music);
+    al_attach_sample_instance_to_mixer(inst_menu_music,al_get_default_mixer());
+    al_set_sample_instance_playmode(inst_menu_music, ALLEGRO_PLAYMODE_LOOP);
+    al_set_sample_instance_gain(inst_menu_music,0.8);
+
+    ALLEGRO_SAMPLE *button;
+    ALLEGRO_SAMPLE_INSTANCE *inst_button;
+    button = al_load_sample("sounds/button.ogg");
+    inst_button = al_create_sample_instance(button);
+    al_attach_sample_instance_to_mixer(inst_button,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_button,1.0);
+
+    ALLEGRO_SAMPLE *pass_button;
+    ALLEGRO_SAMPLE_INSTANCE *inst_pass_button;
+    pass_button = al_load_sample("sounds/pass_button.ogg");
+    inst_pass_button = al_create_sample_instance(pass_button);
+    al_attach_sample_instance_to_mixer(inst_pass_button,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_pass_button,1.0);
+
     ALLEGRO_SAMPLE *tiro;
     ALLEGRO_SAMPLE_INSTANCE *inst_tiro;
-    tiro = al_load_sample("sounds/tiro.wav");
+    tiro = al_load_sample("sounds/tiro.ogg");
     inst_tiro = al_create_sample_instance(tiro);
     al_attach_sample_instance_to_mixer(inst_tiro,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_tiro,0.7);
+    al_set_sample_instance_gain(inst_tiro,0.6);
 
     ALLEGRO_SAMPLE *explosao1;
     ALLEGRO_SAMPLE_INSTANCE *inst_explosao1;
@@ -932,7 +972,7 @@ int main(int argc, char **argv){
 
 
     //INICIALIZAÇÃO DA TRILHA SONORA
-    al_play_sample_instance(inst_theme);
+
 
 
     //--------------------------------------------------------------------------------
@@ -945,13 +985,82 @@ int main(int argc, char **argv){
     //MENU
     while(1){
 
-        /*
-        -------------------------
-        -------------------------
-        ---MENU INICIAL(DIEGO)---
-        -------------------------
-        -------------------------
-        */
+        al_play_sample_instance(inst_menu_music);
+
+        //MENU INICIAL
+        while(fechar == 0){
+
+            ALLEGRO_EVENT ev2;
+            al_wait_for_event(event_queue, &ev2);
+            int redrawMenu = 0;
+
+            if(ev2.type == ALLEGRO_EVENT_TIMER) {
+                redrawMenu = 1;
+            }else if(ev2.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+                if(ev2.mouse.button & 1){
+                    if(pos_x >= SCREEN_W/2-(iniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(iniciar.width*0.9)/2)+iniciar.width*0.9 && pos_y >= SCREEN_H/2+(iniciar.height*0.9)/2-100 && pos_y <= (SCREEN_H/2+(iniciar.height*0.9)/2-100)+iniciar.height*0.9){
+                        //...
+                        al_play_sample_instance(inst_button);
+                        al_play_sample_instance(inst_theme);
+                        break;
+                    }else if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
+                        al_play_sample_instance(inst_button);
+                        fechar = 1;
+                        break;
+                    }
+                }
+            }else if(ev2.type == ALLEGRO_EVENT_MOUSE_AXES){
+                pos_x = ev2.mouse.x;
+                pos_y = ev2.mouse.y;
+            }else if(ev2.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+                fechar = 1;
+                break;
+            }
+
+            //DESENHA
+            if(redrawMenu && al_is_event_queue_empty(event_queue)){
+                redrawMenu = 0;
+
+                al_draw_scaled_bitmap(menu_background.img,0,0,menu_background.width,menu_background.height,0,0,SCREEN_W, SCREEN_H, 0);
+                al_draw_scaled_bitmap(logo.img,0,0,logo.width,logo.height,SCREEN_W/2-logo.width*0.5/2, 80 ,logo.width*0.5, logo.height*0.5, 0);
+
+                if(pos_x >= SCREEN_W/2-(iniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(iniciar.width*0.9)/2)+iniciar.width*0.9 && pos_y >= SCREEN_H/2+(iniciar.height*0.9)/2-100 && pos_y <= (SCREEN_H/2+(iniciar.height*0.9)/2-100)+iniciar.height*0.9){
+                    //al_play_sample_instance(inst_pass_button);
+                    al_draw_scaled_bitmap(iniciar.imgs[1],0,0,iniciar.width,iniciar.height,SCREEN_W/2-(iniciar.width)/2,SCREEN_H/2+(iniciar.height)/2-100,iniciar.width, iniciar.height, 0);
+                }else{
+                    al_draw_scaled_bitmap(iniciar.imgs[0],0,0,iniciar.width,iniciar.height,SCREEN_W/2-(iniciar.width*0.9)/2,SCREEN_H/2+(iniciar.height*0.9)/2-100,iniciar.width*0.9, iniciar.height*0.9, 0);
+                }
+
+                if(pos_x >= SCREEN_W/2-(story.width*0.9)/2 && pos_x <= (SCREEN_W/2-(story.width*0.9)/2)+story.width*0.9 && pos_y >= SCREEN_H/2+(story.height*0.9)/2+20 && pos_y <= (SCREEN_H/2+(story.height*0.9)/2+20)+story.height*0.9){
+                    //al_play_sample_instance(inst_pass_button);
+                    al_draw_scaled_bitmap(story.imgs[1],0,0,story.width,story.height,SCREEN_W/2-(story.width)/2,SCREEN_H/2+(story.height)/2+20,story.width, story.height, 0);
+                }else{
+                    al_draw_scaled_bitmap(story.imgs[0],0,0,story.width,story.height,SCREEN_W/2-(story.width*0.9)/2,SCREEN_H/2+(story.height*0.9)/2+20,story.width*0.9, story.height*0.9, 0);
+                }
+
+                if(pos_x >= SCREEN_W/2-(creditos.width*0.9)/2 && pos_x <= (SCREEN_W/2-(creditos.width*0.9)/2)+creditos.width*0.9 && pos_y >= SCREEN_H/2+(creditos.height*0.9)/2+140 && pos_y <= (SCREEN_H/2+(creditos.height*0.9)/2+140)+creditos.height*0.9){
+                   // al_play_sample_instance(inst_pass_button);
+                    al_draw_scaled_bitmap(creditos.imgs[1],0,0,creditos.width,creditos.height,SCREEN_W/2-(creditos.width)/2,SCREEN_H/2+(creditos.height)/2+140,creditos.width, creditos.height, 0);
+                }else{
+                    al_draw_scaled_bitmap(creditos.imgs[0],0,0,creditos.width,creditos.height,SCREEN_W/2-(creditos.width*0.9)/2,SCREEN_H/2+(creditos.height*0.9)/2+140,creditos.width*0.9, creditos.height*0.9, 0);
+                }
+
+                if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
+                    //al_play_sample_instance(inst_pass_button);
+                    al_draw_scaled_bitmap(sair.imgs[1],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width)/2,SCREEN_H/2+(sair.height)/2+260,sair.width, sair.height, 0);
+                }else{
+                    al_draw_scaled_bitmap(sair.imgs[0],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width*0.9)/2,SCREEN_H/2+(sair.height*0.9)/2+260,sair.width*0.9, sair.height*0.9, 0);
+                }
+
+                al_flip_display();
+            }
+        }
+
+        al_stop_sample_instance(inst_menu_music);
+
+        if(fechar){
+            break;
+        }
 
         //JOGO
         while((vidascale != vida.width)){
@@ -1341,6 +1450,7 @@ int main(int argc, char **argv){
         al_stop_sample_instance(inst_rotacao_a);
         al_stop_sample_instance(inst_rotacao_h);
         al_stop_sample_instance(inst_alerta);
+        al_stop_sample_instance(inst_crash);
         al_flip_display();
 
 
@@ -1450,9 +1560,18 @@ int main(int argc, char **argv){
     al_destroy_bitmap(reset.imgs[1]);
     al_destroy_bitmap(belttop.img);
     al_destroy_bitmap(beltside.img);
+    al_destroy_bitmap(iniciar.imgs[0]);
+    al_destroy_bitmap(iniciar.imgs[1]);
+    al_destroy_bitmap(sair.imgs[0]);
+    al_destroy_bitmap(sair.imgs[1]);
+    al_destroy_bitmap(story.imgs[0]);
+    al_destroy_bitmap(story.imgs[1]);
+    al_destroy_bitmap(creditos.imgs[0]);
+    al_destroy_bitmap(creditos.imgs[1]);
 
     al_destroy_sample(theme);
     al_destroy_sample(tiro);
+    al_destroy_sample(crash);
     al_destroy_sample(explosao1);
     al_destroy_sample(explosao2);
     al_destroy_sample(explosao3);
@@ -1460,6 +1579,9 @@ int main(int argc, char **argv){
     al_destroy_sample(rotacao_a);
     al_destroy_sample(rotacao_h);
     al_destroy_sample(alerta);
+    al_destroy_sample(menu_music);
+    al_destroy_sample(button);
+    al_destroy_sample(pass_button);
     al_destroy_sample_instance(inst_theme);
     al_destroy_sample_instance(inst_tiro);
     al_destroy_sample_instance(inst_explosao1);
@@ -1469,6 +1591,10 @@ int main(int argc, char **argv){
     al_destroy_sample_instance(inst_rotacao_a);
     al_destroy_sample_instance(inst_rotacao_h);
     al_destroy_sample_instance(inst_alerta);
+    al_destroy_sample_instance(inst_crash);
+    al_destroy_sample_instance(inst_menu_music);
+    al_destroy_sample_instance(inst_button);
+    al_destroy_sample_instance(inst_pass_button);
 
     for(int i=0; i<6; i++){
         al_destroy_bitmap(faisca.imgs[i]);
