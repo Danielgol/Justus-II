@@ -862,15 +862,29 @@ int main(int argc, char **argv){
     DYNF_OBJECT sair;
     sair = build_Dynamic_Object(2,"images/menu/","sair##.png", 0);
 
-    //WEI-----------------------------------------------------------------------------
-    DYNF_OBJECT game_over;
-    game_over = build_Dynamic_Object(10,"images/game_over/","g##.png",0);
+    DYNF_OBJECT close_X;
+    close_X = build_Dynamic_Object(2,"images/menu/","x##.png", 0);
 
-    DYNF_OBJECT reset;
-    reset = build_Dynamic_Object(2,"images/reset/","r##.png",0);
-    //--------------------------------------------------------------------------------
+    //DYNF_OBJECT video_intro;
+    //video_intro = build_Dynamic_Object(30,"images/intro/","##.jpg", 0);
 
+    DYNF_OBJECT creditosButton;
+    creditosButton = build_Dynamic_Object(2,"images/menu/","creditos##.png",0);
 
+    SIMP_OBJECT game_over;
+    game_over = build_Simple_Object("images/menu/game_over.png");
+
+    DYNF_OBJECT reiniciar;
+    reiniciar = build_Dynamic_Object(2,"images/menu/","reiniciar##.png",0);
+
+    DYNF_OBJECT menuButton;
+    menuButton = build_Dynamic_Object(2,"images/menu/","menu##.png",0);
+
+    SIMP_OBJECT black;
+    black = build_Simple_Object("images/menu/black.png");
+
+    SIMP_OBJECT deadnaut;
+    deadnaut = build_Simple_Object("images/menu/deadnaut.png");
 
     //SONS
     ALLEGRO_SAMPLE *theme;
@@ -994,6 +1008,8 @@ int main(int argc, char **argv){
     int pos_x = 0, pos_y = 0; //MOUSE
     int fechar = 0; // FECHAR O JOGO NO [X] DO DISPLAY
     int contador;//PARA O EFEITO SONORO DO MENU
+    int show_Menu = 1;
+    int button_flag = 0;
     //--------------------------------------------------------------------------------
 
 
@@ -1514,6 +1530,11 @@ int main(int argc, char **argv){
 
 
 
+        int subindo = 1; //MOVIMENTO DEADNAUT
+        float y_astron = 0; //MOVIMENTO DEADNAUT
+        //al_play_sample_instance(inst_menu_death);
+
+        //MENU GAME OVER
         while(fechar == 0){
 
             ALLEGRO_EVENT ev2;
@@ -1521,57 +1542,32 @@ int main(int argc, char **argv){
             int redrawMenu = 0;
 
             if(ev2.type == ALLEGRO_EVENT_TIMER) {
-                game_over.cur_Frame++;
-                if(game_over.cur_Frame >= 10*7){
-                    game_over.cur_Frame = 0;
+                if(subindo){
+                    y_astron -= 0.2;
+                    if(y_astron <= -20){
+                        subindo = 0;
+                    }
+                }else{
+                    y_astron += 0.2;
+                    if(y_astron >= 0){
+                        subindo = 1;
+                    }
                 }
                 redrawMenu = 1;
             }else if(ev2.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
                 if(ev2.mouse.button & 1)
                 {
-                    if(pos_x >= SCREEN_W/2-(reset.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reset.width*0.9)/2)+reset.width*0.9 && pos_y >= SCREEN_H/2+(reset.height*0.9)/2 && pos_y <= (SCREEN_H/2+(reset.height*0.9)/2)+reset.height*0.9)
+                    if(pos_x >= SCREEN_W/2-(reiniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reiniciar.width*0.9)/2)+reiniciar.width*0.9 && pos_y >= SCREEN_H/2+(reiniciar.height*0.9)/2 +20 && pos_y <= (SCREEN_H/2+(reiniciar.height*0.9)/2)+reiniciar.height*0.9 +20)
                     {
-                        //RESETANDO O GAME
-                        al_play_sample_instance(inst_theme);
-
-                        ship.x = WORLD_W/2;
-                        ship.y = WORLD_H/2;
-                        ship.forceX = 0;
-                        ship.forceY = 0;
-                        vidascale=0;
-                        oxigenioscale=0;
-                        gunLEFT.controle=0;
-                        gunRIGHT.controle=0;
-                        gunUP.controle=0;
-                        gunDOWN.controle=0;
-                        ship.repondoOxi=0;
-                        ship.controle=0;
-                        asteroid_explode=0;
-                        explosion.cur_Frame =0;
-
-                        key[KEY_UP] = false;
-                        key[KEY_DOWN] = false;
-                        key[KEY_LEFT] = false;
-                        key[KEY_RIGHT] = false;
-                        key[KEY_W] = false;
-                        key[KEY_S] = false;
-                        key[KEY_A] = false;
-                        key[KEY_D] = false;
-
-                        player1.x=ship.width/2+7;
-                        player1.y=ship.height/2+10;
-                        player2.x=ship.width/2-35;
-                        player2.y=ship.height/2+10;
-
-                        for(int i=0; i<QUANT_SHOTS; i++){
-                            shots[i].ativo = 0;
-                        }
-
-                        //RESETAR: ASTEROIDS, TIROS, POSIÇÃO DOS CANHOES, CONTROLE DOS CANHOES, CONTROLE DA NAVE, POSIÇÃO DOS ASTRONAUTAS, POSIÇÃO DO PROPULSOR
-                        adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
-                        for(int i=0; i<QUANT_ASTEROIDS; i++){
-                            add_new_asteroid(&asteroids[i], cameraX, cameraY, SCREEN_W, SCREEN_H);
-                        }
+                        al_play_sample_instance(inst_button);
+                        show_Menu = 0;
+                        break;
+                    }else if(pos_x >= SCREEN_W/2-(menuButton.width*0.9)/2 && pos_x <= (SCREEN_W/2-(menuButton.width*0.9)/2)+menuButton.width*0.9 && pos_y >= SCREEN_H/2+(menuButton.height*0.9)/2+ 140 && pos_y <= (SCREEN_H/2+(menuButton.height*0.9)/2+ 140)+menuButton.height*0.9){
+                        al_play_sample_instance(inst_button);
+                        break;
+                    } else if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
+                        al_play_sample_instance(inst_button);
+                        fechar = 1;
                         break;
                     }
                 }
@@ -1586,16 +1582,58 @@ int main(int argc, char **argv){
             //DESENHA
             if(redrawMenu && al_is_event_queue_empty(event_queue)){
                 redrawMenu = 0;
-                al_draw_scaled_bitmap(game_over.imgs[game_over.cur_Frame/7],0,0,game_over.width,game_over.height,0,0,SCREEN_W, SCREEN_H, 0);
-                if(pos_x >= SCREEN_W/2-(reset.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reset.width*0.9)/2)+reset.width*0.9 && pos_y >= SCREEN_H/2+(reset.height*0.9)/2 && pos_y <= (SCREEN_H/2+(reset.height*0.9)/2)+reset.height*0.9){
-                    al_draw_scaled_bitmap(reset.imgs[1],0,0,reset.width,reset.height,SCREEN_W/2-(reset.width*0.9)/2,SCREEN_H/2+(reset.height*0.9)/2,reset.width*0.9, reset.height*0.9, 0);
+                al_draw_scaled_bitmap(black.img,0,0, black.width, black.height,0,0, SCREEN_W, SCREEN_H, 0);
+                al_draw_scaled_bitmap(game_over.img,0,0,game_over.width,game_over.height,SCREEN_W/2-game_over.width*1.5/2, 100 ,game_over.width*1.5, game_over.height*1.5, 0);
+                al_draw_scaled_bitmap(deadnaut.img,0,0,deadnaut.width,deadnaut.height, SCREEN_W/2 - deadnaut.width*2/2 , SCREEN_H/2 - deadnaut.height/2 - 100 + y_astron ,deadnaut.width*2, deadnaut.height*2, 0);
+
+                if(pos_x >= SCREEN_W/2-(reiniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reiniciar.width*0.9)/2)+reiniciar.width*0.9 && pos_y >= SCREEN_H/2+(reiniciar.height*0.9)/2 +20 && pos_y <= (SCREEN_H/2+(reiniciar.height*0.9)/2)+reiniciar.height*0.9 +20){
+                    al_draw_scaled_bitmap(reiniciar.imgs[1],0,0,reiniciar.width,reiniciar.height,SCREEN_W/2-(reiniciar.width)/2,SCREEN_H/2+(reiniciar.height)/2 +20,reiniciar.width, reiniciar.height, 0);
+                    if(button_flag != 1){
+                        al_stop_sample_instance(inst_pass_button);
+                        al_play_sample_instance(inst_pass_button);
+                        button_flag = 1;
+                    }
                 }else{
-                    al_draw_scaled_bitmap(reset.imgs[0],0,0,reset.width,reset.height,SCREEN_W/2-(reset.width*0.9)/2,SCREEN_H/2+(reset.height*0.9)/2,reset.width*0.9, reset.height*0.9, 0);
+                    al_draw_scaled_bitmap(reiniciar.imgs[0],0,0,reiniciar.width,reiniciar.height,SCREEN_W/2-(reiniciar.width*0.9)/2,SCREEN_H/2+(reiniciar.height*0.9)/2 +20,reiniciar.width*0.9, reiniciar.height*0.9, 0);
+                    if(button_flag == 1){
+                        button_flag = 0;
+                    }
                 }
+
+                if(pos_x >= SCREEN_W/2-(menuButton.width*0.9)/2 && pos_x <= (SCREEN_W/2-(menuButton.width*0.9)/2)+menuButton.width*0.9 && pos_y >= SCREEN_H/2+(menuButton.height*0.9)/2 + 140 && pos_y <= (SCREEN_H/2+(menuButton.height*0.9)/2)+menuButton.height*0.9 + 140){
+                    al_draw_scaled_bitmap(menuButton.imgs[1],0,0,menuButton.width,menuButton.height, SCREEN_W/2-(menuButton.width)/2 , SCREEN_H/2+(menuButton.height)/2 + 140 ,menuButton.width, menuButton.height, 0);
+                    if(button_flag != 2){
+                        al_stop_sample_instance(inst_pass_button);
+                        al_play_sample_instance(inst_pass_button);
+                        button_flag = 2;
+                    }
+                }else{
+                    al_draw_scaled_bitmap(menuButton.imgs[0],0,0,menuButton.width,menuButton.height, SCREEN_W/2-(menuButton.width*0.9)/2 , SCREEN_H/2+(menuButton.height*0.9)/2 + 140 ,menuButton.width*0.9, menuButton.height*0.9, 0);
+                    if(button_flag == 2){
+                        button_flag = 0;
+                    }
+                }
+
+                if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
+                    al_draw_scaled_bitmap(sair.imgs[1],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width)/2,SCREEN_H/2+(sair.height)/2+260,sair.width, sair.height, 0);
+                    if(button_flag != 3){
+                        al_stop_sample_instance(inst_pass_button);
+                        al_play_sample_instance(inst_pass_button);
+                        button_flag = 3;
+                    }
+                }else{
+                    al_draw_scaled_bitmap(sair.imgs[0],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width*0.9)/2,SCREEN_H/2+(sair.height*0.9)/2+260,sair.width*0.9, sair.height*0.9, 0);
+                    if(button_flag == 3){
+                        button_flag = 0;
+                    }
+                }
+
                 al_flip_display();
             }
         }
 
+        //al_stop_sample_instance(inst_menu_death);
+        button_flag = 0;
 
         if(fechar){
             break;
@@ -1615,8 +1653,6 @@ int main(int argc, char **argv){
     al_destroy_bitmap(oxigenio2.img);
     al_destroy_bitmap(canhao.img);
     al_destroy_bitmap(canhaoBase.img);
-    al_destroy_bitmap(reset.imgs[0]);
-    al_destroy_bitmap(reset.imgs[1]);
     al_destroy_bitmap(belttop.img);
     al_destroy_bitmap(beltside.img);
     al_destroy_bitmap(iniciar.imgs[0]);
@@ -1676,10 +1712,6 @@ int main(int argc, char **argv){
     for(int i=0; i<22; i++){
         al_destroy_bitmap(player2.imgs[i]);
     }
-    for(int i=0; i<10; i++){
-        al_destroy_bitmap(game_over.imgs[i]);
-    }
-
     for(int i=0; i<10; i++){
         al_destroy_bitmap(unidades.imgs[i]);
         al_destroy_bitmap(dezenas.imgs[i]);
