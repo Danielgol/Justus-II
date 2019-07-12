@@ -978,6 +978,7 @@ int main(int argc, char **argv){
     //--------------------------------------------------------------------------------
     int pos_x = 0, pos_y = 0; //MOUSE
     int fechar = 0; // FECHAR O JOGO NO [X] DO DISPLAY
+    int contador;//PARA O EFEITO SONORO DO MENU
     //--------------------------------------------------------------------------------
 
 
@@ -1025,31 +1026,42 @@ int main(int argc, char **argv){
                 al_draw_scaled_bitmap(logo.img,0,0,logo.width,logo.height,SCREEN_W/2-logo.width*0.5/2, 80 ,logo.width*0.5, logo.height*0.5, 0);
 
                 if(pos_x >= SCREEN_W/2-(iniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(iniciar.width*0.9)/2)+iniciar.width*0.9 && pos_y >= SCREEN_H/2+(iniciar.height*0.9)/2-100 && pos_y <= (SCREEN_H/2+(iniciar.height*0.9)/2-100)+iniciar.height*0.9){
-                    //al_play_sample_instance(inst_pass_button);
                     al_draw_scaled_bitmap(iniciar.imgs[1],0,0,iniciar.width,iniciar.height,SCREEN_W/2-(iniciar.width)/2,SCREEN_H/2+(iniciar.height)/2-100,iniciar.width, iniciar.height, 0);
                 }else{
                     al_draw_scaled_bitmap(iniciar.imgs[0],0,0,iniciar.width,iniciar.height,SCREEN_W/2-(iniciar.width*0.9)/2,SCREEN_H/2+(iniciar.height*0.9)/2-100,iniciar.width*0.9, iniciar.height*0.9, 0);
                 }
 
                 if(pos_x >= SCREEN_W/2-(story.width*0.9)/2 && pos_x <= (SCREEN_W/2-(story.width*0.9)/2)+story.width*0.9 && pos_y >= SCREEN_H/2+(story.height*0.9)/2+20 && pos_y <= (SCREEN_H/2+(story.height*0.9)/2+20)+story.height*0.9){
-                    //al_play_sample_instance(inst_pass_button);
                     al_draw_scaled_bitmap(story.imgs[1],0,0,story.width,story.height,SCREEN_W/2-(story.width)/2,SCREEN_H/2+(story.height)/2+20,story.width, story.height, 0);
                 }else{
                     al_draw_scaled_bitmap(story.imgs[0],0,0,story.width,story.height,SCREEN_W/2-(story.width*0.9)/2,SCREEN_H/2+(story.height*0.9)/2+20,story.width*0.9, story.height*0.9, 0);
                 }
 
                 if(pos_x >= SCREEN_W/2-(creditos.width*0.9)/2 && pos_x <= (SCREEN_W/2-(creditos.width*0.9)/2)+creditos.width*0.9 && pos_y >= SCREEN_H/2+(creditos.height*0.9)/2+140 && pos_y <= (SCREEN_H/2+(creditos.height*0.9)/2+140)+creditos.height*0.9){
-                   // al_play_sample_instance(inst_pass_button);
                     al_draw_scaled_bitmap(creditos.imgs[1],0,0,creditos.width,creditos.height,SCREEN_W/2-(creditos.width)/2,SCREEN_H/2+(creditos.height)/2+140,creditos.width, creditos.height, 0);
                 }else{
                     al_draw_scaled_bitmap(creditos.imgs[0],0,0,creditos.width,creditos.height,SCREEN_W/2-(creditos.width*0.9)/2,SCREEN_H/2+(creditos.height*0.9)/2+140,creditos.width*0.9, creditos.height*0.9, 0);
                 }
 
                 if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
-                    //al_play_sample_instance(inst_pass_button);
                     al_draw_scaled_bitmap(sair.imgs[1],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width)/2,SCREEN_H/2+(sair.height)/2+260,sair.width, sair.height, 0);
                 }else{
                     al_draw_scaled_bitmap(sair.imgs[0],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width*0.9)/2,SCREEN_H/2+(sair.height*0.9)/2+260,sair.width*0.9, sair.height*0.9, 0);
+                }
+
+                if((pos_y < 336)||(pos_x<560)||(pos_x > 820)|| (pos_y > 425 && pos_y < 456)||(pos_y > 545 && pos_y < 576)||(pos_y > 665 && pos_y < 696)||(pos_y > 785)){
+                    contador=0;
+                }
+                else{
+                    if(contador < 2)
+                    {
+                     contador++;
+                    }
+                    if(contador == 1)
+                    {
+                        al_stop_sample_instance(inst_pass_button);
+                        al_play_sample_instance(inst_pass_button);
+                    }
                 }
 
                 al_flip_display();
