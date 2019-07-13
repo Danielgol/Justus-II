@@ -1168,7 +1168,7 @@ int main(int argc, char **argv){
 
     SIMP_OBJECT oxigenio2;
     oxigenio2 = build_Simple_Object("images/barra/oxigenio2.png");
-    float oxigenioscale2 = 0;
+    float oxigenioscale2 = oxigenio2.width;
 
     SIMP_OBJECT background;
     background = build_Simple_Object("images/background.png");
@@ -1574,17 +1574,18 @@ int main(int argc, char **argv){
 
                 //EVENTOS RELACIONADOS A VIDA
                 if(oxigenioscale == oxigenio.width){
-                    vidascale += 2; //0.2
+                    vidascale += 0.5;
                     al_play_sample_instance(inst_alerta);
                 }
 
                 //EVENTOS RELACIONADOS AO OXIGENIO
                 if(oxigenioscale < oxigenio.width){
-                    oxigenioscale += 2; //0.2
+                    oxigenioscale += 0.1;
                 }else{
                     oxigenioscale = oxigenio.width;
                 }
 
+                //EVENTOS RELACIONADO AO FIM DE JOGO
                 if(vidascale >= vida.width){
 
                     vidascale = vida.width;
@@ -1611,10 +1612,11 @@ int main(int argc, char **argv){
                         controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunDOWN.angle, 0);
                         atirar(&shots, key[KEY_UP], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS, inst_tiro);
                     }else if(ship.repondoOxi == 1){
-                        if(oxigenioscale <= oxigenio.width && oxigenioscale > 0){
+                        if((oxigenioscale <= oxigenio.width) && (oxigenioscale > 0) && (oxigenioscale2 < oxigenio2.width)){
                             oxigenioscale -= 1;
+                            oxigenioscale2 += 0.3;
                         }else{
-                            oxigenioscale = 0;
+                            ship.repondoOxi = 0;
                         }
                     }else if(ship.controle == 1){
                         player1.cur_Frame = 19*DELAY;
@@ -1644,10 +1646,11 @@ int main(int argc, char **argv){
                         controlarCanhao(key[KEY_A], key[KEY_D], &gunDOWN.angle, 0);
                         atirar(&shots, key[KEY_W], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS, inst_tiro);
                     }else if(ship.repondoOxi == 2){
-                        if(oxigenioscale <= oxigenio.width && oxigenioscale > 0){
+                       if((oxigenioscale <= oxigenio.width) && (oxigenioscale > 0) && (oxigenioscale2 < oxigenio2.width)){
                             oxigenioscale -= 1;
+                            oxigenioscale2 += 0.3;
                         }else{
-                            oxigenioscale = 0;
+                            ship.repondoOxi = 0;
                         }
                     }else if(ship.controle == 2){
                         player2.cur_Frame = 19*DELAY;
@@ -1728,6 +1731,12 @@ int main(int argc, char **argv){
                             oxigen_balls[i].vida = 0;
 
                             //-----AUMENTAR SEGUNDA BARRINHA DE OXIGENIO-----\\
+
+                            oxigenioscale2 -=24;
+                            if(oxigenioscale2 <= 0){
+                                oxigenioscale2 = 0;
+                            }
+
 
                         }
                     }
@@ -2042,7 +2051,7 @@ int main(int argc, char **argv){
                 al_draw_scaled_bitmap(oxigenio.img,0,0,oxigenio.width,oxigenio.height,SCREEN_W/2-oxigenio.width/2-15,SCREEN_H-36,oxigenio.width-oxigenioscale,oxigenio.height, 0);
                 al_draw_scaled_bitmap(barra.img,0,0,barra.width,barra.height,SCREEN_W/2-barra.width/2,SCREEN_H-100,barra.width,barra.height, 0);
 
-                al_draw_scaled_bitmap(oxigenio2.img,0,0,oxigenio2.width,oxigenio2.height,SCREEN_W/2-oxigenio2.width/2+337,SCREEN_H-71,oxigenio2.width-oxigenioscale2,oxigenio2.height, 0);
+                al_draw_scaled_bitmap(oxigenio2.img,0,0,oxigenio2.width,oxigenio2.height,SCREEN_W/2-oxigenio2.width/2+335,SCREEN_H-44,oxigenio2.width-oxigenioscale2,oxigenio2.height, 0);
                 al_draw_scaled_bitmap(barra2.img,0,0,barra2.width,barra2.height,SCREEN_W/2-barra2.width/2+340,SCREEN_H-85,barra2.width,barra2.height, 0);
 
                 al_draw_tinted_bitmap(video_intro.imgs[29], al_map_rgba_f(1, 1, 1, jogo_acabou), 0, 0, 0);
