@@ -5,6 +5,9 @@
 #include "allegro5/allegro_native_dialog.h"
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <windows.h>
 #include <string.h>
 #include <malloc.h>
 #include <time.h>
@@ -12,9 +15,11 @@
 
 
 
+
+
 const float FPS = 60;
-const int WORLD_W = 16000; // 13250 - 11000 - 3000
-const int WORLD_H = 16000; // 7500 - 6250 - 1500
+const int WORLD_W = 16000;
+const int WORLD_H = 16000;
 const int VELOCITY = 2;
 const int DELAY = 6;
 
@@ -270,66 +275,12 @@ void moverPlayer(float *x, float *y, int *dir, int *flag, bool UP, bool LEFT, bo
             if((*y <= 93) || (*y > 93 && *y < 124) || (*y > 161 && *x > 100)||(*x<=100 && *y < 193) || (*x < 116 && *y <=163) || (*x > 178)){
                 if((*y > 93)|| (*x >128 && *x < 165)||(*x > 178)||(*x <116) || (*y < 93)){
                         if((*x > 80 && *x < 215)|| (*y < 91 && *x <= 80) || ((*y < 91 && *x >= 215)) || (*y >= 110)){
-                            if(*y + VELOCITY <= 265){
+                            if(*y + VELOCITY <= 255){
                                 *y += VELOCITY;
             }}}}
         }
         *flag = 1;
     }
-
-    //int flag = 0;
-    //            if(key[KEY_RIGHT] && player1.x < ship.width - player1.width){
-    //                player1.dir = 1;
-    //                if(player1.x + VELOCITY <=255 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x + VELOCITY >=155 && player1.x + VELOCITY <=195 ){
-    //                  if((player1.x + VELOCITY < 141)||(player1.x + VELOCITY > 141 && player1.x + VELOCITY < 195 && player1.y < 182 && player1.y > 122)||(player1.y > 182)||(player1.y <= 122 && player1.y>90) || (player1.y <=90 && player1.x <= 200) || (player1.x + VELOCITY > 195 && player1.x + VELOCITY < 290 && player1.y >= 90))
-    //                  {
-    //                    if((player1.x + VELOCITY > 195 && player1.y>120 && player1.y < 142 && player1.x + VELOCITY <235)||(player1.x<=195)||(player1.x>195 && player1.y<120)||(player1.x>195 && player1.y>142)|| (player1.x>=255))
-    //                    {
-    //                       player1.x += VELOCITY;
-    //                    }
-    //                  }
-    //                }
-    //                flag = 1;
-    //            }
-    //            if(key[KEY_LEFT] && player1.x > 0){
-    //                player1.dir = 2;
-    //                if(player1.x - VELOCITY >=99 && player1.y>=76 && player1.y <=244 || player1.y >= 140 && player1.y <= 182 || player1.x - VELOCITY >=155 && player1.x - VELOCITY <=195 ){
-    //                    if((player1.x - VELOCITY > 55 && player1.x - VELOCITY < 159 && player1.y < 230)||(player1.x-VELOCITY>159 && player1.x-VELOCITY<205 && player1.y <182 && player1.y > 122)||(player1.y > 182 && player1.x > 130)||(player1.y <= 122) || (player1.x - VELOCITY > 209))
-    //                    {
-    //                        if((player1.x - VELOCITY < 135 && player1.y>120 && player1.y<142 && player1.x - VELOCITY > 119)||(player1.x >=135)||(player1.x <135 && player1.y<120)||(player1.x<135 && player1.y > 142)||(player1.x<=99))
-    //                        {
-    //                            player1.x -= VELOCITY;
-    //                        }
-    //                    }
-    //                }
-    //                flag = 1;
-    //            }
-    //            if(key[KEY_UP] && player1.y > 0){
-    //                player1.dir = 3;
-    //                if(player1.y - VELOCITY >= 76 && player1.x>=99 && player1.x<=255 || player1.x >= 155 && player1.x <= 195 || player1.y - VELOCITY >= 140 && player1.y - VELOCITY <= 182 ){
-    //                    if((player1.y - VELOCITY> 30 && player1.y - VELOCITY <= 76)||(player1.x >= 135 && player1.x <= 205 && player1.y - VELOCITY > 184)|| (player1.x > 205 && player1.y > 90 )||(player1.y<=90 && player1.y>=76 && player1.x<205)||(player1.x <= 140)||(player1.y-VELOCITY <= 155 && player1.y-VELOCITY>=76 && player1.x >=135 && player1.x<=205))
-    //                    {
-    //                        if((player1.x>50 && player1.y - VELOCITY>142)||(player1.y - VELOCITY <=142 && player1.x>110 && player1.x<242)||(player1.y-VELOCITY<=120))
-    //                        {
-    //                            player1.y -= VELOCITY;
-    //                        }
-    //                    }
-    //                }
-    //                flag = 1;
-    //            }
-    //            if(key[KEY_DOWN] && player1.y < ship.height - player1.height){
-    //                player1.dir = 4;
-    //                if(player1.y + VELOCITY <= 244 && player1.x>=99 && player1.x<=255 || player1.x >= 155 && player1.x <= 195 || player1.y + VELOCITY >= 140 && player1.y + VELOCITY <= 182 ){
-    //                    if((player1.y + VELOCITY>= 244 && player1.y + VELOCITY < 295)||(player1.x >= 135 && player1.x <= 205 && player1.y + VELOCITY < 150)|| (player1.x > 205 )||(player1.x <= 140 && player1.y + VELOCITY < 230)||(player1.y + VELOCITY>= 230 && player1.x>115 && player1.x <=135)||(player1.x >= 135 && player1.x<=205 && player1.y + VELOCITY < 295 && player1.y>180))
-    //                    {
-    //                        if((player1.x>50 && player1.y + VELOCITY< 120)||(player1.y + VELOCITY >= 120 && player1.x>110 && player1.x<140 )||(player1.y + VELOCITY >= 120 && player1.x>159 && player1.x<195)||(player1.y + VELOCITY >= 120 && player1.x>209 && player1.x<242)||(player1.y+VELOCITY >= 142))
-    //                            {
-    //                            player1.y += VELOCITY;
-    //                            }
-    //                    }
-    //                }
-    //                flag = 1;
-    //            }
 }
 
 void limitarAnguloNave(int *rotation){
@@ -482,7 +433,7 @@ void impulsionarNave(float *forceX, float *forceY, float rotation){
     *forceY += cos(rotation*3.14159/180)*0.01;
 }
 
-void atirar(SHOT *shots, bool UP, int *carga, float x, float y, int angle, int QUANT_SHOTS , ALLEGRO_SAMPLE_INSTANCE* inst_tiro){
+void atirar(SHOT *shots, bool UP, int *carga, float x, float y, int angle, int QUANT_SHOTS, ALLEGRO_SAMPLE_INSTANCE* inst_tiro){
     if(UP && *carga == 20){
         for(int i=0; i<QUANT_SHOTS; i++){
             if((shots+i)->ativo == 0 ){
@@ -646,7 +597,7 @@ void interagirGUNS(PLAYER player, int playerID, int shipWidth, int shipHeight, i
         }else if(*UP_CONTROL == playerID){
             *UP_CONTROL = 0;
         }
-    }else if(player.y+player.height+30 > shipHeight){
+    }else if(player.y+player.height+35 > shipHeight){
         if(*DOWN_CONTROL == 0){
             *DOWN_CONTROL = playerID;
         }else if(*DOWN_CONTROL == playerID){
@@ -691,6 +642,383 @@ void add_new_asteroid(ASTEROID *asteroid, int cameraX, int cameraY, int SCREEN_W
     }
 }
 
+void add_new_especial_asteroid(ASTEROID *asteroid, int cameraX, int cameraY, int SCREEN_W, int SCREEN_H){
+    for(int i=0; i<1;){
+
+        int x = rand()%(WORLD_W-(asteroid->width));
+        int y = rand()%(WORLD_H-(asteroid->height));
+
+        if((x > cameraX-100 && x < cameraX+SCREEN_W+100 && y > cameraY-100 && y < cameraY+SCREEN_H+100) || (x <= 0 || y <= 0 || x+asteroid->width > WORLD_W || y+asteroid->height > WORLD_H)) {
+
+        }else{
+            asteroid->x = x;
+            asteroid->y = y;
+            i++;
+        }
+    }
+}
+
+void throw_oxi_ball(ASTEROID *ball, float x, float y){
+
+    float forceX = ((rand()%301)/100) -1.5;
+    float forceY = ((rand()%301)/100) -1.5;
+
+    if(forceX < 0.5 && forceX >= 0){
+        forceX = 0.5;
+    }else if(forceX < 0 && forceX > -0.5){
+        forceX = -0.5;
+    }
+
+    if(forceY < 0.5 && forceY >= 0){
+        forceY = 0.5;
+    }else if(forceY < 0 && forceY > -0.5){
+        forceY = -0.5;
+    }
+
+    ball->x = x;
+    ball->y = y;
+    ball->vida = 800;
+    ball->forceX = forceX;
+    ball->forceY = forceY;
+}
+
+void reset_players(bool key[10], PLAYER *player1, PLAYER *player2, int shipWidth, int shipHeight){
+    key[KEY_UP] = false;
+    key[KEY_DOWN] = false;
+    key[KEY_LEFT] = false;
+    key[KEY_RIGHT] = false;
+    key[KEY_W] = false;
+    key[KEY_S] = false;
+    key[KEY_A] = false;
+    key[KEY_D] = false;
+
+    player1->x = shipWidth/2+7;
+    player1->y = shipHeight/2+10;
+    player2->x = shipWidth/2-35;
+    player2->y = shipHeight/2+10;
+
+    player1->cur_Frame = 0;
+    player2->cur_Frame = 0;
+
+    player1->dir = 1;
+    player2->dir = 2;
+}
+
+void reset_ship(SHIP *ship, GUN *gunLEFT, GUN *gunRIGHT, GUN *gunUP, GUN *gunDOWN, int QUANT_SHOTS, SHOT shots[QUANT_SHOTS], float *vidascale, float *oxigenioscale){
+    ship->x = WORLD_W/2;
+    ship->y = WORLD_H/2;
+    ship->forceX = 0;
+    ship->forceY = 0;
+    ship->rotation = 0;
+
+    *vidascale = 0;
+    *oxigenioscale = 0;
+
+    gunLEFT->controle = 0;
+    gunRIGHT->controle = 0;
+    gunUP->controle = 0;
+    gunDOWN->controle = 0;
+
+    gunLEFT->angle = 180;
+    gunRIGHT->angle = 0;
+    gunUP->angle = -90;
+    gunDOWN->angle = 90;
+
+    ship->repondoOxi = 0;
+    ship->controle = 0;
+
+    for(int i=0; i<QUANT_SHOTS; i++){
+        shots[i].ativo = 0;
+    }
+}
+
+void reset_asteroids(int QUANT_ASTEROIDS, ASTEROID asteroids[QUANT_ASTEROIDS], int *asteroid_explode, int *explosion_cur_Frame){
+    *asteroid_explode = 0;
+    *explosion_cur_Frame = 0;
+    for(int i=0; i<QUANT_ASTEROIDS; i++){
+        asteroids[i].vida = 0;
+    }
+}
+
+void reset_especial_asteroids(int QUANT_ESPECIAL, ASTEROID especiais[QUANT_ESPECIAL], int QUANT_OXI, ASTEROID oxigen_balls[QUANT_OXI]){
+    for(int i=0; i<QUANT_ESPECIAL; i++){
+        especiais[i].vida = 0;
+    }
+    for(int i=0; i<QUANT_OXI; i++){
+        oxigen_balls[i].vida = 0;
+    }
+}
+
+void show_intro(DYNF_OBJECT intro, ALLEGRO_SAMPLE_INSTANCE* inst_intro, int SCREEN_W, int SCREEN_H){
+
+    Sleep(2000);
+    al_play_sample_instance(inst_intro);
+    Sleep(5370);
+
+    al_draw_scaled_bitmap(intro.imgs[0],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(5000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(2000);
+
+    al_draw_scaled_bitmap(intro.imgs[1],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(9000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1000);
+
+    al_draw_scaled_bitmap(intro.imgs[2],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(3000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(400);
+
+    al_draw_scaled_bitmap(intro.imgs[3],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(2700);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(400);
+
+    al_draw_scaled_bitmap(intro.imgs[4],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(2700);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(600);
+
+    al_draw_scaled_bitmap(intro.imgs[5],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(4400);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(4500);
+
+    al_draw_scaled_bitmap(intro.imgs[6],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(11000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1400);
+
+    al_draw_scaled_bitmap(intro.imgs[0],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(3500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(800);
+
+    al_draw_scaled_bitmap(intro.imgs[7],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(7000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(800);
+
+    al_draw_scaled_bitmap(intro.imgs[8],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(10000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[9],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(11000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[0],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(3500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[10],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(10000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1000);
+
+    al_draw_scaled_bitmap(intro.imgs[11],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(7000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(400);
+
+    al_draw_scaled_bitmap(intro.imgs[12],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(7000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(400);
+
+    al_draw_scaled_bitmap(intro.imgs[13],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(7000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[0],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(3500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[14],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(7000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[15],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(7000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[16],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(2500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(500);
+
+    al_draw_scaled_bitmap(intro.imgs[17],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(2000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(500);
+
+    al_draw_scaled_bitmap(intro.imgs[18],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(3000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(500);
+
+    al_draw_scaled_bitmap(intro.imgs[19],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(3500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1000);
+
+    al_draw_scaled_bitmap(intro.imgs[20],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(7000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(500);
+
+    al_draw_scaled_bitmap(intro.imgs[21],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(2000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(500);
+
+    al_draw_scaled_bitmap(intro.imgs[22],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(500);
+
+    al_draw_scaled_bitmap(intro.imgs[23],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(500);
+
+    al_draw_scaled_bitmap(intro.imgs[24],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(500);
+
+    al_draw_scaled_bitmap(intro.imgs[25],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(700);
+
+    al_draw_scaled_bitmap(intro.imgs[26],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1700);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1000);
+
+    al_draw_scaled_bitmap(intro.imgs[27],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(5000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1500);
+
+    al_draw_scaled_bitmap(intro.imgs[28],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(3000);
+
+    al_draw_scaled_bitmap(intro.imgs[29],0,0,intro.width,intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+    al_flip_display();
+    Sleep(1000);
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -700,7 +1028,7 @@ void add_new_asteroid(ASTEROID *asteroid, int cameraX, int cameraY, int SCREEN_W
 int main(int argc, char **argv){
 
     ALLEGRO_DISPLAY *display = NULL;
-    //ALLEGRO_DISPLAY_MODE   disp_data; //FULLSCREEN
+    ALLEGRO_DISPLAY_MODE   disp_data;
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_TIMER *timer = NULL;
 
@@ -714,24 +1042,37 @@ int main(int argc, char **argv){
     al_install_audio();
     al_init_acodec_addon();
     al_reserve_samples(20);
-    //al_init_primitives_addon(); //FULLSCREEN
+    al_init_primitives_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
     al_install_mouse();
     al_install_keyboard();
     timer = al_create_timer(1.0 / FPS);
 
     //FULLSCREEN
-    //al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
-    //al_set_new_display_flags(ALLEGRO_FULLSCREEN);
-    //display = al_create_display(disp_data.width, disp_data.height);
-    //int SCREEN_W = al_get_display_width(display);
-    //int SCREEN_H = al_get_display_height(display);
-    int SCREEN_W = 1380;
-    int SCREEN_H = 780;
-    display = al_create_display(SCREEN_W, SCREEN_H);
-
+    al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
+    al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+    display = al_create_display(disp_data.width, disp_data.height);
+    int SCREEN_W = al_get_display_width(display);
+    int SCREEN_H = al_get_display_height(display);
     srand(time(NULL));
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    int pontuacao = 0;
 
     SHIP ship;
     ship = build_ship(WORLD_W/2, WORLD_H/2, 0, 0, 0,"images/ship/shipWhite.png");
@@ -739,63 +1080,14 @@ int main(int argc, char **argv){
     SIMP_OBJECT propulsor;
     propulsor = build_Simple_Object("images/ship/propulsorWhite.png");
 
+    SIMP_OBJECT objetos_nave;
+    objetos_nave = build_Simple_Object("images/ship/objetos1.png");
+
     PLAYER player1;
     player1 = build_player(ship.width/2+7,ship.height/2+10,22,"images/players/","a##.png",0,1);
 
     PLAYER player2;
     player2 = build_player(ship.width/2-35,ship.height/2+10,22,"images/players/","b##.png",0,2);
-
-    DYNF_OBJECT fire;
-    fire = build_Dynamic_Object(12,"images/effects/fire/","f##.png",0);
-
-    DYNF_OBJECT faisca;
-    faisca = build_Dynamic_Object(6,"images/effects/spark/","h##.png",0);
-    int collide_shot_ast = 0;
-    float xF, yF;
-
-    DYNF_OBJECT explosion;
-    explosion = build_Dynamic_Object(12,"images/effects/explosion/","e##.png",0);
-    int asteroid_explode = 0;
-    float xE, yE;
-   int pontucao = 0;
-
-    DYNF_OBJECT unidades;
-    unidades = build_Dynamic_Object(10,"images/numbers/","##.png", 0);
-
-    DYNF_OBJECT dezenas;
-    dezenas = unidades;
-
-    DYNF_OBJECT centenas;
-    centenas = unidades;
-
-    DYNF_OBJECT milhares;
-    milhares = unidades;
-
-    DYNF_OBJECT milhoes;
-    milhoes = unidades;
-
-
-    int QUANT_ASTEROIDS = 30;
-    ASTEROID asteroids[QUANT_ASTEROIDS];
-    generateAsteroids(QUANT_ASTEROIDS, &asteroids, 4, "images/asteroids/Asteroid.png");
-    //---------------------------------------------------------------------------------------------
-    adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
-    for(int i=0; i<QUANT_ASTEROIDS; i++){
-        add_new_asteroid(&asteroids[i], cameraX, cameraY, SCREEN_W, SCREEN_H);
-    }
-    //---------------------------------------------------------------------------------------------
-
-
-
-    int QUANT_SHOTS = 10;
-    SHOT shots[QUANT_SHOTS];
-    shots[0].ativo = 0;
-    shots[0].img = al_load_bitmap("images/effects/shot/s07.png");
-    shots[0].width = al_get_bitmap_width(shots[0].img);
-    shots[0].height = al_get_bitmap_height(shots[0].img);
-    for(int i=1; i<QUANT_SHOTS; i++){
-        shots[i] = shots[0];
-    }
 
     GUN gunUP;
     gunUP = build_gun(ship.x+ship.width/2+2, ship.y-6, 0, -90);
@@ -815,11 +1107,53 @@ int main(int argc, char **argv){
     SIMP_OBJECT canhaoBase;
     canhaoBase = build_Simple_Object("images/ship/gunBase.png");
 
+    DYNF_OBJECT fire;
+    fire = build_Dynamic_Object(12,"images/effects/fire/","f##.png",0);
+
+    DYNF_OBJECT faisca;
+    faisca = build_Dynamic_Object(6,"images/effects/spark/","h##.png",0);
+    int collide_shot_ast = 0;
+    float xF, yF;
+
+    DYNF_OBJECT explosion;
+    explosion = build_Dynamic_Object(12,"images/effects/explosion/","e##.png",0);
+    int asteroid_explode = 0;
+    float xE, yE;
+
+    SIMP_OBJECT planeta;
+    planeta = build_Simple_Object("images/planet/planet.png");
+
+    int QUANT_ASTEROIDS = 30;
+    ASTEROID asteroids[QUANT_ASTEROIDS];
+    generateAsteroids(QUANT_ASTEROIDS, &asteroids, 4, "images/asteroids/Asteroid.png");
+    adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
+    for(int i=0; i<QUANT_ASTEROIDS; i++){
+        add_new_asteroid(&asteroids[i], cameraX, cameraY, SCREEN_W, SCREEN_H);
+    }
+
+    int QUANT_ESPECIAL_ASTEROIDS = 50;
+    ASTEROID especiais[QUANT_ESPECIAL_ASTEROIDS];
+    generateAsteroids(QUANT_ESPECIAL_ASTEROIDS, &especiais, 1, "images/asteroids/asteroid_esp.png");
+    for(int i=0; i<QUANT_ESPECIAL_ASTEROIDS; i++){
+        especiais[i].vida = 0;
+    }
+
+    int QUANT_OXI_BALLS = 10;
+    ASTEROID oxigen_balls[QUANT_OXI_BALLS];
+    generateAsteroids(QUANT_OXI_BALLS, &oxigen_balls, 0, "images/asteroids/oxiball.png");
+
+    int QUANT_SHOTS = 10;
+    SHOT shots[QUANT_SHOTS];
+    shots[0].ativo = 0;
+    shots[0].img = al_load_bitmap("images/effects/shot/s007.png");
+    shots[0].width = al_get_bitmap_width(shots[0].img);
+    shots[0].height = al_get_bitmap_height(shots[0].img);
+    for(int i=1; i<QUANT_SHOTS; i++){
+        shots[i] = shots[0];
+    }
+
     SIMP_OBJECT barra;
     barra = build_Simple_Object("images/barra/barra.png");
-
-    SIMP_OBJECT barra2;
-    barra2 = build_Simple_Object("images/barra/barra2.png");
 
     SIMP_OBJECT vida;
     vida = build_Simple_Object("images/barra/vida.png");
@@ -828,6 +1162,9 @@ int main(int argc, char **argv){
     SIMP_OBJECT oxigenio;
     oxigenio = build_Simple_Object("images/barra/oxigenio.png");
     float oxigenioscale = 0;
+
+    SIMP_OBJECT barra2;
+    barra2 = build_Simple_Object("images/barra/barra2.png");
 
     SIMP_OBJECT oxigenio2;
     oxigenio2 = build_Simple_Object("images/barra/oxigenio2.png");
@@ -844,6 +1181,16 @@ int main(int argc, char **argv){
     SIMP_OBJECT belttop;
     belttop = build_Simple_Object("images/asteroids/beltup.png");
 
+    SIMP_OBJECT dangerzoneSide;
+    dangerzoneSide = build_Simple_Object("images/asteroids/dangerzoneSide.png");
+
+    SIMP_OBJECT dangerzoneTop;
+    dangerzoneTop = build_Simple_Object("images/asteroids/dangerzoneTop.png");
+
+
+
+    //MENU----------------------------------------------------------------------------
+
     SIMP_OBJECT menu_background;
     menu_background = build_Simple_Object("images/menu/menu_background.png");
 
@@ -856,20 +1203,20 @@ int main(int argc, char **argv){
     DYNF_OBJECT story;
     story = build_Dynamic_Object(2,"images/menu/","storymode##.png", 0);
 
-    DYNF_OBJECT creditos;
-    creditos = build_Dynamic_Object(2,"images/menu/","creditos##.png",0);
-
-    DYNF_OBJECT sair;
-    sair = build_Dynamic_Object(2,"images/menu/","sair##.png", 0);
-
     DYNF_OBJECT close_X;
     close_X = build_Dynamic_Object(2,"images/menu/","x##.png", 0);
 
-    //DYNF_OBJECT video_intro;
-    //video_intro = build_Dynamic_Object(30,"images/intro/","##.jpg", 0);
+    SIMP_OBJECT creditos;
+    creditos = build_Simple_Object("images/menu/creditos.png");
+
+    DYNF_OBJECT video_intro;
+    video_intro = build_Dynamic_Object(30,"images/intro/","##.jpg", 0);
 
     DYNF_OBJECT creditosButton;
     creditosButton = build_Dynamic_Object(2,"images/menu/","creditos##.png",0);
+
+    DYNF_OBJECT sair;
+    sair = build_Dynamic_Object(2,"images/menu/","sair##.png", 0);
 
     SIMP_OBJECT game_over;
     game_over = build_Simple_Object("images/menu/game_over.png");
@@ -886,6 +1233,10 @@ int main(int argc, char **argv){
     SIMP_OBJECT deadnaut;
     deadnaut = build_Simple_Object("images/menu/deadnaut.png");
 
+    //--------------------------------------------------------------------------------
+
+
+
     //SONS
     ALLEGRO_SAMPLE *theme;
     ALLEGRO_SAMPLE_INSTANCE *inst_theme;
@@ -894,28 +1245,6 @@ int main(int argc, char **argv){
     al_attach_sample_instance_to_mixer(inst_theme,al_get_default_mixer());
     al_set_sample_instance_playmode(inst_theme, ALLEGRO_PLAYMODE_LOOP);
     al_set_sample_instance_gain(inst_theme,0.8);
-
-    ALLEGRO_SAMPLE *menu_music;
-    ALLEGRO_SAMPLE_INSTANCE *inst_menu_music;
-    menu_music = al_load_sample("sounds/menu_music.ogg");
-    inst_menu_music = al_create_sample_instance(menu_music);
-    al_attach_sample_instance_to_mixer(inst_menu_music,al_get_default_mixer());
-    al_set_sample_instance_playmode(inst_menu_music, ALLEGRO_PLAYMODE_LOOP);
-    al_set_sample_instance_gain(inst_menu_music,0.8);
-
-    ALLEGRO_SAMPLE *button;
-    ALLEGRO_SAMPLE_INSTANCE *inst_button;
-    button = al_load_sample("sounds/button.ogg");
-    inst_button = al_create_sample_instance(button);
-    al_attach_sample_instance_to_mixer(inst_button,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_button,1.0);
-
-    ALLEGRO_SAMPLE *pass_button;
-    ALLEGRO_SAMPLE_INSTANCE *inst_pass_button;
-    pass_button = al_load_sample("sounds/pass_button.ogg");
-    inst_pass_button = al_create_sample_instance(pass_button);
-    al_attach_sample_instance_to_mixer(inst_pass_button,al_get_default_mixer());
-    al_set_sample_instance_gain(inst_pass_button,1.0);
 
     ALLEGRO_SAMPLE *tiro;
     ALLEGRO_SAMPLE_INSTANCE *inst_tiro;
@@ -985,8 +1314,39 @@ int main(int argc, char **argv){
     intro = al_load_sample("sounds/intro.ogg");
     inst_intro = al_create_sample_instance(intro);
     al_attach_sample_instance_to_mixer(inst_intro,al_get_default_mixer());
-    al_set_sample_instance_playmode(inst_intro, ALLEGRO_PLAYMODE_LOOP);
     al_set_sample_instance_gain(inst_intro,0.8);
+
+    ALLEGRO_SAMPLE *menu_music;
+    ALLEGRO_SAMPLE_INSTANCE *inst_menu_music;
+    menu_music = al_load_sample("sounds/menu_music.ogg");
+    inst_menu_music = al_create_sample_instance(menu_music);
+    al_attach_sample_instance_to_mixer(inst_menu_music,al_get_default_mixer());
+    al_set_sample_instance_playmode(inst_menu_music, ALLEGRO_PLAYMODE_LOOP);
+    al_set_sample_instance_gain(inst_menu_music,0.8);
+
+    ALLEGRO_SAMPLE *menu_death;
+    ALLEGRO_SAMPLE_INSTANCE *inst_menu_death;
+    menu_death = al_load_sample("sounds/menu_death.ogg");
+    inst_menu_death = al_create_sample_instance(menu_death);
+    al_attach_sample_instance_to_mixer(inst_menu_death,al_get_default_mixer());
+    al_set_sample_instance_playmode(inst_menu_death, ALLEGRO_PLAYMODE_LOOP);
+    al_set_sample_instance_gain(inst_menu_death,0.8);
+
+    ALLEGRO_SAMPLE *button;
+    ALLEGRO_SAMPLE_INSTANCE *inst_button;
+    button = al_load_sample("sounds/button.ogg");
+    inst_button = al_create_sample_instance(button);
+    al_attach_sample_instance_to_mixer(inst_button,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_button,1.0);
+
+    ALLEGRO_SAMPLE *pass_button;
+    ALLEGRO_SAMPLE_INSTANCE *inst_pass_button;
+    pass_button = al_load_sample("sounds/pass_button.ogg");
+    inst_pass_button = al_create_sample_instance(pass_button);
+    al_attach_sample_instance_to_mixer(inst_pass_button,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_pass_button,1.0);
+
+    ALLEGRO_FONT *font = al_load_font("images/font/superstar.ttf", 42, 0);
 
 
     //CONFIGURA/INICIALIZA EVENTOS E LOCAL DE DESENHO
@@ -999,28 +1359,38 @@ int main(int argc, char **argv){
     al_flip_display();
     al_start_timer(timer);
 
-
-    //INICIALIZAÇÃO DA TRILHA SONORA
-
-
-
     //--------------------------------------------------------------------------------
     int pos_x = 0, pos_y = 0; //MOUSE
     int fechar = 0; // FECHAR O JOGO NO [X] DO DISPLAY
-    int contador;//PARA O EFEITO SONORO DO MENU
-    int show_Menu = 1;
-    int button_flag = 0;
+    int show_Menu = 1; // MOSTRAR (NORMAL) OU PULAR O MENU (REINICIAR)
     //--------------------------------------------------------------------------------
 
 
 
-    //MENU
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     while(1){
 
+
+        int show_credits = 0;
+        int button_flag = 0;
+        int play_intro = 0;
         al_play_sample_instance(inst_menu_music);
 
         //MENU INICIAL
-        while(fechar == 0){
+        while(show_Menu && fechar == 0){
 
             ALLEGRO_EVENT ev2;
             al_wait_for_event(event_queue, &ev2);
@@ -1030,15 +1400,27 @@ int main(int argc, char **argv){
                 redrawMenu = 1;
             }else if(ev2.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
                 if(ev2.mouse.button & 1){
-                    if(pos_x >= SCREEN_W/2-(iniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(iniciar.width*0.9)/2)+iniciar.width*0.9 && pos_y >= SCREEN_H/2+(iniciar.height*0.9)/2-100 && pos_y <= (SCREEN_H/2+(iniciar.height*0.9)/2-100)+iniciar.height*0.9){
-                        //...
-                        al_play_sample_instance(inst_button);
-                        al_play_sample_instance(inst_theme);
-                        break;
-                    }else if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
-                        al_play_sample_instance(inst_button);
-                        fechar = 1;
-                        break;
+                    if(show_credits == 0){
+                        if(pos_x >= SCREEN_W/2-(iniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(iniciar.width*0.9)/2)+iniciar.width*0.9 && pos_y >= SCREEN_H/2+(iniciar.height*0.9)/2-100 && pos_y <= (SCREEN_H/2+(iniciar.height*0.9)/2-100)+iniciar.height*0.9){
+                            al_play_sample_instance(inst_button);
+                            break;
+                        }else if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
+                            al_play_sample_instance(inst_button);
+                            fechar = 1;
+                            break;
+                        }else if(pos_x >= SCREEN_W/2-(story.width*0.9)/2 && pos_x <= (SCREEN_W/2-(story.width*0.9)/2)+story.width*0.9 && pos_y >= SCREEN_H/2+(story.height*0.9)/2+20 && pos_y <= (SCREEN_H/2+(story.height*0.9)/2+20)+story.height*0.9){
+                            al_play_sample_instance(inst_button);
+                            play_intro = 1;
+                            break;
+                        }else if(pos_x >= SCREEN_W/2-(creditosButton.width*0.9)/2 && pos_x <= (SCREEN_W/2-(creditosButton.width*0.9)/2)+creditosButton.width*0.9 && pos_y >= SCREEN_H/2+(creditosButton.height*0.9)/2+140 && pos_y <= (SCREEN_H/2+(creditosButton.height*0.9)/2+140)+creditosButton.height*0.9){
+                            al_play_sample_instance(inst_button);
+                            show_credits = 1;
+                        }
+                    }else{
+                        if(pos_x >= (SCREEN_W/2+(creditos.width)/2)-(close_X.width)-10 && pos_x <= (SCREEN_W/2+(creditos.width)/2)-(close_X.width)+close_X.width-10 && pos_y >= (SCREEN_H/2-(creditos.height)/2)+10 && pos_y <= (SCREEN_H/2-(creditos.height)/2)+close_X.height+10){
+                            al_play_sample_instance(inst_button);
+                            show_credits = 0;
+                        }
                     }
                 }
             }else if(ev2.type == ALLEGRO_EVENT_MOUSE_AXES){
@@ -1056,42 +1438,76 @@ int main(int argc, char **argv){
                 al_draw_scaled_bitmap(menu_background.img,0,0,menu_background.width,menu_background.height,0,0,SCREEN_W, SCREEN_H, 0);
                 al_draw_scaled_bitmap(logo.img,0,0,logo.width,logo.height,SCREEN_W/2-logo.width*0.5/2, 80 ,logo.width*0.5, logo.height*0.5, 0);
 
-                if(pos_x >= SCREEN_W/2-(iniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(iniciar.width*0.9)/2)+iniciar.width*0.9 && pos_y >= SCREEN_H/2+(iniciar.height*0.9)/2-100 && pos_y <= (SCREEN_H/2+(iniciar.height*0.9)/2-100)+iniciar.height*0.9){
-                    al_draw_scaled_bitmap(iniciar.imgs[1],0,0,iniciar.width,iniciar.height,SCREEN_W/2-(iniciar.width)/2,SCREEN_H/2+(iniciar.height)/2-100,iniciar.width, iniciar.height, 0);
-                }else{
-                    al_draw_scaled_bitmap(iniciar.imgs[0],0,0,iniciar.width,iniciar.height,SCREEN_W/2-(iniciar.width*0.9)/2,SCREEN_H/2+(iniciar.height*0.9)/2-100,iniciar.width*0.9, iniciar.height*0.9, 0);
-                }
+                if(show_credits == 0){
 
-                if(pos_x >= SCREEN_W/2-(story.width*0.9)/2 && pos_x <= (SCREEN_W/2-(story.width*0.9)/2)+story.width*0.9 && pos_y >= SCREEN_H/2+(story.height*0.9)/2+20 && pos_y <= (SCREEN_H/2+(story.height*0.9)/2+20)+story.height*0.9){
-                    al_draw_scaled_bitmap(story.imgs[1],0,0,story.width,story.height,SCREEN_W/2-(story.width)/2,SCREEN_H/2+(story.height)/2+20,story.width, story.height, 0);
-                }else{
-                    al_draw_scaled_bitmap(story.imgs[0],0,0,story.width,story.height,SCREEN_W/2-(story.width*0.9)/2,SCREEN_H/2+(story.height*0.9)/2+20,story.width*0.9, story.height*0.9, 0);
-                }
-
-                if(pos_x >= SCREEN_W/2-(creditos.width*0.9)/2 && pos_x <= (SCREEN_W/2-(creditos.width*0.9)/2)+creditos.width*0.9 && pos_y >= SCREEN_H/2+(creditos.height*0.9)/2+140 && pos_y <= (SCREEN_H/2+(creditos.height*0.9)/2+140)+creditos.height*0.9){
-                    al_draw_scaled_bitmap(creditos.imgs[1],0,0,creditos.width,creditos.height,SCREEN_W/2-(creditos.width)/2,SCREEN_H/2+(creditos.height)/2+140,creditos.width, creditos.height, 0);
-                }else{
-                    al_draw_scaled_bitmap(creditos.imgs[0],0,0,creditos.width,creditos.height,SCREEN_W/2-(creditos.width*0.9)/2,SCREEN_H/2+(creditos.height*0.9)/2+140,creditos.width*0.9, creditos.height*0.9, 0);
-                }
-
-                if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
-                    al_draw_scaled_bitmap(sair.imgs[1],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width)/2,SCREEN_H/2+(sair.height)/2+260,sair.width, sair.height, 0);
-                }else{
-                    al_draw_scaled_bitmap(sair.imgs[0],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width*0.9)/2,SCREEN_H/2+(sair.height*0.9)/2+260,sair.width*0.9, sair.height*0.9, 0);
-                }
-
-                if((pos_y < 336)||(pos_x<560)||(pos_x > 820)|| (pos_y > 425 && pos_y < 456)||(pos_y > 545 && pos_y < 576)||(pos_y > 665 && pos_y < 696)||(pos_y > 785)){
-                    contador=0;
-                }
-                else{
-                    if(contador < 2)
-                    {
-                     contador++;
+                    if(pos_x >= SCREEN_W/2-(iniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(iniciar.width*0.9)/2)+iniciar.width*0.9 && pos_y >= SCREEN_H/2+(iniciar.height*0.9)/2-100 && pos_y <= (SCREEN_H/2+(iniciar.height*0.9)/2-100)+iniciar.height*0.9){
+                        al_draw_scaled_bitmap(iniciar.imgs[1],0,0,iniciar.width,iniciar.height,SCREEN_W/2-(iniciar.width)/2,SCREEN_H/2+(iniciar.height)/2-100,iniciar.width, iniciar.height, 0);
+                        if(button_flag != 1){
+                            al_stop_sample_instance(inst_pass_button);
+                            al_play_sample_instance(inst_pass_button);
+                            button_flag = 1;
+                        }
+                    }else{
+                        al_draw_scaled_bitmap(iniciar.imgs[0],0,0,iniciar.width,iniciar.height,SCREEN_W/2-(iniciar.width*0.9)/2,SCREEN_H/2+(iniciar.height*0.9)/2-100,iniciar.width*0.9, iniciar.height*0.9, 0);
+                        if(button_flag == 1){
+                            button_flag = 0;
+                        }
                     }
-                    if(contador == 1)
-                    {
-                        al_stop_sample_instance(inst_pass_button);
-                        al_play_sample_instance(inst_pass_button);
+
+                    if(pos_x >= SCREEN_W/2-(story.width*0.9)/2 && pos_x <= (SCREEN_W/2-(story.width*0.9)/2)+story.width*0.9 && pos_y >= SCREEN_H/2+(story.height*0.9)/2+20 && pos_y <= (SCREEN_H/2+(story.height*0.9)/2+20)+story.height*0.9){
+                        al_draw_scaled_bitmap(story.imgs[1],0,0,story.width,story.height,SCREEN_W/2-(story.width)/2,SCREEN_H/2+(story.height)/2+20,story.width, story.height, 0);
+                        if(button_flag != 2){
+                            al_stop_sample_instance(inst_pass_button);
+                            al_play_sample_instance(inst_pass_button);
+                            button_flag = 2;
+                        }
+                    }else{
+                        al_draw_scaled_bitmap(story.imgs[0],0,0,story.width,story.height,SCREEN_W/2-(story.width*0.9)/2,SCREEN_H/2+(story.height*0.9)/2+20,story.width*0.9, story.height*0.9, 0);
+                        if(button_flag == 2){
+                            button_flag = 0;
+                        }
+                    }
+
+                    if(pos_x >= SCREEN_W/2-(creditosButton.width*0.9)/2 && pos_x <= (SCREEN_W/2-(creditosButton.width*0.9)/2)+creditosButton.width*0.9 && pos_y >= SCREEN_H/2+(creditosButton.height*0.9)/2+140 && pos_y <= (SCREEN_H/2+(creditosButton.height*0.9)/2+140)+creditosButton.height*0.9){
+                        al_draw_scaled_bitmap(creditosButton.imgs[1],0,0,creditosButton.width,creditosButton.height,SCREEN_W/2-(creditosButton.width)/2,SCREEN_H/2+(creditosButton.height)/2+140,creditosButton.width, creditosButton.height, 0);
+                        if(button_flag != 3){
+                            al_stop_sample_instance(inst_pass_button);
+                            al_play_sample_instance(inst_pass_button);
+                            button_flag = 3;
+                        }
+                    }else{
+                        al_draw_scaled_bitmap(creditosButton.imgs[0],0,0,creditosButton.width,creditosButton.height,SCREEN_W/2-(creditosButton.width*0.9)/2,SCREEN_H/2+(creditosButton.height*0.9)/2+140,creditosButton.width*0.9, creditosButton.height*0.9, 0);
+                        if(button_flag == 3){
+                            button_flag = 0;
+                        }
+                    }
+
+                    if(pos_x >= SCREEN_W/2-(sair.width*0.9)/2 && pos_x <= (SCREEN_W/2-(sair.width*0.9)/2)+sair.width*0.9 && pos_y >= SCREEN_H/2+(sair.height*0.9)/2+260 && pos_y <= (SCREEN_H/2+(sair.height*0.9)/2+260)+sair.height*0.9){
+                        al_draw_scaled_bitmap(sair.imgs[1],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width)/2,SCREEN_H/2+(sair.height)/2+260,sair.width, sair.height, 0);
+                        if(button_flag != 4){
+                            al_stop_sample_instance(inst_pass_button);
+                            al_play_sample_instance(inst_pass_button);
+                            button_flag = 4;
+                        }
+                    }else{
+                        al_draw_scaled_bitmap(sair.imgs[0],0,0,sair.width,sair.height,SCREEN_W/2-(sair.width*0.9)/2,SCREEN_H/2+(sair.height*0.9)/2+260,sair.width*0.9, sair.height*0.9, 0);
+                        if(button_flag == 4){
+                            button_flag = 0;
+                        }
+                    }
+
+                }else{
+                    al_draw_scaled_bitmap(creditos.img,0,0,creditos.width,creditos.height, SCREEN_W/2-(creditos.width)/2, SCREEN_H/2-(creditos.height)/2 , creditos.width*1, creditos.height*1, 0);
+                    if(pos_x >= (SCREEN_W/2+(creditos.width)/2)-(close_X.width)-10 && pos_x <= (SCREEN_W/2+(creditos.width)/2)-(close_X.width)+close_X.width-10 && pos_y >= (SCREEN_H/2-(creditos.height)/2)+10 && pos_y <= (SCREEN_H/2-(creditos.height)/2)+close_X.height+10){
+                        al_draw_scaled_bitmap(close_X.imgs[1] ,0,0, close_X.width, close_X.height,  (SCREEN_W/2+(creditos.width)/2)-(close_X.width)-10  ,  (SCREEN_H/2-(creditos.height)/2)+10 , close_X.width, close_X.height, 0);
+                        if(button_flag != 5){
+                            button_flag = 5;
+                        }
+                    }else{
+                        al_draw_scaled_bitmap(close_X.imgs[0] ,0,0, close_X.width, close_X.height,  (SCREEN_W/2+(creditos.width)/2)-(close_X.width)-10  ,  (SCREEN_H/2-(creditos.height)/2)+10 , close_X.width, close_X.height, 0);
+                        if(button_flag == 5){
+                            button_flag = 0;
+                        }
                     }
                 }
 
@@ -1099,15 +1515,56 @@ int main(int argc, char **argv){
             }
         }
 
+        show_Menu = 1;
+        button_flag = 0;
         al_stop_sample_instance(inst_menu_music);
 
         if(fechar){
             break;
         }
 
-        //JOGO
-        while((vidascale != vida.width)){
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        al_stop_timer(timer);
+
+        if(play_intro){
+            al_draw_scaled_bitmap(video_intro.imgs[29],0,0,video_intro.width,video_intro.height,0,0,SCREEN_W,SCREEN_H, 0);
+            al_flip_display();
+            show_intro(video_intro, inst_intro, SCREEN_W, SCREEN_H);
+        }
+
+        pontuacao = 0;
+        float jogo_acabou = 0;
+        reset_players(key, &player1, &player2, ship.width, ship.height);
+        reset_ship(&ship, &gunLEFT, &gunRIGHT, &gunUP, &gunDOWN, QUANT_SHOTS, shots, &vidascale, &oxigenioscale);
+        adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
+        reset_asteroids(QUANT_ASTEROIDS, asteroids, &asteroid_explode, &explosion.cur_Frame);
+        reset_especial_asteroids(QUANT_ESPECIAL_ASTEROIDS, especiais, QUANT_OXI_BALLS, oxigen_balls);
+        al_play_sample_instance(inst_theme);
+
+        al_start_timer(timer);
+
+
+
+        while(jogo_acabou < 1){
 
             ALLEGRO_EVENT ev;
             al_wait_for_event(event_queue, &ev);
@@ -1116,93 +1573,92 @@ int main(int argc, char **argv){
             if(ev.type == ALLEGRO_EVENT_TIMER) {
 
                 //EVENTOS RELACIONADOS A VIDA
-
                 if(oxigenioscale == oxigenio.width){
-                   vidascale += 0.5;
-                   al_play_sample_instance(inst_alerta);
+                    vidascale += 2; //0.2
+                    al_play_sample_instance(inst_alerta);
                 }
-                if(ship.x >= 14400 || ship.x <= 1850 || ship.y >= 15000 || ship.y <= 1400)
-                {
-                    vidascale += 0.5;
-                }
-
-                if(vidascale >= vida.width){
-                    vidascale = vida.width;
-                }
-
-
 
                 //EVENTOS RELACIONADOS AO OXIGENIO
                 if(oxigenioscale < oxigenio.width){
-                    oxigenioscale += 1;
+                    oxigenioscale += 2; //0.2
                 }else{
                     oxigenioscale = oxigenio.width;
                 }
 
-                //NAVE / OXIGENIO / CANHOES / PLAYER 1
-                if(gunLEFT.controle == 1){
-                    player1.cur_Frame = 7*DELAY;
-                    controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunLEFT.angle, 90);
-                    atirar(&shots, key[KEY_UP], &gunLEFT.carga, ship.x-6, ship.y+ship.height/2-10, gunLEFT.angle-90, QUANT_SHOTS , inst_tiro);
-                }else if(gunRIGHT.controle == 1){
-                    player1.cur_Frame = 0;
-                    controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunRIGHT.angle, -90);
-                    atirar(&shots, key[KEY_UP], &gunRIGHT.carga, ship.x+ship.width+6, ship.y+ship.height/2-10, gunRIGHT.angle-90, QUANT_SHOTS , inst_tiro);
-                }else if(gunUP.controle == 1){
-                    player1.cur_Frame = 15*DELAY;
-                    controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunUP.angle, -180);
-                    atirar(&shots, key[KEY_UP], &gunUP.carga, ship.x+ship.width/2-6, ship.y-10, gunUP.angle-90, QUANT_SHOTS , inst_tiro);
-                }else if(gunDOWN.controle == 1){
-                    player1.cur_Frame = 19*DELAY;
-                    controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunDOWN.angle, 0);
-                    atirar(&shots, key[KEY_UP], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS , inst_tiro);
-                }else if(ship.repondoOxi == 1){
-                    if(oxigenioscale <= oxigenio.width && oxigenioscale > 0){
-                        oxigenioscale -= 1;
-                    }else{
-                        oxigenioscale = 0;
-                    }
-                }else if(ship.controle == 1){
-                    player1.cur_Frame = 19*DELAY;
-                    controlarNave(key[KEY_UP], key[KEY_LEFT], key[KEY_RIGHT], &ship.forceX, &ship.forceY, &ship.rotation, &fire.cur_Frame, inst_som_propulsor, inst_rotacao_h, inst_rotacao_a);
-                    limitarForcas(&ship.forceX, &ship.forceY, 2);
-                }else{
-                    int flag = 0;
-                    moverPlayer(&player1.x, &player1.y, &player1.dir, &flag, key[KEY_UP], key[KEY_LEFT], key[KEY_RIGHT], key[KEY_DOWN]);
-                    atualizarFramePlayer(player1.dir, flag, &player1.cur_Frame);
-                }
+                if(vidascale >= vida.width){
 
-                //NAVE / OXIGENIO / CANHOES / PLAYER 2
-                if(gunLEFT.controle == 2){
-                    player2.cur_Frame = 7*DELAY;
-                    controlarCanhao(key[KEY_A], key[KEY_D], &gunLEFT.angle, 90);
-                    atirar(&shots, key[KEY_W], &gunLEFT.carga, ship.x-6, ship.y+ship.height/2-10, gunLEFT.angle-90, QUANT_SHOTS, inst_tiro);
-                }else if(gunRIGHT.controle == 2){
-                    player2.cur_Frame = 0;
-                    controlarCanhao(key[KEY_A], key[KEY_D], &gunRIGHT.angle, -90);
-                    atirar(&shots, key[KEY_W], &gunRIGHT.carga, ship.x+ship.width+6, ship.y+ship.height/2-10, gunRIGHT.angle-90, QUANT_SHOTS, inst_tiro);
-                }else if(gunUP.controle == 2){
-                    player2.cur_Frame = 15*DELAY;
-                    controlarCanhao(key[KEY_A], key[KEY_D], &gunUP.angle, -180);
-                    atirar(&shots, key[KEY_W], &gunUP.carga, ship.x+ship.width/2-6, ship.y-10, gunUP.angle-90, QUANT_SHOTS, inst_tiro);
-                }else if(gunDOWN.controle == 2){
-                    player2.cur_Frame = 19*DELAY;
-                    controlarCanhao(key[KEY_A], key[KEY_D], &gunDOWN.angle, 0);
-                    atirar(&shots, key[KEY_W], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS, inst_tiro);
-                }else if(ship.repondoOxi == 2){
-                    if(oxigenioscale <= oxigenio.width && oxigenioscale > 0){
-                        oxigenioscale -= 1;
-                    }else{
-                        oxigenioscale = 0;
-                    }
-                }else if(ship.controle == 2){
-                    player2.cur_Frame = 19*DELAY;
-                    controlarNave(key[KEY_W], key[KEY_A], key[KEY_D], &ship.forceX, &ship.forceY, &ship.rotation, &fire.cur_Frame, inst_som_propulsor, inst_rotacao_h, inst_rotacao_a);
-                    limitarForcas(&ship.forceX, &ship.forceY, 2);
+                    vidascale = vida.width;
+                    ship.controle = 0;
+                    jogo_acabou += 0.005;
+
                 }else{
-                    int flag = 0;
-                    moverPlayer(&player2.x, &player2.y, &player2.dir, &flag, key[KEY_W], key[KEY_A], key[KEY_D], key[KEY_S]);
-                    atualizarFramePlayer(player2.dir, flag, &player2.cur_Frame);
+
+                    //NAVE / OXIGENIO / CANHOES / PLAYER 1
+                    if(gunLEFT.controle == 1){
+                        player1.cur_Frame = 7*DELAY;
+                        controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunLEFT.angle, 90);
+                        atirar(&shots, key[KEY_UP], &gunLEFT.carga, ship.x-6, ship.y+ship.height/2-10, gunLEFT.angle-90, QUANT_SHOTS, inst_tiro);
+                    }else if(gunRIGHT.controle == 1){
+                        player1.cur_Frame = 0;
+                        controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunRIGHT.angle, -90);
+                        atirar(&shots, key[KEY_UP], &gunRIGHT.carga, ship.x+ship.width+6, ship.y+ship.height/2-10, gunRIGHT.angle-90, QUANT_SHOTS, inst_tiro);
+                    }else if(gunUP.controle == 1){
+                        player1.cur_Frame = 15*DELAY;
+                        controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunUP.angle, -180);
+                        atirar(&shots, key[KEY_UP], &gunUP.carga, ship.x+ship.width/2-6, ship.y-10, gunUP.angle-90, QUANT_SHOTS, inst_tiro);
+                    }else if(gunDOWN.controle == 1){
+                        player1.cur_Frame = 19*DELAY;
+                        controlarCanhao(key[KEY_LEFT], key[KEY_RIGHT], &gunDOWN.angle, 0);
+                        atirar(&shots, key[KEY_UP], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS, inst_tiro);
+                    }else if(ship.repondoOxi == 1){
+                        if(oxigenioscale <= oxigenio.width && oxigenioscale > 0){
+                            oxigenioscale -= 1;
+                        }else{
+                            oxigenioscale = 0;
+                        }
+                    }else if(ship.controle == 1){
+                        player1.cur_Frame = 19*DELAY;
+                        controlarNave(key[KEY_UP], key[KEY_LEFT], key[KEY_RIGHT], &ship.forceX, &ship.forceY, &ship.rotation, &fire.cur_Frame, inst_som_propulsor, inst_rotacao_h, inst_rotacao_a);
+                        limitarForcas(&ship.forceX, &ship.forceY, 2);
+                    }else{
+                        int flag = 0;
+                        moverPlayer(&player1.x, &player1.y, &player1.dir, &flag, key[KEY_UP], key[KEY_LEFT], key[KEY_RIGHT], key[KEY_DOWN]);
+                        atualizarFramePlayer(player1.dir, flag, &player1.cur_Frame);
+                    }
+
+                    //NAVE / OXIGENIO / CANHOES / PLAYER 2
+                    if(gunLEFT.controle == 2){
+                        player2.cur_Frame = 7*DELAY;
+                        controlarCanhao(key[KEY_A], key[KEY_D], &gunLEFT.angle, 90);
+                        atirar(&shots, key[KEY_W], &gunLEFT.carga, ship.x-6, ship.y+ship.height/2-10, gunLEFT.angle-90, QUANT_SHOTS, inst_tiro);
+                    }else if(gunRIGHT.controle == 2){
+                        player2.cur_Frame = 0;
+                        controlarCanhao(key[KEY_A], key[KEY_D], &gunRIGHT.angle, -90);
+                        atirar(&shots, key[KEY_W], &gunRIGHT.carga, ship.x+ship.width+6, ship.y+ship.height/2-10, gunRIGHT.angle-90, QUANT_SHOTS, inst_tiro);
+                    }else if(gunUP.controle == 2){
+                        player2.cur_Frame = 15*DELAY;
+                        controlarCanhao(key[KEY_A], key[KEY_D], &gunUP.angle, -180);
+                        atirar(&shots, key[KEY_W], &gunUP.carga, ship.x+ship.width/2-6, ship.y-10, gunUP.angle-90, QUANT_SHOTS, inst_tiro);
+                    }else if(gunDOWN.controle == 2){
+                        player2.cur_Frame = 19*DELAY;
+                        controlarCanhao(key[KEY_A], key[KEY_D], &gunDOWN.angle, 0);
+                        atirar(&shots, key[KEY_W], &gunDOWN.carga, ship.x+ship.width/2-6, ship.y+ship.height-5, gunDOWN.angle-90, QUANT_SHOTS, inst_tiro);
+                    }else if(ship.repondoOxi == 2){
+                        if(oxigenioscale <= oxigenio.width && oxigenioscale > 0){
+                            oxigenioscale -= 1;
+                        }else{
+                            oxigenioscale = 0;
+                        }
+                    }else if(ship.controle == 2){
+                        player2.cur_Frame = 19*DELAY;
+                        controlarNave(key[KEY_W], key[KEY_A], key[KEY_D], &ship.forceX, &ship.forceY, &ship.rotation, &fire.cur_Frame, inst_som_propulsor, inst_rotacao_h, inst_rotacao_a);
+                        limitarForcas(&ship.forceX, &ship.forceY, 2);
+                    }else{
+                        int flag = 0;
+                        moverPlayer(&player2.x, &player2.y, &player2.dir, &flag, key[KEY_W], key[KEY_A], key[KEY_D], key[KEY_S]);
+                        atualizarFramePlayer(player2.dir, flag, &player2.cur_Frame);
+                    }
+
                 }
 
 
@@ -1218,6 +1674,7 @@ int main(int argc, char **argv){
                 if(gunDOWN.carga < 20){
                     gunDOWN.carga += 1;
                 }
+
 
                 for(int i=0; i<QUANT_SHOTS; i++){
                     if(shots[i].ativo != 0){
@@ -1236,16 +1693,46 @@ int main(int argc, char **argv){
                     if(distancia == 0){
                         if(asteroids[i].vida > 0){
                             realizar_Colisao_SHIP_ASTEROID(&ship, &asteroids[i]);
-                            vidascale+=10;
+                            vidascale+=1;
                             al_stop_sample_instance(inst_crash);
                             al_play_sample_instance(inst_crash);
                         }
                     }else if(distancia >= 2000){
-                        //------------------------------------------------------------------------------
                         asteroids[i].vida = 0;
-                        //------------------------------------------------------------------------------
                     }
                 }
+
+                //ESPECIAIS-----------------------------------------------------------------------------------------
+                for(int i=0; i<QUANT_ESPECIAL_ASTEROIDS; i++){
+                    float distancia = 0;
+                    if(especiais[i].vida > 0){
+                        distancia = verificar_Colisao_SHIP_ASTEROID(&ship, &especiais[i]);
+                        if(distancia == 0){
+                            especiais[i].vida = 0;
+                            vidascale+=0.5;
+                            al_play_sample_instance(inst_explosao1);
+                        }
+                    }else{
+                        add_new_especial_asteroid(&especiais[i], cameraX, cameraY, SCREEN_W, SCREEN_H);
+                        especiais[i].vida = 1;
+                    }
+                    if((especiais[i].x > 14400 || especiais[i].x < 1850 || especiais[i].y > 15000 || especiais[i].y < 1400) && distancia >= 2000){
+                        especiais[i].vida = 0;
+                    }
+                }
+
+                for(int i=0; i<QUANT_OXI_BALLS; i++){
+                    if(oxigen_balls[i].vida > 0){
+                        float distancia = verificar_Colisao_SHIP_ASTEROID(&ship, &oxigen_balls[i]);
+                        if(distancia == 0){
+                            oxigen_balls[i].vida = 0;
+
+                            //-----AUMENTAR SEGUNDA BARRINHA DE OXIGENIO-----\\
+
+                        }
+                    }
+                }
+                //--------------------------------------------------------------------------------------------------
 
                 for(int i=0; i<QUANT_ASTEROIDS; i++){
                     for(int x=0; x<QUANT_ASTEROIDS; x++){
@@ -1257,10 +1744,8 @@ int main(int argc, char **argv){
                                 }
                             }
                         }else{
-                            //--------------------------------------------------------------------------
                             add_new_asteroid(&asteroids[i], cameraX, cameraY, SCREEN_W, SCREEN_H);
                             asteroids[i].vida = 4;
-                            //--------------------------------------------------------------------------
                             break;
                         }
                     }
@@ -1280,6 +1765,44 @@ int main(int argc, char **argv){
                         asteroid_explode = 0;
                     }
                 }
+
+                //ESPECIAIS-----------------------------------------------------------------------------------------
+                for(int i=0; i<QUANT_SHOTS; i++){
+                    for(int x=0; x<QUANT_ESPECIAL_ASTEROIDS; x++){
+                        if(shots[i].ativo != 0){
+                            if(especiais[x].vida > 0){
+                                int colidiu = verificar_Colisao_SHOT_ASTEROID(&shots[i], &especiais[x]);
+                                if(colidiu){
+
+                                    shots[i].ativo = 0;
+                                    especiais[x].vida = 0;
+
+                                    xF = ((shots[i].x+shots[i].width/2)+(especiais[x].x+especiais[x].width/4))/2;
+                                    yF = ((shots[i].y+shots[i].height/2)+(especiais[x].y+especiais[x].height/4))/2;
+                                    collide_shot_ast = 1;
+                                    al_play_sample_instance(inst_explosao1);
+
+                                    int created = 0;
+                                    int quant_balls = (rand()%3) + 1;
+
+                                    for(int i=0; i<QUANT_OXI_BALLS; i++){
+                                        if(oxigen_balls[i].vida == 0){
+                                            throw_oxi_ball(&oxigen_balls[i], especiais[x].x, especiais[x].y);
+                                            created += 1;
+                                        }
+                                        if(created == quant_balls){
+                                            break;
+                                        }
+                                    }
+
+                                }
+                            }
+                        }else{
+                            break;
+                        }
+                    }
+                }
+                //--------------------------------------------------------------------------------------------------
 
                 for(int i=0; i<QUANT_SHOTS; i++){
                     for(int x=0; x<QUANT_ASTEROIDS; x++){
@@ -1301,50 +1824,25 @@ int main(int argc, char **argv){
                                     //EXPLOSÃO----------------------------------------------------------------------
                                     if(asteroids[x].vida <= 0){
 
-                                       asteroid_explode = 1;
-                                //PARTE DE ADICIONAR PONTOS
-                                        pontucao += 50;
-                                    int point_converter = pontucao;
-                                        int dez = 0;
-                                       int uni = 0;
-                                       int cen=0;
-                                       int mil = 0;
-                                       int milho = 0;
-                                       milho = point_converter/10000;
-                                       point_converter = point_converter - milho/10000;
-                                         mil = point_converter/1000; //0
-                                        point_converter = point_converter - mil*1000;
-                                         cen = point_converter/100; //6
-                                        point_converter = point_converter - cen*100;
-                                        dez = point_converter/10; //3
-                                       point_converter = point_converter - dez*10; //8
-                                        uni = point_converter;
-                                       dezenas.cur_Frame = dez;
-                                       unidades.cur_Frame = uni;
-                                       centenas.cur_Frame = cen;
-                                       milhares.cur_Frame = mil;
-                                       milhoes.cur_Frame = milho;
+                                        pontuacao += 1;
 
+                                        asteroid_explode = 1;
+                                        xE = asteroids[x].x;
+                                        yE = asteroids[x].y;
 
-                            //ACABOU PARTE DE ADICIONAR PONTOS
-                                       xE = asteroids[x].x;
-                                       yE = asteroids[x].y;
-                                       int tempo=rand()%3;
-                                       if(tempo == 0)
-                                       {
-                                           al_stop_sample_instance(inst_explosao1);
-                                           al_play_sample_instance(inst_explosao1);
-                                       }
-                                       if(tempo == 1)
-                                       {
-                                           al_stop_sample_instance(inst_explosao2);
-                                           al_play_sample_instance(inst_explosao2);
-                                       }
-                                       if(tempo == 2)
-                                       {
-                                           al_stop_sample_instance(inst_explosao3);
-                                           al_play_sample_instance(inst_explosao3);
-                                       }
+                                        int tempo = rand()%3;
+                                        if(tempo == 0){
+                                            al_stop_sample_instance(inst_explosao1);
+                                            al_play_sample_instance(inst_explosao1);
+                                        }
+                                        if(tempo == 1){
+                                            al_stop_sample_instance(inst_explosao2);
+                                            al_play_sample_instance(inst_explosao2);
+                                        }
+                                        if(tempo == 2){
+                                            al_stop_sample_instance(inst_explosao3);
+                                            al_play_sample_instance(inst_explosao3);
+                                        }
 
                                     }
                                     //------------------------------------------------------------------------------
@@ -1360,17 +1858,35 @@ int main(int argc, char **argv){
                 limitarAnguloNave(&ship.rotation);
                 limitarForcas(&ship.forceX, &ship.forceY, 2);//TESTE - (EVITAR QUE O CONTATO COM ASTEROIDES EXCEDA 2)
                 limitarNaveMundo(&ship.x, &ship.y, &ship.forceX, &ship.forceY, ship.width, ship.height);
+
+                if(ship.x >= 14400 || ship.x <= 1850 || ship.y >= 14400 || ship.y <= 1400){
+                    vidascale += 0.5;
+                    frearObjetos(&ship.forceX, &ship.forceY, 0.005);
+                }
+
                 aplicarForcas(&ship.x, &ship.y, ship.forceX, ship.forceY);
+
+                for(int i=0; i<QUANT_ESPECIAL_ASTEROIDS; i++){
+                    if(especiais[i].vida > 0){
+                        limitarAsteroideMundo(&especiais[i].x, &especiais[i].y, &especiais[i].forceX, &especiais[i].forceY, especiais[i].width, especiais[i].height);
+                        aplicarForcas(&especiais[i].x, &especiais[i].y, especiais[i].forceX, especiais[i].forceY);
+                    }
+                }
 
                 for(int i=0; i<QUANT_ASTEROIDS; i++){
                     if(asteroids[i].vida > 0){
                         limitarAsteroideMundo(&asteroids[i].x, &asteroids[i].y, &asteroids[i].forceX, &asteroids[i].forceY, asteroids[i].width, asteroids[i].height);
+                        aplicarForcas(&asteroids[i].x, &asteroids[i].y, asteroids[i].forceX, asteroids[i].forceY);
                     }
                 }
-                for(int i=0; i<QUANT_ASTEROIDS; i++){
-                     if(asteroids[i].vida > 0){
-                        aplicarForcas(&asteroids[i].x, &asteroids[i].y, asteroids[i].forceX, asteroids[i].forceY);
-                     }
+
+                for(int i=0; i<QUANT_OXI_BALLS; i++){
+                    if(oxigen_balls[i].vida > 0){
+                        limitarAsteroideMundo(&oxigen_balls[i].x, &oxigen_balls[i].y, &oxigen_balls[i].forceX, &oxigen_balls[i].forceY, oxigen_balls[i].width, oxigen_balls[i].height);
+                        aplicarForcas(&oxigen_balls[i].x, &oxigen_balls[i].y, oxigen_balls[i].forceX, oxigen_balls[i].forceY);
+                        frearObjetos(&oxigen_balls[i].forceX, &oxigen_balls[i].forceY, 0.002);
+                        oxigen_balls[i].vida -= 1;
+                    }
                 }
 
                 adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
@@ -1445,14 +1961,17 @@ int main(int argc, char **argv){
                 break;
             }
 
-            if(redraw && al_is_event_queue_empty(event_queue)) {
+            if(redraw && al_is_event_queue_empty(event_queue) && jogo_acabou < 1) {
 
                 redraw = false;
                 al_draw_scaled_bitmap(background.img,0,0,background.width,background.height,0-(cameraX/2.5),0-(cameraY/2.5),background.width*BGScale, background.height*BGScale, 0);
+
                 al_draw_scaled_bitmap(beltside.img,0,0,beltside.width,beltside.height,1300-(cameraX/1.5),0-(cameraY/1.5),beltside.width*beltScale, beltside.height*beltScale, 0);//LEFT
                 al_draw_scaled_bitmap(beltside.img,0,0,beltside.width,beltside.height,(WORLD_W-7500)-(cameraX/1.5),0-(cameraY/1.5),beltside.width*beltScale, beltside.height*beltScale, 0);//RIGTH
                 al_draw_scaled_bitmap(belttop.img,0,0,belttop.width,belttop.height,1300-(cameraX/1.5),900-(cameraY/1.5),belttop.width*beltScale, belttop.height*beltScale, 0);//UP
                 al_draw_scaled_bitmap(belttop.img,0,0,belttop.width,belttop.height,1300-(cameraX/1.5),(WORLD_H-7000)-(cameraY/1.5),belttop.width*beltScale, belttop.height*beltScale, 0);//DOWN
+
+                al_draw_scaled_bitmap(planeta.img,0,0,planeta.width,planeta.height,(WORLD_W/2)-(cameraX/2.2)-4000,(WORLD_H/2)-(cameraY/2.2)-4000,planeta.width*3, planeta.height*3, 0);
 
                 if((key[KEY_UP] && ship.controle==1) || (key[KEY_W] && ship.controle==2) ){
                     al_draw_rotated_bitmap(fire.imgs[fire.cur_Frame],25, -200,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation+180)*3.14159/180),0);
@@ -1460,12 +1979,10 @@ int main(int argc, char **argv){
 
                 al_draw_rotated_bitmap(propulsor.img,propulsor.height/2, propulsor.height/2,ship.x-cameraX+ship.width/2, ship.y-cameraY+ship.height/2,((ship.rotation-90)*3.14159/180),0);
                 al_draw_scaled_bitmap(ship.img,0,0,ship.width,ship.height,ship.x-cameraX,ship.y-cameraY,ship.width, ship.height, 0);
-
                 al_draw_rotated_bitmap(canhao.img,12, canhao.height/2, ship.x-cameraX+ship.width/2+2, ship.y-cameraY-6,(gunUP.angle*3.14159/180), 0);
                 al_draw_rotated_bitmap(canhao.img,12, canhao.height/2, ship.x-cameraX+ship.width+10, ship.y-cameraY+ship.height/2-4,(gunRIGHT.angle*3.14159/180), 0);
                 al_draw_rotated_bitmap(canhao.img,12, canhao.height/2, ship.x-cameraX-6, ship.y-cameraY+ship.height/2-3,(gunLEFT.angle*3.14159/180), 0);
                 al_draw_rotated_bitmap(canhao.img,12, canhao.height/2, ship.x-cameraX+ship.width/2+2, ship.y-cameraY+ship.height+7,(gunDOWN.angle*3.14159/180), 0);
-
                 al_draw_rotated_bitmap(canhaoBase.img,12, canhaoBase.height/2, ship.x-cameraX+ship.width/2-12, ship.y-cameraY-10,0, 0);
                 al_draw_rotated_bitmap(canhaoBase.img,12, canhaoBase.height/2, ship.x-cameraX+ship.width+15, ship.y-cameraY+ship.height/2-17,(90*3.14159/180), 0);
                 al_draw_rotated_bitmap(canhaoBase.img,12, canhaoBase.height/2, ship.x-cameraX-12, ship.y-cameraY+ship.height/2+12,(-90*3.14159/180), 0);
@@ -1479,9 +1996,29 @@ int main(int argc, char **argv){
                     al_draw_scaled_bitmap(player2.imgs[player2.cur_Frame/DELAY],0,0,player2.width,player2.height,player2.x+ship.x-cameraX,player2.y+ship.y-cameraY,player2.width, player2.height, 0);
                 }
 
+                al_draw_scaled_bitmap(objetos_nave.img,0,0,objetos_nave.width,objetos_nave.height, ship.x-cameraX, ship.y-cameraY, objetos_nave.width, objetos_nave.height, 0);
+
+                //ASTEROIDS (AREA DE PERIGO)
+                al_draw_scaled_bitmap(dangerzoneSide.img,0,0,dangerzoneSide.width,dangerzoneSide.height, 0-(cameraX/1.5)-600 , 0-(cameraY/1.5) ,dangerzoneSide.width*beltScale, dangerzoneSide.height*beltScale, 0);//LEFT
+                al_draw_scaled_bitmap(dangerzoneSide.img,0,0,dangerzoneSide.width,dangerzoneSide.height, (WORLD_W-6200)-(cameraX/1.5) , 0-(cameraY/1.5) ,dangerzoneSide.width*beltScale, dangerzoneSide.height*beltScale, 0);//RIGHT
+                al_draw_scaled_bitmap(dangerzoneTop.img,0,0,dangerzoneTop.width,dangerzoneTop.height, 0-(cameraX/1.5)-600 , 0-(cameraY/1.5)-1200 ,dangerzoneTop.width*beltScale, dangerzoneTop.height*beltScale, 0);//UP
+                al_draw_scaled_bitmap(dangerzoneTop.img,0,0,dangerzoneTop.width,dangerzoneTop.height, 0-(cameraX/1.5)-600 , (WORLD_H-6200)-(cameraY/1.5) ,dangerzoneTop.width*beltScale, dangerzoneTop.height*beltScale, 0);//DOWN
+
                 for(int i=0; i<QUANT_ASTEROIDS; i++){
                     if(asteroids[i].vida > 0){
                         al_draw_scaled_bitmap(asteroids[i].img,0,0,asteroids[i].width,asteroids[i].height,asteroids[i].x-cameraX,asteroids[i].y-cameraY,asteroids[i].width, asteroids[i].height, 0);
+                    }
+                }
+
+                for(int i=0; i<QUANT_ESPECIAL_ASTEROIDS; i++){
+                    if(especiais[i].vida > 0){
+                        al_draw_scaled_bitmap(especiais[i].img,0,0,especiais[i].width,especiais[i].height,especiais[i].x-cameraX,especiais[i].y-cameraY,especiais[i].width, especiais[i].height, 0);
+                    }
+                }
+
+                for(int i=0; i<QUANT_OXI_BALLS; i++){
+                    if(oxigen_balls[i].vida > 0){
+                        al_draw_scaled_bitmap(oxigen_balls[i].img,0,0,oxigen_balls[i].width,oxigen_balls[i].height,oxigen_balls[i].x-cameraX,oxigen_balls[i].y-cameraY,oxigen_balls[i].width, oxigen_balls[i].height, 0);
                     }
                 }
 
@@ -1497,18 +2034,18 @@ int main(int argc, char **argv){
                         al_draw_scaled_bitmap(shots[i].img,0,0, shots[i].width, shots[i].height, shots[i].x-cameraX, shots[i].y-cameraY, shots[i].width*0.7, shots[i].height*0.7, 0);
                     }
                 }
-                //CAIO
-               al_draw_scaled_bitmap(unidades.imgs[unidades.cur_Frame],0,0,unidades.width,unidades.height,100,60,unidades.width, unidades.height, 0);
-               al_draw_scaled_bitmap(dezenas.imgs[dezenas.cur_Frame],0,0,dezenas.width,dezenas.height,80,60,dezenas.width, dezenas.height, 0);
-               al_draw_scaled_bitmap(centenas.imgs[centenas.cur_Frame],0,0,centenas.width,centenas.height,60,60,centenas.width, centenas.height, 0);
-               al_draw_scaled_bitmap(milhares.imgs[milhares.cur_Frame],0,0,milhares.width,milhares.height,40,60,milhares.width, milhares.height, 0);
-               al_draw_scaled_bitmap(milhoes.imgs[milhoes.cur_Frame],0,0,milhoes.width,milhoes.height,20,60,milhoes.width, milhoes.height, 0);
+
+                al_draw_text(font, al_map_rgb(255, 255, 255), 80, 30, ALLEGRO_ALIGN_CENTRE, "SCORE:");
+                al_draw_textf(font , al_map_rgb(255 , 255 , 255) , 200 , 30 , ALLEGRO_ALIGN_CENTRE   , "%d" , pontuacao );
 
                 al_draw_scaled_bitmap(vida.img,0,0,vida.width,vida.height,(SCREEN_W/2)-(vida.width/2)-15,SCREEN_H-43,vida.width-vidascale,vida.height, 0);
                 al_draw_scaled_bitmap(oxigenio.img,0,0,oxigenio.width,oxigenio.height,SCREEN_W/2-oxigenio.width/2-15,SCREEN_H-36,oxigenio.width-oxigenioscale,oxigenio.height, 0);
-                al_draw_scaled_bitmap(oxigenio2.img,0,0,oxigenio2.width,oxigenio2.height,SCREEN_W/2-oxigenio2.width/2+337,SCREEN_H-71,oxigenio2.width-oxigenioscale2,oxigenio2.height, 0);
                 al_draw_scaled_bitmap(barra.img,0,0,barra.width,barra.height,SCREEN_W/2-barra.width/2,SCREEN_H-100,barra.width,barra.height, 0);
+
+                al_draw_scaled_bitmap(oxigenio2.img,0,0,oxigenio2.width,oxigenio2.height,SCREEN_W/2-oxigenio2.width/2+337,SCREEN_H-71,oxigenio2.width-oxigenioscale2,oxigenio2.height, 0);
                 al_draw_scaled_bitmap(barra2.img,0,0,barra2.width,barra2.height,SCREEN_W/2-barra2.width/2+340,SCREEN_H-85,barra2.width,barra2.height, 0);
+
+                al_draw_tinted_bitmap(video_intro.imgs[29], al_map_rgba_f(1, 1, 1, jogo_acabou), 0, 0, 0);
 
                 al_flip_display();
 
@@ -1525,14 +2062,31 @@ int main(int argc, char **argv){
         al_stop_sample_instance(inst_rotacao_a);
         al_stop_sample_instance(inst_rotacao_h);
         al_stop_sample_instance(inst_alerta);
-        al_stop_sample_instance(inst_crash);
-        al_flip_display();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
         int subindo = 1; //MOVIMENTO DEADNAUT
         float y_astron = 0; //MOVIMENTO DEADNAUT
-        //al_play_sample_instance(inst_menu_death);
+        al_play_sample_instance(inst_menu_death);
 
         //MENU GAME OVER
         while(fechar == 0){
@@ -1632,14 +2186,14 @@ int main(int argc, char **argv){
             }
         }
 
-        //al_stop_sample_instance(inst_menu_death);
+        al_stop_sample_instance(inst_menu_death);
         button_flag = 0;
 
         if(fechar){
             break;
         }
 
-    }//MENUS
+    }
 
     al_destroy_timer(timer);
     al_destroy_display(display);
@@ -1647,26 +2201,38 @@ int main(int argc, char **argv){
     al_destroy_bitmap(propulsor.img);
     al_destroy_bitmap(ship.img);
     al_destroy_bitmap(barra.img);
-    al_destroy_bitmap(barra2.img);
     al_destroy_bitmap(vida.img);
     al_destroy_bitmap(oxigenio.img);
+    al_destroy_bitmap(barra2.img);
     al_destroy_bitmap(oxigenio2.img);
     al_destroy_bitmap(canhao.img);
     al_destroy_bitmap(canhaoBase.img);
     al_destroy_bitmap(belttop.img);
     al_destroy_bitmap(beltside.img);
+    al_destroy_bitmap(logo.img);
+    al_destroy_bitmap(menu_background.img);
+    al_destroy_bitmap(planeta.img);
+    al_destroy_bitmap(objetos_nave.img);
+    al_destroy_bitmap(dangerzoneSide.img);
+    al_destroy_bitmap(dangerzoneTop.img);
     al_destroy_bitmap(iniciar.imgs[0]);
     al_destroy_bitmap(iniciar.imgs[1]);
     al_destroy_bitmap(sair.imgs[0]);
     al_destroy_bitmap(sair.imgs[1]);
     al_destroy_bitmap(story.imgs[0]);
     al_destroy_bitmap(story.imgs[1]);
-    al_destroy_bitmap(creditos.imgs[0]);
-    al_destroy_bitmap(creditos.imgs[1]);
+    al_destroy_bitmap(creditosButton.imgs[0]);
+    al_destroy_bitmap(creditosButton.imgs[1]);
+    al_destroy_bitmap(deadnaut.img);
+    al_destroy_bitmap(black.img);
+    al_destroy_bitmap(reiniciar.imgs[0]);
+    al_destroy_bitmap(reiniciar.imgs[1]);
+    al_destroy_bitmap(menuButton.imgs[0]);
+    al_destroy_bitmap(menuButton.imgs[1]);
+    al_destroy_bitmap(game_over.img);
 
     al_destroy_sample(theme);
     al_destroy_sample(tiro);
-    al_destroy_sample(crash);
     al_destroy_sample(explosao1);
     al_destroy_sample(explosao2);
     al_destroy_sample(explosao3);
@@ -1674,7 +2240,10 @@ int main(int argc, char **argv){
     al_destroy_sample(rotacao_a);
     al_destroy_sample(rotacao_h);
     al_destroy_sample(alerta);
+    al_destroy_sample(intro);
+    al_destroy_sample(crash);
     al_destroy_sample(menu_music);
+    al_destroy_sample(menu_death);
     al_destroy_sample(button);
     al_destroy_sample(pass_button);
     al_destroy_sample_instance(inst_theme);
@@ -1686,11 +2255,19 @@ int main(int argc, char **argv){
     al_destroy_sample_instance(inst_rotacao_a);
     al_destroy_sample_instance(inst_rotacao_h);
     al_destroy_sample_instance(inst_alerta);
+    al_destroy_sample_instance(inst_intro);
     al_destroy_sample_instance(inst_crash);
     al_destroy_sample_instance(inst_menu_music);
+    al_destroy_sample_instance(inst_menu_death);
     al_destroy_sample_instance(inst_button);
     al_destroy_sample_instance(inst_pass_button);
 
+    for(int i=0; i<QUANT_ESPECIAL_ASTEROIDS; i++){
+        al_destroy_bitmap(especiais[i].img);
+    }
+    for(int i=0; i<QUANT_OXI_BALLS; i++){
+        al_destroy_bitmap(oxigen_balls[i].img);
+    }
     for(int i=0; i<6; i++){
         al_destroy_bitmap(faisca.imgs[i]);
     }
@@ -1712,12 +2289,8 @@ int main(int argc, char **argv){
     for(int i=0; i<22; i++){
         al_destroy_bitmap(player2.imgs[i]);
     }
-    for(int i=0; i<10; i++){
-        al_destroy_bitmap(unidades.imgs[i]);
-        al_destroy_bitmap(dezenas.imgs[i]);
-        al_destroy_bitmap(centenas.imgs[i]);
-        al_destroy_bitmap(milhares.imgs[i]);
-        al_destroy_bitmap(milhoes.imgs[i]);
+    for(int i=0; i<30; i++){
+        al_destroy_bitmap(video_intro.imgs[i]);
     }
 
     al_destroy_event_queue(event_queue);
