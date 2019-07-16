@@ -1431,6 +1431,7 @@ int main(int argc, char **argv){
                 break;
             }
 
+
             //DESENHA
             if(redrawMenu && al_is_event_queue_empty(event_queue)){
                 redrawMenu = 0;
@@ -1700,7 +1701,8 @@ int main(int argc, char **argv){
                             al_stop_sample_instance(inst_crash);
                             al_play_sample_instance(inst_crash);
                         }
-                    }else if(distancia >= 2000){
+                    }
+                    if(distancia >= 2000){
                         asteroids[i].vida = 0;
                     }
                 }
@@ -1863,6 +1865,8 @@ int main(int argc, char **argv){
                         }
                     }
                 }
+
+
 
                 limitarAnguloNave(&ship.rotation);
                 limitarForcas(&ship.forceX, &ship.forceY, 2);//TESTE - (EVITAR QUE O CONTATO COM ASTEROIDES EXCEDA 2)
@@ -2062,6 +2066,33 @@ int main(int argc, char **argv){
 
         }//JOGO
 
+
+            int ponto = pontuacao;
+            //PONTUAÇÃO
+                // Anotar a pontuação primeira vez
+                FILE *score;
+                if(score == NULL)
+                {
+                    score = fopen("score.txt", "w");
+                    fprintf(score, "%i ", ponto);
+                    fclose(score);
+                }
+                else
+                {
+                    score = fopen("score.txt", "a");
+                    fprintf(score, "%i ", ponto);
+                    fclose(score);
+                }
+
+                // Ler as pontuações anteriores
+                score = fopen("score.txt", "r");
+
+
+
+
+                fclose(score);
+
+
         al_stop_sample_instance(inst_theme);
         al_stop_sample_instance(inst_tiro);
         al_stop_sample_instance(inst_explosao1);
@@ -2099,6 +2130,8 @@ int main(int argc, char **argv){
 
         //MENU GAME OVER
         while(fechar == 0){
+
+            FILE *score;
 
             ALLEGRO_EVENT ev2;
             al_wait_for_event(event_queue, &ev2);
@@ -2193,6 +2226,9 @@ int main(int argc, char **argv){
 
                 al_flip_display();
             }
+
+
+
         }
 
         al_stop_sample_instance(inst_menu_death);
@@ -2201,6 +2237,7 @@ int main(int argc, char **argv){
         if(fechar){
             break;
         }
+
 
     }
 
