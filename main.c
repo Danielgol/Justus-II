@@ -600,12 +600,15 @@ void interagirGUNS(PLAYER player, int playerID, int shipWidth, int shipHeight, i
     }
 }
 
-void interagirSHIP(PLAYER player, int playerID, int shipWidth, int shipHeight, int *controle){
+void interagirSHIP(PLAYER player, int playerID, int shipWidth, int shipHeight, int *controle, ALLEGRO_SAMPLE_INSTANCE* inst_som_propulsor , ALLEGRO_SAMPLE_INSTANCE* inst_rotacaoh , ALLEGRO_SAMPLE_INSTANCE* inst_rotacaoa){
     if(player.x <= shipWidth/2+5 && player.x >= shipWidth/2-30 && player.y <= shipHeight/2-20 && player.y >= shipHeight/2-40){
         if(*controle == 0){
             *controle = playerID;
         }else if(*controle == playerID){
             *controle = 0;
+            al_stop_sample_instance(inst_som_propulsor);
+            al_stop_sample_instance(inst_rotacaoa);
+            al_stop_sample_instance(inst_rotacaoh);
         }
     }
 }
@@ -1431,6 +1434,14 @@ int main(int argc, char **argv){
     al_attach_sample_instance_to_mixer(inst_pass_button,al_get_default_mixer());
     al_set_sample_instance_gain(inst_pass_button,1.0);
 
+    ALLEGRO_SAMPLE *som_oxigenio;
+    ALLEGRO_SAMPLE_INSTANCE *inst_som_oxigenio;
+    som_oxigenio = al_load_sample("sounds/som_oxigenio.ogg");
+    inst_som_oxigenio = al_create_sample_instance(som_oxigenio);
+    al_attach_sample_instance_to_mixer(inst_som_oxigenio,al_get_default_mixer());
+    al_set_sample_instance_gain(inst_som_oxigenio,1.0);
+
+
     ALLEGRO_FONT *font = al_load_font("images/font/superstar.ttf", 42, 0);
 
 
@@ -1966,6 +1977,8 @@ int main(int argc, char **argv){
                             pontuacao += 25;
                             oxigen_balls[i].vida = 0;
 
+                            al_play_sample_instance(inst_som_oxigenio);
+
                             oxigenioscale2 -= 24;
                             if(oxigenioscale2 <= 0){
                                 oxigenioscale2 = 0;
@@ -2183,7 +2196,7 @@ int main(int argc, char **argv){
                         break;
                     case ALLEGRO_KEY_L:
                         interagirGUNS(player1, 1, ship.width, ship.height, &gunLEFT.controle, &gunRIGHT.controle, &gunUP.controle, &gunDOWN.controle);
-                        interagirSHIP(player1, 1, ship.width, ship.height, &ship.controle);
+                        interagirSHIP(player1, 1, ship.width, ship.height, &ship.controle , inst_som_propulsor , inst_rotacao_h , inst_rotacao_a);
                         interagirOXIG(player1, 1, &ship.repondoOxi);
                         break;
                     case ALLEGRO_KEY_W:
@@ -2200,7 +2213,7 @@ int main(int argc, char **argv){
                         break;
                     case ALLEGRO_KEY_E:
                         interagirGUNS(player2, 2, ship.width, ship.height, &gunLEFT.controle, &gunRIGHT.controle, &gunUP.controle, &gunDOWN.controle);
-                        interagirSHIP(player2, 2, ship.width, ship.height, &ship.controle);
+                        interagirSHIP(player2, 2, ship.width, ship.height, &ship.controle , inst_som_propulsor, inst_rotacao_h , inst_rotacao_a);
                         interagirOXIG(player2, 2, &ship.repondoOxi);
                         break;
                 }
