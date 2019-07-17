@@ -326,8 +326,6 @@ void limitarAsteroideMundo(float *x, float *y, float *forceX, float *forceY, int
 
 
 
-
-
 //@OBSOLETO (ALTERAR OU REMOVER)
 void generateAsteroids(int quant, ASTEROID *asteroids, int vida, char path[]){
 
@@ -350,8 +348,6 @@ void generateAsteroids(int quant, ASTEROID *asteroids, int vida, char path[]){
         (asteroids[i]) = build_asteroid(xA, yA, Fx, Fy, vida, path);
     }
 }
-
-
 
 
 
@@ -1070,27 +1066,29 @@ int main(int argc, char **argv){
     int SCREEN_H = al_get_display_height(display);
     srand(time(NULL));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     int pontuacao = 0;
     int ranking[5];
     FILE *score;
     score = fopen("score.txt", "r");
     fscanf(score, "%i %i %i %i %i" , &ranking[0], &ranking[1], &ranking[2], &ranking[3], &ranking[4]);
     fclose(score);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     SHIP ship;
@@ -1155,7 +1153,6 @@ int main(int argc, char **argv){
     int esp_ship_collide = 0;
     float xE_ES, yE_ES;
 
-    //FLASHES DO TIRO-------------------------------------------------------------------------------------------------------------------------------------
     DYNF_OBJECT flash;
     flash = build_Dynamic_Object(2,"images/effects/shot/","s##.png",0);
     int flash_p1 = 0;
@@ -1163,13 +1160,13 @@ int main(int argc, char **argv){
     DYNF_OBJECT flash2;
     flash2 = build_Dynamic_Object(2,"images/effects/shot/","s##.png",0);
     int flash_p2 = 0;
-    //FLASHES DO TIRO-------------------------------------------------------------------------------------------------------------------------------------
 
-    int QUANT_ASTEROIDS = 30;
+    int QUANT_ASTEROIDS = 90;
+    int current_quant_asteroids = 10;
     ASTEROID asteroids[QUANT_ASTEROIDS];
-    generateAsteroids(QUANT_ASTEROIDS, &asteroids, 4, "images/asteroids/Asteroid.png");
+    generateAsteroids(QUANT_ASTEROIDS, &asteroids, 0, "images/asteroids/Asteroid.png");
     adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
-    for(int i=0; i<QUANT_ASTEROIDS; i++){
+    for(int i=0; i<current_quant_asteroids; i++){
         add_new_asteroid(&asteroids[i], cameraX, cameraY, SCREEN_W, SCREEN_H);
     }
 
@@ -1232,9 +1229,7 @@ int main(int argc, char **argv){
     SIMP_OBJECT dangerzoneTop;
     dangerzoneTop = build_Simple_Object("images/asteroids/dangerzoneTop.png");
 
-
     //MENU----------------------------------------------------------------------------
-
     SIMP_OBJECT menu_background;
     menu_background = build_Simple_Object("images/menu/menu_background.png");
 
@@ -1291,9 +1286,7 @@ int main(int argc, char **argv){
 
     SIMP_OBJECT deadnaut;
     deadnaut = build_Simple_Object("images/menu/deadnaut.png");
-
     //--------------------------------------------------------------------------------
-
 
     //SONS
     ALLEGRO_SAMPLE *theme;
@@ -1430,6 +1423,8 @@ int main(int argc, char **argv){
     int show_Menu = 1; // MOSTRAR (NORMAL) OU PULAR O MENU (REINICIAR)
     int show_Menu_Death = 1; // MOSTRAR MENU DE GAME OVER
     //--------------------------------------------------------------------------------
+
+
 
 
 
@@ -1581,9 +1576,7 @@ int main(int argc, char **argv){
                     }
 
                 }else{
-
                     if(show_ranking){
-
                         score = fopen("score.txt", "r");
                         fscanf(score, "%i %i %i %i %i" , &ranking[0], &ranking[1], &ranking[2], &ranking[3], &ranking[4]);
                         fclose(score);
@@ -1620,7 +1613,6 @@ int main(int argc, char **argv){
                             }
                         }
                     }
-
                 }
 
                 if(play_intro){
@@ -1657,6 +1649,9 @@ int main(int argc, char **argv){
 
 
 
+
+
+
         al_stop_timer(timer);
         if(play_intro){
             al_draw_scaled_bitmap(video_intro.imgs[29],0,0,video_intro.width,video_intro.height,0,0,SCREEN_W,SCREEN_H, 0);
@@ -1666,10 +1661,11 @@ int main(int argc, char **argv){
         pontuacao = 0;
         int fadeIn = 1;
         float jogo_acabou = 0.98;
+        current_quant_asteroids = 10;
         reset_players(key, &player1, &player2, ship.width, ship.height);
         reset_ship(&ship, &gunLEFT, &gunRIGHT, &gunUP, &gunDOWN, QUANT_SHOTS, shots, &vidascale, &oxigenioscale, &oxigenioscale2, oxigenio2.width);
         adaptarCamera(&cameraX, &cameraY, ship.x, ship.y, ship.width, ship.height, SCREEN_W, SCREEN_H);
-        reset_asteroids(QUANT_ASTEROIDS, asteroids, &asteroid_explode, &explosion.cur_Frame);//ZERAR EXPLOSOES DOS ASTEROIDS ESPECIAS
+        reset_asteroids(QUANT_ASTEROIDS, asteroids, &asteroid_explode, &explosion.cur_Frame);
         reset_especial_asteroids(QUANT_ESPECIAL_ASTEROIDS, especiais, QUANT_OXI_BALLS, oxigen_balls);
         al_play_sample_instance(inst_theme);
         al_start_timer(timer);
@@ -1679,11 +1675,10 @@ int main(int argc, char **argv){
 
         while(jogo_acabou < 1){
 
+
+
             ALLEGRO_EVENT ev;
             al_wait_for_event(event_queue, &ev);
-
-
-
 
             if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
                 if(ev.mouse.button & 1){
@@ -1729,6 +1724,8 @@ int main(int argc, char **argv){
             if(pausado){
                 redraw = true;
             }
+
+
 
 
 
@@ -1819,7 +1816,6 @@ int main(int argc, char **argv){
 
 
 
-
                     //NAVE / OXIGENIO / CANHOES / PLAYER 2
                     if(gunLEFT.controle == 2){
                         player2.cur_Frame = 7*DELAY;
@@ -1904,12 +1900,12 @@ int main(int argc, char **argv){
                     }
                 }
 
-                for(int i=0; i<QUANT_ASTEROIDS; i++){
+                for(int i=0; i<current_quant_asteroids; i++){
                     float distancia = verificar_Colisao_SHIP_ASTEROID(&ship, &asteroids[i]);
                     if(distancia == 0){
                         if(asteroids[i].vida > 0){
                             realizar_Colisao_SHIP_ASTEROID(&ship, &asteroids[i]);
-                            vidascale+=2;
+                            vidascale+=2.5;
                             al_stop_sample_instance(inst_crash);
                             al_play_sample_instance(inst_crash);
                         }
@@ -1918,7 +1914,6 @@ int main(int argc, char **argv){
                     }
                 }
 
-                //ESPECIAIS-----------------------------------------------------------------------------------------
                 for(int i=0; i<QUANT_ESPECIAL_ASTEROIDS; i++){
                     float distancia = 0;
                     if(especiais[i].vida > 0){
@@ -1958,10 +1953,9 @@ int main(int argc, char **argv){
                         }
                     }
                 }
-                //--------------------------------------------------------------------------------------------------
 
-                for(int i=0; i<QUANT_ASTEROIDS; i++){
-                    for(int x=0; x<QUANT_ASTEROIDS; x++){
+                for(int i=0; i<current_quant_asteroids; i++){
+                    for(int x=0; x<current_quant_asteroids; x++){
                         if(asteroids[i].vida > 0){
                             if(i != x && asteroids[x].vida > 0){
                                 int colidiu = verificar_Colisao_ASTEROIDS(&asteroids[i], &asteroids[x]);
@@ -2013,7 +2007,6 @@ int main(int argc, char **argv){
                         flash_p1 = 0;
                     }
                 }
-
                 if(flash_p2){
                     flash2.cur_Frame += 1;
                     if(flash2.cur_Frame >= 2*2){
@@ -2023,7 +2016,6 @@ int main(int argc, char **argv){
                 }
 
 
-                //ESPECIAIS-----------------------------------------------------------------------------------------
                 for(int i=0; i<QUANT_SHOTS; i++){
                     for(int x=0; x<QUANT_ESPECIAL_ASTEROIDS; x++){
                         if(shots[i].ativo != 0){
@@ -2038,6 +2030,10 @@ int main(int argc, char **argv){
                                     shots[i].ativo = 0;
                                     especiais[x].vida = 0;
                                     especial_explode = 1;
+
+                                    if(current_quant_asteroids+2 <= QUANT_ASTEROIDS){
+                                        current_quant_asteroids += 2;
+                                    }
 
                                     xF = ((shots[i].x+shots[i].width/2)+(especiais[x].x+especiais[x].width/4))/2;
                                     yF = ((shots[i].y+shots[i].height/2)+(especiais[x].y+especiais[x].height/4))/2;
@@ -2062,14 +2058,14 @@ int main(int argc, char **argv){
                         }
                     }
                 }
-                //--------------------------------------------------------------------------------------------------
 
                 for(int i=0; i<QUANT_SHOTS; i++){
-                    for(int x=0; x<QUANT_ASTEROIDS; x++){
+                    for(int x=0; x<current_quant_asteroids; x++){
                         if(shots[i].ativo != 0){
                             if(asteroids[x].vida > 0){
                                 int colidiu = verificar_Colisao_SHOT_ASTEROID(&shots[i], &asteroids[x]);
                                 if(colidiu){
+
                                     realizar_Colisao_SHOT_ASTEROID(&shots[i], &asteroids[x]);
                                     shots[i].ativo = 0;
 
@@ -2110,7 +2106,7 @@ int main(int argc, char **argv){
                 }
 
                 limitarAnguloNave(&ship.rotation);
-                limitarForcas(&ship.forceX, &ship.forceY, 2);//TESTE - (EVITAR QUE O CONTATO COM ASTEROIDES EXCEDA 2)
+                limitarForcas(&ship.forceX, &ship.forceY, 2);
                 limitarNaveMundo(&ship.x, &ship.y, &ship.forceX, &ship.forceY, ship.width, ship.height);
 
                 if(ship.x >= 14200 || ship.x <= 1850 || ship.y >= 14400 || ship.y <= 1400){
@@ -2127,7 +2123,7 @@ int main(int argc, char **argv){
                     }
                 }
 
-                for(int i=0; i<QUANT_ASTEROIDS; i++){
+                for(int i=0; i<current_quant_asteroids; i++){
                     if(asteroids[i].vida > 0){
                         limitarAsteroideMundo(&asteroids[i].x, &asteroids[i].y, &asteroids[i].forceX, &asteroids[i].forceY, asteroids[i].width, asteroids[i].height);
                         aplicarForcas(&asteroids[i].x, &asteroids[i].y, asteroids[i].forceX, asteroids[i].forceY);
@@ -2313,7 +2309,7 @@ int main(int argc, char **argv){
                 al_draw_scaled_bitmap(dangerzoneTop.img,0,0,dangerzoneTop.width,dangerzoneTop.height, 0-(cameraX/1.5)-600 , 0-(cameraY/1.5)-1200 ,dangerzoneTop.width*beltScale, dangerzoneTop.height*beltScale, 0);//UP
                 al_draw_scaled_bitmap(dangerzoneTop.img,0,0,dangerzoneTop.width,dangerzoneTop.height, 0-(cameraX/1.5)-600 , (WORLD_H-6200)-(cameraY/1.5) ,dangerzoneTop.width*beltScale, dangerzoneTop.height*beltScale, 0);//DOWN
 
-                for(int i=0; i<QUANT_ASTEROIDS; i++){
+                for(int i=0; i<current_quant_asteroids; i++){
                     if(asteroids[i].vida > 0){
                         al_draw_scaled_bitmap(asteroids[i].img,0,0,asteroids[i].width,asteroids[i].height,asteroids[i].x-cameraX,asteroids[i].y-cameraY,asteroids[i].width, asteroids[i].height, 0);
                     }
@@ -2438,7 +2434,6 @@ int main(int argc, char **argv){
 
         }//JOGO
 
-
         button_flag = 0;
         al_stop_sample_instance(inst_theme);
         al_stop_sample_instance(inst_tiro);
@@ -2494,6 +2489,11 @@ int main(int argc, char **argv){
 
 
 
+
+
+
+
+
         int subindo = 1; //MOVIMENTO DEADNAUT
         float y_astron = 0; //MOVIMENTO DEADNAUT
         al_play_sample_instance(inst_menu_death);
@@ -2519,10 +2519,8 @@ int main(int argc, char **argv){
                 }
                 redrawMenu = 1;
             }else if(ev2.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-                if(ev2.mouse.button & 1)
-                {
-                    if(pos_x >= SCREEN_W/2-(reiniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reiniciar.width*0.9)/2)+reiniciar.width*0.9 && pos_y >= SCREEN_H/2+(reiniciar.height*0.9)/2 +20 && pos_y <= (SCREEN_H/2+(reiniciar.height*0.9)/2)+reiniciar.height*0.9 +20)
-                    {
+                if(ev2.mouse.button & 1){
+                    if(pos_x >= SCREEN_W/2-(reiniciar.width*0.9)/2 && pos_x <= (SCREEN_W/2-(reiniciar.width*0.9)/2)+reiniciar.width*0.9 && pos_y >= SCREEN_H/2+(reiniciar.height*0.9)/2 +20 && pos_y <= (SCREEN_H/2+(reiniciar.height*0.9)/2)+reiniciar.height*0.9 +20){
                         al_play_sample_instance(inst_button);
                         show_Menu = 0;
                         break;
@@ -2603,6 +2601,8 @@ int main(int argc, char **argv){
         if(fechar){
             break;
         }
+
+
 
 
     }
