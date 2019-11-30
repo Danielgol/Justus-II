@@ -14,3 +14,6 @@ Características:
 •	Colisão e destruição de objetos
 •	Barra de vida e oxigênio da nave
 •	Música de fundo e efeitos sonoros
+
+
+Interface gráfica: Allegro 5.0.10
