@@ -1,5 +1,8 @@
 # Justus II
-Project of Rural Federal University of Pernambuco's students of Computer Science
+
+<img src="https://github.com/Danielgol/Justus-II/blob/master/images/menu/logo.png?raw=true" width="70" height="70">
+
+Projeto dos estudantes de Ciência da Computação da Universidade Federal Rural de Pernambuco.
 
 A humanidade sucumbiu e a missão espacial Justus II é a única esperança de sobrevivência.
 Justus II é um jogo multiplayer onde os dois jogadores controlam uma nave e devem navegar pelo espaço enquanto desviam e destroem asteroides.
