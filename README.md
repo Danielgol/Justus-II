@@ -22,4 +22,5 @@ Características:
 Interface gráfica: Allegro 5.0.10
 
 Para jogar, basta clicar no arquivo main.exe
+
 (É possível criar atalhos com ícone: images/icon/icon.ico)
