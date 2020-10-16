@@ -31,7 +31,7 @@ Movimentos:
 
 • Player 1: **W,A,S,D** + **E** (Interagir/Soltar)
 
-• Player 2: **Up, Down, Left, Right** + **L** (Interagir/Soltar)
+• Player 2: **UP, DOWN, LEFT, RIGHT** + **L** (Interagir/Soltar)
 
 Interação:
 
