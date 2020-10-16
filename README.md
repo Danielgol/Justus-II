@@ -24,3 +24,19 @@ Interface gráfica: Allegro 5.0.10
 Para jogar, basta clicar no arquivo main.exe
 
 (É possível criar atalhos com ícone: images/icon/icon.ico)
+
+## Instruções:
+
+Movimentos:
+
+• Player 1: "W,A,S,D" + "E"(Interagir/Soltar)
+
+• Player 2: "Up, Down, Left, Right" + "L"(Interagir/Soltar)
+
+Interação:
+
+• Computador Central (Movimento da Nave)
+
+• Canhões Espaciais
+
+• Controlador de Oxigênio (Canto Inferior Esquerdo)
