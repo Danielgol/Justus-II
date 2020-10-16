@@ -29,9 +29,9 @@ Para jogar, basta clicar no arquivo main.exe
 
 Movimentos:
 
-• Player 1: **W,A,S,D** + **E**(Interagir/Soltar)
+• Player 1: **W,A,S,D** + **E** (Interagir/Soltar)
 
-• Player 2: **Up, Down, Left, Right** + **L**(Interagir/Soltar)
+• Player 2: **Up, Down, Left, Right** + **L** (Interagir/Soltar)
 
 Interação:
 
